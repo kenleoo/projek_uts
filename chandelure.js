@@ -1,4 +1,4 @@
-import { MyObject } from "./MyObject.js";
+import { Head } from "./Head.js";
 function main() {
     //GET CANVAS
     var CANVAS = document.getElementById("mycanvas");
@@ -116,7 +116,7 @@ function main() {
     GL.useProgram(SHADER_PROGRAM);
 
     /*========================= OBJECTS ========================= */
-    var Object1 = new MyObject(GL, SHADER_PROGRAM, _position, _color);
+    var Object1 = new Head(GL, SHADER_PROGRAM, _position, _color);
     // var Strap1 = new MyStrap(GL, SHADER_PROGRAM, _position, _color);
     // var Strap2 = new MyStrap(GL, SHADER_PROGRAM, _position, _color, 0.6, 0.4, 0.6, 60, 0.03, -1.575);
     // var Object2 = new MyObject(GL, SHADER_PROGRAM, _position, _color);
