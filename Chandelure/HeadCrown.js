@@ -18,62 +18,70 @@ export class HeadCrown {
   childs = [];
 
   constructor(
-    GL,
-    SHADER_PROGRAM,
-    _position,
-    _color,
-    _Mmatrix,
-
-    // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
-    paraboloidRadius = 2,
-    paraboloidHeight = 2,
-    segments = 360
+  GL,
+  SHADER_PROGRAM,
+  _position,
+  _color,
+  _MMatrix,
+  crownRadius = 1.5,
+  crownHeight = 1,
+  segments = 16 // jumlah gigi mahkota
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
     this._position = _position;
     this._color = _color;
-    this._MMatrix = _Mmatrix;
+    this._MMatrix = _MMatrix;
 
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Paraboloid Eliptik Terbalik Runcing ========================= */
-    const rings = 360; // semakin besar, semakin halus
-    const a = paraboloidHeight / (paraboloidRadius * paraboloidRadius); // konstanta parabola
+    const baseIndex = 0;
 
-    // Simpan index awal vertex
-    const baseIndex = this.vertex.length / 8;
+    // Tambahkan vertex bawah dan atas mahkota
+    for (let i = 0; i <= segments; i++) {
+      const theta = (i / segments) * Math.PI * 2;
+      const x = Math.cos(theta) * crownRadius;
+      const z = Math.sin(theta) * crownRadius;
 
-    // Build vertex paraboloid terbalik (runcing ke bawah)
-    for (let i = 0; i <= rings; i++) {
-      const t = i / rings;
-      const r = paraboloidRadius * (1 - t);             // radius mengecil ke bawah
-      const y = -paraboloidHeight / 2 + a * (r * r);    // buka ke bawah, runcing di bawah
+      // Vertex bawah
+      const yBottom = -crownHeight / 2;
+      this.vertex.push(x, yBottom, z, 0, 0, 0); // hitam
 
-      for (let j = 0; j <= segments; j++) {
-        const theta = (j / segments) * Math.PI * 2;
-        const x = Math.cos(theta) * r;
-        const z = Math.sin(theta) * r;
+      // Vertex atas (naik-turun untuk bentuk gigi mahkota)
+      // Vertex atas (naik-turun untuk bentuk gigi mahkota)
+      const isPeak = i % 2 !== 0;
+      const yTop = crownHeight / 2 + (isPeak ? 0.5 : -0.5);
 
-        // warna hitam 
-        this.vertex.push(x, y, z, 0.1, 0.1, 0.1);
-      }
+      // Buat ujung sedikit menjulur keluar
+      const outwardFactor = isPeak ? 0.6 : 0; // hanya puncak (bukan lembah) yang menjulur keluar
+      const xOut = Math.cos(theta) * (crownRadius + outwardFactor);
+      const zOut = Math.sin(theta) * (crownRadius + outwardFactor);
+
+      this.vertex.push(xOut, yTop, zOut, 0, 0, 0.0); // hitam
+
     }
 
-    // Build faces paraboloid
-    for (let i = 0; i < rings; i++) {
-      for (let j = 0; j < segments; j++) {
-        const p1 = baseIndex + i * (segments + 1) + j;
-        const p2 = baseIndex + (i + 1) * (segments + 1) + j;
-        const p3 = baseIndex + (i + 1) * (segments + 1) + (j + 1);
-        const p4 = baseIndex + i * (segments + 1) + (j + 1);
+    // Tambahkan face sisi samping (buat quad dari dua triangle)
+    for (let i = 0; i < segments; i++) {
+      const p1 = baseIndex + i * 2;
+      const p2 = baseIndex + i * 2 + 1;
+      const p3 = baseIndex + (i + 1) * 2 + 1;
+      const p4 = baseIndex + (i + 1) * 2;
 
+      this.faces.push(p1, p2, p3); // Triangle 1
+      this.faces.push(p1, p3, p4); // Triangle 2
+    }
 
-        // if(i == 45 || i == 90 || i == 135 || i == 180 || i == 235 || i == 270 || i = 315 || i = 360)
-        // this.faces.push(p1, p2, p3);
-        // this.faces.push(p1, p3, p4);
-      }
+    // (Optional) Tambahkan alas (bottom face) kalau ingin menutup bawah
+    const centerIndex = this.vertex.length / 6;
+    this.vertex.push(0, -crownHeight / 2, 0, 0.1, 0.1, 0.1); // pusat bawah
+
+    for (let i = 0; i < segments; i++) {
+      const p1 = centerIndex;
+      const p2 = i * 2;
+      const p3 = ((i + 1) % segments) * 2;
+      this.faces.push(p1, p2, p3);
     }
   }
   setup() {

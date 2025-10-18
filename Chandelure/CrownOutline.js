@@ -63,7 +63,7 @@ export class CrownOutline {
           let p3 = p1 + (uSeg + 1);
           let p4 = p3 + 1;
 
-          if (i>=51){
+          if (i>=50){
             this.faces.push(p1, p2, p4);
             this.faces.push(p1, p4, p3);
           }
