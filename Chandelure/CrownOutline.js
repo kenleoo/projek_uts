@@ -1,4 +1,4 @@
-export class Head {
+export class CrownOutline {
   GL = null;
   SHADER_PROGRAM = null;
 
@@ -50,8 +50,8 @@ export class Head {
           let y = b * Math.sin(phi) * Math.sin(theta);
           let z = c * Math.cos(phi);
 
-          this.vertex.push(x, y, z);
-          this.vertex.push(0.7, 0.8, 1); // Purple color
+            this.vertex.push(x, y, z);
+            this.vertex.push(0, 0, 0); // Purple color
 
       }
    }
@@ -63,8 +63,11 @@ export class Head {
           let p3 = p1 + (uSeg + 1);
           let p4 = p3 + 1;
 
-          this.faces.push(p1, p2, p4);
-          this.faces.push(p1, p4, p3);
+          if (i>=51){
+            this.faces.push(p1, p2, p4);
+            this.faces.push(p1, p4, p3);
+          }
+
       }
     }
   }

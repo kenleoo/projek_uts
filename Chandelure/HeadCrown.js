@@ -1,4 +1,4 @@
-export class Head {
+export class HeadCrown {
   GL = null;
   SHADER_PROGRAM = null;
 
@@ -24,11 +24,10 @@ export class Head {
     _color,
     _Mmatrix,
 
-    a = 0.525,
-    b = 0.525,
-    c = 0.45,
-    uSeg = 360,
-    vSeg = 60
+    // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
+    paraboloidRadius = 2,
+    paraboloidHeight = 2,
+    segments = 360
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -39,32 +38,41 @@ export class Head {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Upside-down cone (penyangga kepala) ========================= */
-    // Build vertex
-   for (let i = 0; i <= vSeg; i++) {
-      let phi = Math.PI * i / vSeg; // 0 to π
-      for (let j = 0; j <= uSeg; j++) {
-          let theta = 2 * Math.PI * j / uSeg; // 0 to 2π
+    /*========================= Paraboloid Eliptik Terbalik Runcing ========================= */
+    const rings = 360; // semakin besar, semakin halus
+    const a = paraboloidHeight / (paraboloidRadius * paraboloidRadius); // konstanta parabola
 
-          let x = a * Math.sin(phi) * Math.cos(theta);
-          let y = b * Math.sin(phi) * Math.sin(theta);
-          let z = c * Math.cos(phi);
+    // Simpan index awal vertex
+    const baseIndex = this.vertex.length / 8;
 
-          this.vertex.push(x, y, z);
-          this.vertex.push(0.7, 0.8, 1); // Purple color
+    // Build vertex paraboloid terbalik (runcing ke bawah)
+    for (let i = 0; i <= rings; i++) {
+      const t = i / rings;
+      const r = paraboloidRadius * (1 - t);             // radius mengecil ke bawah
+      const y = -paraboloidHeight / 2 + a * (r * r);    // buka ke bawah, runcing di bawah
 
+      for (let j = 0; j <= segments; j++) {
+        const theta = (j / segments) * Math.PI * 2;
+        const x = Math.cos(theta) * r;
+        const z = Math.sin(theta) * r;
+
+        // warna hitam 
+        this.vertex.push(x, y, z, 0.1, 0.1, 0.1);
       }
-   }
-    // Faces (triangles)
-   for (let i = 0; i < vSeg; i++) {
-      for (let j = 0; j < uSeg; j++) {
-          let p1 = i * (uSeg + 1) + j;
-          let p2 = p1 + 1;
-          let p3 = p1 + (uSeg + 1);
-          let p4 = p3 + 1;
+    }
 
-          this.faces.push(p1, p2, p4);
-          this.faces.push(p1, p4, p3);
+    // Build faces paraboloid
+    for (let i = 0; i < rings; i++) {
+      for (let j = 0; j < segments; j++) {
+        const p1 = baseIndex + i * (segments + 1) + j;
+        const p2 = baseIndex + (i + 1) * (segments + 1) + j;
+        const p3 = baseIndex + (i + 1) * (segments + 1) + (j + 1);
+        const p4 = baseIndex + i * (segments + 1) + (j + 1);
+
+
+        // if(i == 45 || i == 90 || i == 135 || i == 180 || i == 235 || i == 270 || i = 315 || i = 360)
+        // this.faces.push(p1, p2, p3);
+        // this.faces.push(p1, p3, p4);
       }
     }
   }

@@ -1,9 +1,13 @@
 import { Head } from "./Chandelure/Head.js";
 import { HeadStrip } from "./Chandelure/HeadStrip.js";
+import { HeadStrip2 } from "./Chandelure/HeadStrip2.js";
 import { HeadVerticalStrip } from "./Chandelure/HeadVerticalStrip.js";
 import { HeadEye } from "./Chandelure/HeadEye.js";
+import { HeadEyeOutline } from "./Chandelure/HeadEyeOutline.js";
 import { BodyCone } from "./Chandelure/BodyCone.js";
 import { BodyParaboloid } from "./Chandelure/BodyParaboloid.js";
+import { HeadCrown } from "./Chandelure/HeadCrown.js";
+import { CrownOutline } from "./Chandelure/CrownOutline.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -78,14 +82,24 @@ function main() {
   var HeadVerticalStrip1 = new HeadVerticalStrip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var HeadEye1 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var HeadEye2 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var HeadEyeOutline1 = new HeadEyeOutline(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var HeadEyeOutline2 = new HeadEyeOutline(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var HeadStripMid = new HeadStrip2(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var HeadCrown1 = new HeadCrown(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var Object2 = new BodyCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var BodyParaboloid1 = new BodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var CrownOutline1 = new CrownOutline(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
   Object1.childs.push(HeadStrip1);
   Object1.childs.push(HeadVerticalStrip1);
+  Object1.childs.push(HeadStripMid);
   Object1.childs.push(HeadEye1);
   Object1.childs.push(HeadEye2);
+  Object1.childs.push(CrownOutline1);
+  Object1.childs.push(HeadCrown1);
+  HeadEye1.childs.push(HeadEyeOutline1);
+  HeadEye2.childs.push(HeadEyeOutline2);
   Object1.childs.push(Object2);
   Object2.childs.push(BodyParaboloid1);
 
@@ -100,12 +114,19 @@ function main() {
   LIBS.rotateY(HeadEye1.MOVE_MATRIX, 90 * Math.PI / 180);
   LIBS.rotateZ(HeadEye1.MOVE_MATRIX, -45 * Math.PI / 180);
   LIBS.translateY(HeadEye1.MOVE_MATRIX, 0.381);
-  LIBS.translateX(HeadEye1.MOVE_MATRIX, -0.39);
+  LIBS.translateX(HeadEye1.MOVE_MATRIX, -0.37);
   //eye kiri
   LIBS.rotateY(HeadEye2.MOVE_MATRIX, 90 * Math.PI / 180);
   LIBS.rotateZ(HeadEye2.MOVE_MATRIX, 45 * Math.PI / 180);
   LIBS.translateY(HeadEye2.MOVE_MATRIX, -0.381);
-  LIBS.translateX(HeadEye2.MOVE_MATRIX, -0.39);
+  LIBS.translateX(HeadEye2.MOVE_MATRIX, -0.37);
+
+  //head crown
+  LIBS.scaleX(HeadCrown1.POSITION_MATRIX, 0.15);
+  LIBS.scaleY(HeadCrown1.POSITION_MATRIX, 0.15);
+  LIBS.scaleZ(HeadCrown1.POSITION_MATRIX, 0.15);
+  LIBS.rotateX(HeadCrown1.MOVE_MATRIX, -90 * Math.PI / 180);
+  LIBS.translateZ(HeadCrown1.MOVE_MATRIX, -3);
   //object2 (body paraboloid)
   LIBS.scaleX(Object2.POSITION_MATRIX, 0.1);
   LIBS.scaleY(Object2.POSITION_MATRIX, 0.1);
