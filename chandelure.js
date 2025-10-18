@@ -1,4 +1,4 @@
-import { Head } from "./Head.js";
+import { Head } from "./Chandelure/Head.js";
 function main() {
     //GET CANVAS
     var CANVAS = document.getElementById("mycanvas");
