@@ -1,4 +1,4 @@
-export class Head {
+export class HeadEye {
   GL = null;
   SHADER_PROGRAM = null;
 
@@ -24,11 +24,10 @@ export class Head {
     _color,
     _Mmatrix,
 
-    a = 0.525,
-    b = 0.525,
-    c = 0.45,
-    uSeg = 360,
-    vSeg = 60
+    // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
+    radius = 0.1,
+    height = 0.025,
+    segments = 360
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -41,30 +40,39 @@ export class Head {
 
     /*========================= Upside-down cone (penyangga kepala) ========================= */
     // Build vertex
-   for (let i = 0; i <= vSeg; i++) {
-      let phi = Math.PI * i / vSeg; // 0 to π
-      for (let j = 0; j <= uSeg; j++) {
-          let theta = 2 * Math.PI * j / uSeg; // 0 to 2π
+    this.vertex.push(0, 0, height / 2);    // top center
+    this.vertex.push(1, 1, 0);             // top color
 
-          let x = a * Math.sin(phi) * Math.cos(theta);
-          let y = b * Math.sin(phi) * Math.sin(theta);
-          let z = c * Math.cos(phi);
+    this.vertex.push(0, 0, -height / 2);   // bottom center
+    this.vertex.push(1, 1, 0);             // bottom color
 
-          this.vertex.push(x, y, z);
-          this.vertex.push(0.7, 0.8, 1); // Purple color
-      }
-   }
-    // Faces (triangles)
-   for (let i = 0; i < vSeg; i++) {
-      for (let j = 0; j < uSeg; j++) {
-          let p1 = i * (uSeg + 1) + j;
-          let p2 = p1 + 1;
-          let p3 = p1 + (uSeg + 1);
-          let p4 = p3 + 1;
+    for (let i = 0; i <= segments; i++) {
+        let theta = 2 * Math.PI * i / segments;
+        let x = radius * Math.cos(theta);
+        let y = radius * Math.sin(theta);
+        let zTop = height / 2;
+        let zBottom = -height / 2;
 
-          this.faces.push(p1, p2, p4);
-          this.faces.push(p1, p4, p3);
-      }
+        this.vertex.push(x, y, zTop);
+        this.vertex.push(1, 1, 0); // Yellow color
+        // Bottom circle
+        this.vertex.push(x, y, zBottom);
+        this.vertex.push(1, 1, 0); // Yellow color
+        
+    }
+    // Faces
+    for (let i = 0; i < segments; i++) {
+        let top1 = i * 2;
+        let bottom1 = top1 + 1;
+        let top2 = ((i + 1) % segments) * 2;
+        let bottom2 = top2 + 1;
+        // Side faces
+        this.faces.push(top1, bottom1, bottom2);
+        this.faces.push(top1, bottom2, top2);
+        // Top face
+        this.faces.push(top1, top2, (segments * 2));
+        // Bottom face
+        this.faces.push(bottom1, (segments * 2) + 1, bottom2);
     }
   }
   setup() {

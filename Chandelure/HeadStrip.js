@@ -1,4 +1,4 @@
-export class Head {
+export class HeadStrip {
   GL = null;
   SHADER_PROGRAM = null;
 
@@ -24,9 +24,10 @@ export class Head {
     _color,
     _Mmatrix,
 
-    a = 0.525,
-    b = 0.525,
-    c = 0.45,
+    // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
+    a = 0.5251,
+    b = 0.5251,
+    c = 0.451,
     uSeg = 360,
     vSeg = 60
   ) {
@@ -42,30 +43,42 @@ export class Head {
     /*========================= Upside-down cone (penyangga kepala) ========================= */
     // Build vertex
    for (let i = 0; i <= vSeg; i++) {
-      let phi = Math.PI * i / vSeg; // 0 to π
-      for (let j = 0; j <= uSeg; j++) {
-          let theta = 2 * Math.PI * j / uSeg; // 0 to 2π
+            let phi = Math.PI * i / vSeg; // 0 to π
+            for (let j = 0; j <= uSeg; j++) {
+                let theta = 2 * Math.PI * j / uSeg; // 0 to 2π
 
-          let x = a * Math.sin(phi) * Math.cos(theta);
-          let y = b * Math.sin(phi) * Math.sin(theta);
-          let z = c * Math.cos(phi);
+                let x = a * Math.sin(phi) * Math.cos(theta);
+                let y = b * Math.sin(phi) * Math.sin(theta);
+                let z = c * Math.cos(phi);
 
-          this.vertex.push(x, y, z);
-          this.vertex.push(0.7, 0.8, 1); // Purple color
-      }
-   }
-    // Faces (triangles)
-   for (let i = 0; i < vSeg; i++) {
-      for (let j = 0; j < uSeg; j++) {
-          let p1 = i * (uSeg + 1) + j;
-          let p2 = p1 + 1;
-          let p3 = p1 + (uSeg + 1);
-          let p4 = p3 + 1;
+                this.vertex.push(x, y, z);
+                this.vertex.push(0, 0, 0);
 
-          this.faces.push(p1, p2, p4);
-          this.faces.push(p1, p4, p3);
-      }
-    }
+            }
+        }
+
+        // Faces (triangles)
+        for (let i = 0; i < vSeg; i++) {
+            for (let j = 0; j < uSeg; j++) {
+                let p1 = i * (uSeg + 1) + j;
+                let p2 = p1 + 1;
+                let p3 = p1 + (uSeg + 1);
+                let p4 = p3 + 1;
+
+                //create 8 vertical strips with black color
+                if(j % (uSeg / 8) == 0 || (j-1) % (uSeg / 8) == 0 || (j-2) % (uSeg / 8) == 0 || /*(j-3) % (uSeg / 8) == 0 ||*/ (j+1) % (uSeg / 8) == 0 || (j+2) % (uSeg / 8) == 0 /*|| (j+3) % (uSeg / 8) == 0*/) {
+                  if(j == 45 || j == 315 || (j-1) == 315 || (j-2) == 315 || (j+1) == 45 || (j+2) == 45 || (j+1) == 315 || (j+2) == 315 || (j-1) == 45 || (j-2) == 45){
+                    continue;
+                  }
+                  else{
+                    this.faces.push(p1, p3, p4);
+                    this.faces.push(p1, p4, p2);
+                  }
+                }
+
+    
+            }
+        }
   }
   setup() {
     this.OBJECT_VERTEX = this.GL.createBuffer();

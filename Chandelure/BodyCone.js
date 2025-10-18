@@ -26,8 +26,8 @@ export class BodyCone {
 
     // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
     radius = 4,
-    height = 2,
-    radialSegments = 24
+    height = 2.5,
+    radialSegments = 360
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
