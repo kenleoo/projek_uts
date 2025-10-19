@@ -51,7 +51,7 @@ export class CrownOutline {
           let z = c * Math.cos(phi);
 
             this.vertex.push(x, y, z);
-            this.vertex.push(0, 0, 0); // Purple color
+            this.vertex.push(0.075, 0, 0.15); // Purple color
 
       }
    }
