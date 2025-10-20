@@ -1,4 +1,4 @@
-export class TopHat {
+export class BodyParaboloid {
   GL = null;
   SHADER_PROGRAM = null;
 
@@ -27,8 +27,8 @@ export class TopHat {
     color = [0.075, 0, 0.15],
 
     // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
-    paraboloidRadius = 5,
-    paraboloidHeight = 2,
+    paraboloidRadius = 4,
+    paraboloidHeight = 1.5,
     segments = 36
   ) {
     this.GL = GL;
@@ -51,7 +51,7 @@ export class TopHat {
     for (let i = 0; i <= rings; i++) {
       const t = i / rings;
       const r = paraboloidRadius * (1 - t); // radius mengecil ke bawah
-      const y = paraboloidHeight / 2 - a * (r * r); // buka ke bawah, runcing di bawah
+      const y = paraboloidHeight / 2 + a * (r * r); // buka ke bawah, runcing di bawah
 
       for (let j = 0; j <= segments; j++) {
         const theta = (j / segments) * Math.PI * 2;
