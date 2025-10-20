@@ -46,7 +46,7 @@ export class HeadCrown {
 
       // Vertex bawah
       const yBottom = -crownHeight / 2;
-      this.vertex.push(x, yBottom, z, 0, 0, 0); // hitam
+      this.vertex.push(x, yBottom, z, 0.075, 0, 0.15); // hitam
 
       // Vertex atas (naik-turun untuk bentuk gigi mahkota)
       // Vertex atas (naik-turun untuk bentuk gigi mahkota)
@@ -58,7 +58,7 @@ export class HeadCrown {
       const xOut = Math.cos(theta) * (crownRadius + outwardFactor);
       const zOut = Math.sin(theta) * (crownRadius + outwardFactor);
 
-      this.vertex.push(xOut, yTop, zOut, 0, 0, 0.0); // hitam
+      this.vertex.push(xOut, yTop, zOut, 0.075, 0, 0.15); // hitam
 
     }
 

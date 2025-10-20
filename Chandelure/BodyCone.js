@@ -53,12 +53,12 @@ export class BodyCone {
       const x = Math.cos(theta) * radius; // posisi X pada lingkaran
       const z = Math.sin(theta) * radius; // posisi Z pada lingkaran
 
-      this.vertex.push(x, topY, z, 0, 0, 0); // Warna: hitam
+      this.vertex.push(x, topY, z, 0.075, 0, 0.15); // Warna: hitam
     }
 
     // Titik pusat di bagian bawah kerucut
     const apexIndex = this.vertex.length / 6;
-    this.vertex.push(0, bottomY, 0, 0, 0, 0); // Warna: hitam
+    this.vertex.push(0, bottomY, 0, 0.075, 0, 0.15); // Warna: hitam
 
     // Build faces 
     // lingkaran atas

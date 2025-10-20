@@ -57,7 +57,7 @@ export class BodyParaboloid {
         const z = Math.sin(theta) * r;
 
         // warna hitam 
-        this.vertex.push(x, y, z, 0.1, 0.1, 0.1);
+        this.vertex.push(x, y, z, 0.075, 0, 0.15);
       }
     }
 

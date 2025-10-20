@@ -52,7 +52,7 @@ export class HeadStrip2 {
                 let z = c * Math.cos(phi);
 
                 this.vertex.push(x, y, z);
-                this.vertex.push(0, 0, 0);
+                this.vertex.push(0.075, 0, 0.15);
 
             }
         }

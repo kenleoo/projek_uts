@@ -54,10 +54,10 @@ export class HeadEyeOutline {
         let zBottom = -height / 2;
 
         this.vertex.push(x, y, zTop);
-        this.vertex.push(0, 0, 0); // Yellow color
+        this.vertex.push(0.075, 0, 0.15); // Yellow color
         // Bottom circle
         this.vertex.push(x, y, zBottom);
-        this.vertex.push(0, 0, 0); // Yellow color
+        this.vertex.push(0.075, 0, 0.15); // Yellow color
         
     }
     // Faces
