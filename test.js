@@ -75,12 +75,13 @@ function main() {
   var Object1 = new Head (GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var OutsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 5, 2.1);
   var InsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
-  var HeadTip = new HeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var HeadTip1 = new HeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
   // OutsideHat.childs.push(TopHat);
   Object1.childs.push(OutsideHat);
   OutsideHat.childs.push(InsideHat);
+  OutsideHat.childs.push(HeadTip1);
   //   Object1.childs.push(HeadVerticalStrip1);
   //   Object1.childs.push(HeadEye1);
 
@@ -94,6 +95,12 @@ function main() {
   LIBS.translateY(OutsideHat.POSITION_MATRIX, 0.5);
   // hat inside
   LIBS.translateY(InsideHat.POSITION_MATRIX, -0.1);
+  // head tip
+  LIBS.scaleX(HeadTip1.POSITION_MATRIX, 4);
+  LIBS.scaleY(HeadTip1.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(HeadTip1.POSITION_MATRIX, 4);
+  LIBS.rotateX(HeadTip1.MOVE_MATRIX, -90 * (Math.PI / 180));
+  LIBS.translateY(HeadTip1.POSITION_MATRIX, 1);
   // LIBS.translateY(TopHat.POSITION_MATRIX, 1.5);
 
   var PROJMATRIX = LIBS.get_projection(40, CANVAS.width / CANVAS.height, 1, 100);

@@ -46,13 +46,12 @@ export class HeadTip {
 
       // Flame profile: tapering + bulges
       const taper = 1 - t;
-      // const bulge = 0.5 + 0.5 * Math.sin(Math.PI * t);
       const bulge = 0.5 + 0.5 * Math.sin(Math.PI * t);
       const radius = base_radius * taper * bulge;
 
       // Flame curve offset — curve sideways (like S-shape)
-      const offsetX = 0.2 * Math.sin(2 * Math.PI * t) + 0.15 * t;
-      const offsetY = 0.2 * Math.cos(2 * Math.PI * t) + 0.15 * t;
+      const offsetX = 0;
+      const offsetY = 0;
 
       for (let j = 0; j <= uSeg; j++) {
         const theta = (j / uSeg) * 2 * Math.PI;
@@ -63,10 +62,7 @@ export class HeadTip {
         this.vertex.push(x, y, z);
 
         // Color gradient: light blue → dark blue/purple
-        const rCol = 0.3 + 0.15 * (1 - t);
-        const gCol = 0.6 * (1 - t);
-        const bCol = 1;
-        this.vertex.push(rCol, gCol, bCol, 0.8);
+        this.vertex.push(0.075, 0, 0.15, 0.8);
       }
     }
 

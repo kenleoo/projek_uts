@@ -1,19 +1,7 @@
-import { Head } from "./Chandelure/Head.js";
-import { HeadStrip } from "./Chandelure/HeadStrip.js";
-import { HeadStrip2 } from "./Chandelure/HeadStrip2.js";
-import { HeadVerticalStrip } from "./Chandelure/HeadVerticalStrip.js";
-import { HeadEye } from "./Chandelure/HeadEye.js";
-import { HeadEyeOutline } from "./Chandelure/HeadEyeOutline.js";
-import { BodyCone } from "./Chandelure/BodyCone.js";
-import { BodyParaboloid } from "./Chandelure/BodyParaboloid.js";
-import { HeadCrown } from "./Chandelure/HeadCrown.js";
-import { CrownOutline } from "./Chandelure/CrownOutline.js";
-import { HeadFlame } from "./Chandelure/HeadFlame.js";
-import { Hand } from "./Chandelure/Hand.js";
-import { SubHand } from "./Chandelure/SubHand.js";
-import { HandParaboloid } from "./Chandelure/HandParaboloid.js";
-import { HandCrown } from "./Chandelure/HandCrown.js";
-import { HandFlame } from "./Chandelure/HandFlame.js";
+import { Head } from "./Lampent/Head.js";
+import { HatParaboloid } from "./Lampent/HatParaboloid.js";
+import { HeadTip } from "./Lampent/HeadTip.js";
+
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -35,8 +23,8 @@ function main() {
   var shader_vertex_source = `
         attribute vec3 position;
         uniform mat4 Pmatrix, Vmatrix, Mmatrix;
-        attribute vec4 color;
-        varying vec4 vColor;
+        attribute vec3 color;
+        varying vec3 vColor;
 
         void main(void) {
             gl_Position = Pmatrix * Vmatrix * Mmatrix * vec4(position, 1.);
@@ -45,10 +33,10 @@ function main() {
 
   var shader_fragment_source = `
         precision mediump float;
-        varying vec4 vColor;
+        varying vec3 vColor;
 
         void main(void) {
-          gl_FragColor = vColor;
+            gl_FragColor = vec4(vColor, 1.);
         }`;
 
   var compile_shader = function (source, type, typeString) {
@@ -81,263 +69,39 @@ function main() {
   var _Mmatrix = GL.getUniformLocation(SHADER_PROGRAM, "Mmatrix");
 
   GL.useProgram(SHADER_PROGRAM);
-  GL.enable(GL.BLEND);
-  GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA); 
-
 
   // Objects
-  var Object1 = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HeadStrip1 = new HeadStrip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HeadVerticalStrip1 = new HeadVerticalStrip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HeadEye1 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HeadEye2 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HeadEyeOutline1 = new HeadEyeOutline(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HeadEyeOutline2 = new HeadEyeOutline(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HeadStripMid = new HeadStrip2(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HeadCrown1 = new HeadCrown(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var Object2 = new BodyCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var BodyParaboloid1 = new BodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var CrownOutline1 = new CrownOutline(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HeadFlame1 = new HeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var Hand1 = new Hand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var Hand2 = new Hand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var SubHand1 = new SubHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandParaboloid1 = new HandParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandCrown1 = new HandCrown(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandFlame1 = new HandFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var SubHand2 = new SubHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandParaboloid2 = new HandParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandCrown2 = new HandCrown(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandFlame2 = new HandFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var SubHand3 = new SubHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandParaboloid3 = new HandParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandCrown3 = new HandCrown(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandFlame3 = new HandFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var SubHand4 = new SubHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandParaboloid4 = new HandParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandCrown4 = new HandCrown(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HandFlame4 = new HandFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  // var TopHat = new TopHat(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 1, 4);
+  var Object1 = new Head (GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 5, 2.1);
+  var InsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
+  var HeadTip1 = new HeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
-  Object1.childs.push(HeadStrip1);
-  Object1.childs.push(HeadVerticalStrip1);
-  Object1.childs.push(HeadStripMid);
-  Object1.childs.push(HeadEye1);
-  Object1.childs.push(HeadEye2);
-  Object1.childs.push(CrownOutline1);
-  Object1.childs.push(HeadCrown1);
-  HeadEye1.childs.push(HeadEyeOutline1);
-  HeadEye2.childs.push(HeadEyeOutline2);
-  Object1.childs.push(Object2);
-  Object2.childs.push(BodyParaboloid1);
-  Object1.childs.push(HeadFlame1);
-  Object2.childs.push(Hand1);
-  Object2.childs.push(Hand2);
-  Hand1.childs.push(SubHand1);
-  SubHand1.childs.push(HandParaboloid1);
-  HandParaboloid1.childs.push(HandCrown1);
-  HandCrown1.childs.push(HandFlame1);
-  Hand1.childs.push(SubHand2);
-  SubHand2.childs.push(HandParaboloid2);
-  HandParaboloid2.childs.push(HandCrown2);
-  HandCrown2.childs.push(HandFlame2);
-  Hand2.childs.push(SubHand3);
-  SubHand3.childs.push(HandParaboloid3);
-  HandParaboloid3.childs.push(HandCrown3);
-  HandCrown3.childs.push(HandFlame3);
-  Hand2.childs.push(SubHand4);
-  SubHand4.childs.push(HandParaboloid4);
-  HandParaboloid4.childs.push(HandCrown4);
-  HandCrown4.childs.push(HandFlame4);
-
+  // OutsideHat.childs.push(TopHat);
+  Object1.childs.push(OutsideHat);
+  OutsideHat.childs.push(InsideHat);
+  OutsideHat.childs.push(HeadTip1);
+  //   Object1.childs.push(HeadVerticalStrip1);
+  //   Object1.childs.push(HeadEye1);
 
   // Scale + Positioning objects
-  //object1 (head)
-  LIBS.rotateX(Object1.MOVE_MATRIX, 90 * Math.PI / 180);
-  LIBS.rotateY(Object1.MOVE_MATRIX, 90 * Math.PI / 180);
-  LIBS.scaleX(Object1.POSITION_MATRIX, 1.5);
-  LIBS.scaleY(Object1.POSITION_MATRIX, 1.5);
-  LIBS.scaleZ(Object1.POSITION_MATRIX, 1.5);
-  //eye kanan
-  LIBS.rotateY(HeadEye1.MOVE_MATRIX, 90 * Math.PI / 180);
-  LIBS.rotateZ(HeadEye1.MOVE_MATRIX, -45 * Math.PI / 180);
-  LIBS.translateY(HeadEye1.MOVE_MATRIX, 0.381);
-  LIBS.translateX(HeadEye1.MOVE_MATRIX, -0.37);
-  //eye kiri
-  LIBS.rotateY(HeadEye2.MOVE_MATRIX, 90 * Math.PI / 180);
-  LIBS.rotateZ(HeadEye2.MOVE_MATRIX, 45 * Math.PI / 180);
-  LIBS.translateY(HeadEye2.MOVE_MATRIX, -0.381);
-  LIBS.translateX(HeadEye2.MOVE_MATRIX, -0.37);
-  //head crown
-  LIBS.scaleX(HeadCrown1.POSITION_MATRIX, 0.15);
-  LIBS.scaleY(HeadCrown1.POSITION_MATRIX, 0.15);
-  LIBS.scaleZ(HeadCrown1.POSITION_MATRIX, 0.15);
-  LIBS.rotateX(HeadCrown1.MOVE_MATRIX, -90 * Math.PI / 180);
-  LIBS.translateZ(HeadCrown1.MOVE_MATRIX, -3);
-  //head flame
-  LIBS.scaleX(HeadFlame1.POSITION_MATRIX, 0.6);
-  LIBS.scaleY(HeadFlame1.POSITION_MATRIX, 0.6);
-  // LIBS.scaleZ(HeadFlame1.POSITION_MATRIX, 0.5);
-  LIBS.rotateX(HeadFlame1.POSITION_MATRIX, 180 * Math.PI / 180);
-  LIBS.rotateZ(HeadFlame1.POSITION_MATRIX, 90 * Math.PI / 180);
-  LIBS.translateX(HeadFlame1.MOVE_MATRIX, -0.05);
-  LIBS.translateY(HeadFlame1.MOVE_MATRIX, -0.2);
-  LIBS.translateZ(HeadFlame1.MOVE_MATRIX, 0.4);
-  //object2 (body paraboloid)
-  LIBS.scaleX(Object2.POSITION_MATRIX, 0.1);
-  LIBS.scaleY(Object2.POSITION_MATRIX, 0.1);
-  LIBS.scaleZ(Object2.POSITION_MATRIX, 0.1);
-  LIBS.rotateX(Object2.MOVE_MATRIX, -90 * Math.PI / 180);
-  LIBS.translateZ(Object2.MOVE_MATRIX, 4.325);
-  //hand kanan
-  LIBS.scaleX(Hand1.POSITION_MATRIX, 0.35);
-  LIBS.scaleY(Hand1.POSITION_MATRIX, 0.35);
-  LIBS.scaleZ(Hand1.POSITION_MATRIX, 0.35);
-  LIBS.rotateX(Hand1.MOVE_MATRIX, 90 * Math.PI / 180);
-  LIBS.rotateY(Hand1.MOVE_MATRIX, -50 * Math.PI / 180);
-  LIBS.rotateZ(Hand1.MOVE_MATRIX, -90 * Math.PI / 180);
-  LIBS.translateY(Hand1.MOVE_MATRIX, 13);
-  LIBS.translateZ(Hand1.MOVE_MATRIX, 26);
-  //hand kiri
-  LIBS.scaleX(Hand2.POSITION_MATRIX, 0.35);
-  LIBS.scaleY(Hand2.POSITION_MATRIX, 0.35);
-  LIBS.scaleZ(Hand2.POSITION_MATRIX, 0.35);
-  LIBS.rotateX(Hand2.MOVE_MATRIX, -90 * Math.PI / 180);
-  LIBS.rotateY(Hand2.MOVE_MATRIX, 50 * Math.PI / 180);
-  LIBS.rotateZ(Hand2.MOVE_MATRIX, -90 * Math.PI / 180);
-  LIBS.translateY(Hand2.MOVE_MATRIX, 13);
-  LIBS.translateZ(Hand2.MOVE_MATRIX, -26);
-  //subhand kanan depan
-  LIBS.scaleX(SubHand1.POSITION_MATRIX, 6);
-  LIBS.scaleY(SubHand1.POSITION_MATRIX, 6);
-  LIBS.scaleZ(SubHand1.POSITION_MATRIX, 6);
-  LIBS.rotateX(SubHand1.MOVE_MATRIX, -220 * Math.PI / 180);
-  LIBS.rotateY(SubHand1.MOVE_MATRIX, -90  * Math.PI / 180);
-  LIBS.rotateZ(SubHand1.MOVE_MATRIX, 80 * Math.PI / 180);
-  LIBS.translateX(SubHand1.MOVE_MATRIX, 0.9);
-  LIBS.translateY(SubHand1.MOVE_MATRIX, 1.5);
-  // LIBS.translateZ(SubHand1.MOVE_MATRIX, -0.5);
-  //paraboloid kanan depan
-  LIBS.translateY(HandParaboloid1.MOVE_MATRIX, -1);
-  LIBS.translateX(HandParaboloid1.MOVE_MATRIX, 1.625);
-  LIBS.scaleX(HandParaboloid1.POSITION_MATRIX, 1.25);
-  LIBS.scaleY(HandParaboloid1.POSITION_MATRIX, 25);
-  LIBS.scaleZ(HandParaboloid1.POSITION_MATRIX, 1.25);
-  LIBS.rotateX(HandParaboloid1.MOVE_MATRIX, -180 * Math.PI / 180);
-  //crown paraboloid kanan depan
-  LIBS.scaleX(HandCrown1.POSITION_MATRIX, 0.335);
-  LIBS.scaleY(HandCrown1.POSITION_MATRIX, 0.025);
-  LIBS.scaleZ(HandCrown1.POSITION_MATRIX, 0.335);
-  LIBS.rotateY(HandCrown1.MOVE_MATRIX, 45 * Math.PI / 180);
-  LIBS.translateY(HandCrown1.MOVE_MATRIX, -37.75);
-  //body paraboloid1
-  LIBS.translateY(BodyParaboloid1.MOVE_MATRIX,-1.8);
-  //hand flame kanan depan
-  LIBS.scaleX(HandFlame1.POSITION_MATRIX, 3.5);
-  LIBS.scaleY(HandFlame1.POSITION_MATRIX, 1.75);
-  LIBS.scaleZ(HandFlame1.POSITION_MATRIX, 3.5);
-  LIBS.rotateX(HandFlame1.MOVE_MATRIX, -80 * Math.PI / 180);
-  LIBS.rotateY(HandFlame1.MOVE_MATRIX, 45 * Math.PI / 180);
-  LIBS.rotateZ(HandFlame1.MOVE_MATRIX, 15 * Math.PI / 180);  
-  LIBS.translateX(HandFlame1.MOVE_MATRIX, 0.1);
-  LIBS.translateZ(HandFlame1.MOVE_MATRIX, 0.1);
-  //subhand kanan belakang
-  LIBS.scaleX(SubHand2.POSITION_MATRIX, 6);
-  LIBS.scaleY(SubHand2.POSITION_MATRIX, 6);
-  LIBS.scaleZ(SubHand2.POSITION_MATRIX, 6);
-  LIBS.rotateX(SubHand2.MOVE_MATRIX, 220 * Math.PI / 180);
-  LIBS.rotateY(SubHand2.MOVE_MATRIX, 90  * Math.PI / 180);
-  LIBS.rotateZ(SubHand2.MOVE_MATRIX, 80 * Math.PI / 180);
-  LIBS.translateX(SubHand2.MOVE_MATRIX, 0.9);
-  LIBS.translateY(SubHand2.MOVE_MATRIX, 1.5);
-  //paraboloid kanan belakang
-  LIBS.translateY(HandParaboloid2.MOVE_MATRIX, -1);
-  LIBS.translateX(HandParaboloid2.MOVE_MATRIX, 1.625);
-  LIBS.scaleX(HandParaboloid2.POSITION_MATRIX, 1.25);
-  LIBS.scaleY(HandParaboloid2.POSITION_MATRIX, 25);
-  LIBS.scaleZ(HandParaboloid2.POSITION_MATRIX, 1.25);
-  LIBS.rotateX(HandParaboloid2.MOVE_MATRIX, -180 * Math.PI / 180);
-  //crown paraboloid kanan belakang
-  LIBS.scaleX(HandCrown2.POSITION_MATRIX, 0.335);
-  LIBS.scaleY(HandCrown2.POSITION_MATRIX, 0.025);
-  LIBS.scaleZ(HandCrown2.POSITION_MATRIX, 0.335);
-  LIBS.rotateY(HandCrown2.MOVE_MATRIX, 45 * Math.PI / 180);
-  LIBS.translateY(HandCrown2.MOVE_MATRIX, -37.75);
-  //hand flame kanan belakang
-  LIBS.scaleX(HandFlame2.POSITION_MATRIX, 3.5);
-  LIBS.scaleY(HandFlame2.POSITION_MATRIX, 1.75);
-  LIBS.scaleZ(HandFlame2.POSITION_MATRIX, 3.5);
-  LIBS.rotateX(HandFlame2.MOVE_MATRIX, -80 * Math.PI / 180);
-  LIBS.rotateY(HandFlame2.MOVE_MATRIX, 225 * Math.PI / 180);
-  LIBS.rotateZ(HandFlame2.MOVE_MATRIX, -15 * Math.PI / 180);  
-  LIBS.translateX(HandFlame2.MOVE_MATRIX, -0.1);
-  LIBS.translateZ(HandFlame2.MOVE_MATRIX, -0.1);
-  //subhand kiri depan
-  LIBS.scaleX(SubHand3.POSITION_MATRIX, 6);
-  LIBS.scaleY(SubHand3.POSITION_MATRIX, 6);
-  LIBS.scaleZ(SubHand3.POSITION_MATRIX, 6);
-  LIBS.rotateX(SubHand3.MOVE_MATRIX, 220 * Math.PI / 180);
-  LIBS.rotateY(SubHand3.MOVE_MATRIX, 90  * Math.PI / 180);
-  LIBS.rotateZ(SubHand3.MOVE_MATRIX, 80 * Math.PI / 180);
-  LIBS.translateX(SubHand3.MOVE_MATRIX, 0.9);
-  LIBS.translateY(SubHand3.MOVE_MATRIX, 1.5);
-  //paraboloid kiri depan
-  LIBS.translateY(HandParaboloid3.MOVE_MATRIX, -1);
-  LIBS.translateX(HandParaboloid3.MOVE_MATRIX, 1.625);
-  LIBS.scaleX(HandParaboloid3.POSITION_MATRIX, 1.25);
-  LIBS.scaleY(HandParaboloid3.POSITION_MATRIX, 25);
-  LIBS.scaleZ(HandParaboloid3.POSITION_MATRIX, 1.25);
-  LIBS.rotateX(HandParaboloid3.MOVE_MATRIX, -180 * Math.PI / 180);
-  //crown paraboloid kiri depan
-  LIBS.scaleX(HandCrown3.POSITION_MATRIX, 0.335);
-  LIBS.scaleY(HandCrown3.POSITION_MATRIX, 0.025);
-  LIBS.scaleZ(HandCrown3.POSITION_MATRIX, 0.335);
-  LIBS.rotateY(HandCrown3.MOVE_MATRIX, 45 * Math.PI / 180);
-  LIBS.translateY(HandCrown3.MOVE_MATRIX, -37.75);
-  //hand flame kiri depan
-  LIBS.scaleX(HandFlame3.POSITION_MATRIX, 3.5);
-  LIBS.scaleY(HandFlame3.POSITION_MATRIX, 1.75);
-  LIBS.scaleZ(HandFlame3.POSITION_MATRIX, 3.5);
-  LIBS.rotateX(HandFlame3.MOVE_MATRIX, -80 * Math.PI / 180);
-  LIBS.rotateY(HandFlame3.MOVE_MATRIX, 225 * Math.PI / 180);
-  LIBS.rotateZ(HandFlame3.MOVE_MATRIX, -15 * Math.PI / 180);
-  LIBS.translateX(HandFlame3.MOVE_MATRIX, -0.1);
-  LIBS.translateZ(HandFlame3.MOVE_MATRIX, -0.1);  
-  //subhand kiri belakang
-  LIBS.scaleX(SubHand4.POSITION_MATRIX, 6);
-  LIBS.scaleY(SubHand4.POSITION_MATRIX, 6);
-  LIBS.scaleZ(SubHand4.POSITION_MATRIX, 6);
-  LIBS.rotateX(SubHand4.MOVE_MATRIX, -220 * Math.PI / 180);
-  LIBS.rotateY(SubHand4.MOVE_MATRIX, -90  * Math.PI / 180);
-  LIBS.rotateZ(SubHand4.MOVE_MATRIX, 80 * Math.PI / 180);
-  LIBS.translateX(SubHand4.MOVE_MATRIX, 0.9);
-  LIBS.translateY(SubHand4.MOVE_MATRIX, 1.5);
-  //paraboloid kiri belakang
-  LIBS.translateY(HandParaboloid4.MOVE_MATRIX, -1);
-  LIBS.translateX(HandParaboloid4.MOVE_MATRIX, 1.625);
-  LIBS.scaleX(HandParaboloid4.POSITION_MATRIX, 1.25);
-  LIBS.scaleY(HandParaboloid4.POSITION_MATRIX, 25);
-  LIBS.scaleZ(HandParaboloid4.POSITION_MATRIX, 1.25);
-  LIBS.rotateX(HandParaboloid4.MOVE_MATRIX, -180 * Math.PI / 180);
-  //crown paraboloid kiri belakang
-  LIBS.scaleX(HandCrown4.POSITION_MATRIX, 0.335);
-  LIBS.scaleY(HandCrown4.POSITION_MATRIX, 0.025);
-  LIBS.scaleZ(HandCrown4.POSITION_MATRIX, 0.335);
-  LIBS.rotateY(HandCrown4.MOVE_MATRIX, 45 * Math.PI / 180);
-  LIBS.translateY(HandCrown4.MOVE_MATRIX, -37.75);
-  //hand flame kiri belakang
-  LIBS.scaleX(HandFlame4.POSITION_MATRIX, 3.5);
-  LIBS.scaleY(HandFlame4.POSITION_MATRIX, 1.75);
-  LIBS.scaleZ(HandFlame4.POSITION_MATRIX, 3.5);
-  LIBS.rotateX(HandFlame4.MOVE_MATRIX, -80 * Math.PI / 180);
-  LIBS.rotateY(HandFlame4.MOVE_MATRIX, 45 * Math.PI / 180);
-  LIBS.rotateZ(HandFlame4.MOVE_MATRIX, 15 * Math.PI / 180);
-  LIBS.translateX(HandFlame4.MOVE_MATRIX, 0.1);
-  LIBS.translateZ(HandFlame4.MOVE_MATRIX, 0.1);
+  // object1 (head)
 
-
-
-  // LIBS.translateY(Object2.POSITION_MATRIX, -1.7);
+  // hat outside
+  LIBS.scaleX(OutsideHat.POSITION_MATRIX, 0.25);
+  LIBS.scaleY(OutsideHat.POSITION_MATRIX, 0.25);
+  LIBS.scaleZ(OutsideHat.POSITION_MATRIX, 0.25);
+  LIBS.translateY(OutsideHat.POSITION_MATRIX, 0.5);
+  // hat inside
+  LIBS.translateY(InsideHat.POSITION_MATRIX, -0.1);
+  // head tip
+  LIBS.scaleX(HeadTip1.POSITION_MATRIX, 4);
+  LIBS.scaleY(HeadTip1.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(HeadTip1.POSITION_MATRIX, 4);
+  LIBS.rotateX(HeadTip1.MOVE_MATRIX, -90 * (Math.PI / 180));
+  LIBS.translateY(HeadTip1.POSITION_MATRIX, 1);
+  // LIBS.translateY(TopHat.POSITION_MATRIX, 1.5);
 
   var PROJMATRIX = LIBS.get_projection(40, CANVAS.width / CANVAS.height, 1, 100);
   // var MOVEMATRIX = LIBS.get_I4();
@@ -396,7 +160,7 @@ function main() {
 
     var dt = time - time_prev;
     time_prev = time;
-    // LIBS.rotateZ(HeadFlame1.MOVE_MATRIX, dt * 0.0025);
+    // LIBS.rotateY(Object1.MOVE_MATRIX, dt * 0.001);
     // LIBS.rotateX(Object3.MOVE_MATRIX, dt * -0.001);
     // LIBS.rotateX(Object4.MOVE_MATRIX, dt * 0.001);
 
