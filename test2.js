@@ -8,6 +8,7 @@ import { BodyCone } from "./Chandelure/BodyCone.js";
 import { BodyParaboloid } from "./Chandelure/BodyParaboloid.js";
 import { HeadCrown } from "./Chandelure/HeadCrown.js";
 import { CrownOutline } from "./Chandelure/CrownOutline.js";
+import { HeadFlame } from "./Chandelure/HeadFlame.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -89,6 +90,7 @@ function main() {
   var Object2 = new BodyCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var BodyParaboloid1 = new BodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var CrownOutline1 = new CrownOutline(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var HeadFlame1 = new HeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
   Object1.childs.push(HeadStrip1);
@@ -102,14 +104,15 @@ function main() {
   HeadEye2.childs.push(HeadEyeOutline2);
   Object1.childs.push(Object2);
   Object2.childs.push(BodyParaboloid1);
+  Object1.childs.push(HeadFlame1);
 
   // Scale + Positioning objects
   //object1 (head)
   LIBS.rotateX(Object1.MOVE_MATRIX, 90 * Math.PI / 180);
   LIBS.rotateY(Object1.MOVE_MATRIX, 90 * Math.PI / 180);
-  LIBS.scaleX(Object1.POSITION_MATRIX, 2);
-  LIBS.scaleY(Object1.POSITION_MATRIX, 2);
-  LIBS.scaleZ(Object1.POSITION_MATRIX, 2);
+  LIBS.scaleX(Object1.POSITION_MATRIX, 1.5);
+  LIBS.scaleY(Object1.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(Object1.POSITION_MATRIX, 1.5);
   //eye kanan
   LIBS.rotateY(HeadEye1.MOVE_MATRIX, 90 * Math.PI / 180);
   LIBS.rotateZ(HeadEye1.MOVE_MATRIX, -45 * Math.PI / 180);
@@ -120,13 +123,17 @@ function main() {
   LIBS.rotateZ(HeadEye2.MOVE_MATRIX, 45 * Math.PI / 180);
   LIBS.translateY(HeadEye2.MOVE_MATRIX, -0.381);
   LIBS.translateX(HeadEye2.MOVE_MATRIX, -0.37);
-
   //head crown
   LIBS.scaleX(HeadCrown1.POSITION_MATRIX, 0.15);
   LIBS.scaleY(HeadCrown1.POSITION_MATRIX, 0.15);
   LIBS.scaleZ(HeadCrown1.POSITION_MATRIX, 0.15);
   LIBS.rotateX(HeadCrown1.MOVE_MATRIX, -90 * Math.PI / 180);
   LIBS.translateZ(HeadCrown1.MOVE_MATRIX, -3);
+  //head flame
+  LIBS.rotateX(HeadFlame1.POSITION_MATRIX, 180 * Math.PI / 180);
+  LIBS.rotateZ(HeadFlame1.POSITION_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateX(HeadFlame1.MOVE_MATRIX, -0.165);
+  LIBS.translateZ(HeadFlame1.MOVE_MATRIX, 0.15);
   //object2 (body paraboloid)
   LIBS.scaleX(Object2.POSITION_MATRIX, 0.1);
   LIBS.scaleY(Object2.POSITION_MATRIX, 0.1);
