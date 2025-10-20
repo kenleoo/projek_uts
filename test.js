@@ -79,7 +79,7 @@ function main() {
   // Objects
   var Object1 = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var HeadTip1 = new HeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var OutsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 5, 2.1);
+  var OutsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15]);
   var InsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
   var HeadEye1 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var HeadEye2 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
@@ -112,15 +112,16 @@ function main() {
   LIBS.scaleX(OutsideHat.POSITION_MATRIX, 0.25);
   LIBS.scaleY(OutsideHat.POSITION_MATRIX, 0.25);
   LIBS.scaleZ(OutsideHat.POSITION_MATRIX, 0.25);
-  LIBS.translateY(OutsideHat.POSITION_MATRIX, 0.5);
+  LIBS.translateY(OutsideHat.POSITION_MATRIX, 0.1);
   // hat inside
-  LIBS.translateY(InsideHat.POSITION_MATRIX, -0.1);
+  LIBS.translateY(InsideHat.POSITION_MATRIX, -0.05);
+  
   // head tip
   LIBS.scaleX(HeadTip1.POSITION_MATRIX, 4);
   LIBS.scaleY(HeadTip1.POSITION_MATRIX, 1.5);
   LIBS.scaleZ(HeadTip1.POSITION_MATRIX, 4);
   LIBS.rotateX(HeadTip1.MOVE_MATRIX, -90 * (Math.PI / 180));
-  LIBS.translateY(HeadTip1.POSITION_MATRIX, 1);
+  LIBS.translateY(HeadTip1.POSITION_MATRIX, 2);
   // LIBS.translateY(TopHat.POSITION_MATRIX, 1.5);
 
   // head eye (kanan)

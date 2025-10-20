@@ -28,7 +28,7 @@ export class HatParaboloid {
 
     // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
     paraboloidRadius = 5,
-    paraboloidHeight = 2,
+    paraboloidHeight = 5,
     segments = 36
   ) {
     this.GL = GL;
@@ -51,7 +51,8 @@ export class HatParaboloid {
     for (let i = 0; i <= rings; i++) {
       const t = i / rings;
       const r = paraboloidRadius * (1 - t); // radius mengecil ke bawah
-      const y = paraboloidHeight / 2 - a * (r * r); // buka ke bawah, runcing di bawah
+      // const y = paraboloidHeight / 2 - a * (r * r); // buka ke bawah, runcing di bawah
+      const y = paraboloidHeight / 2 - a * Math.pow(r, 1.5); // buka ke bawah, runcing di bawah
 
       for (let j = 0; j <= segments; j++) {
         const theta = (j / segments) * Math.PI * 2;
