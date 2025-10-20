@@ -23,7 +23,7 @@ export class HandFlame {
     _position,
     _color,
     _MMatrix,
-    a = 0.3,      // base radius
+    a = 0.4,      // base radius
     c = 2.5,      // flame height
     uSeg = 32,    // radial segments
     vSeg = 60     // vertical segments

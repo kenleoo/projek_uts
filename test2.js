@@ -264,7 +264,7 @@ function main() {
   LIBS.scaleX(HandFlame2.POSITION_MATRIX, 3.5);
   LIBS.scaleY(HandFlame2.POSITION_MATRIX, 1.75);
   LIBS.scaleZ(HandFlame2.POSITION_MATRIX, 3.5);
-  LIBS.rotateX(HandFlame2.MOVE_MATRIX, -90 * Math.PI / 180);
+  LIBS.rotateX(HandFlame2.MOVE_MATRIX, -80 * Math.PI / 180);
   LIBS.rotateY(HandFlame2.MOVE_MATRIX, 225 * Math.PI / 180);
   LIBS.rotateZ(HandFlame2.MOVE_MATRIX, -15 * Math.PI / 180);  
   //subhand kiri depan
@@ -293,7 +293,7 @@ function main() {
   LIBS.scaleX(HandFlame3.POSITION_MATRIX, 3.5);
   LIBS.scaleY(HandFlame3.POSITION_MATRIX, 1.75);
   LIBS.scaleZ(HandFlame3.POSITION_MATRIX, 3.5);
-  LIBS.rotateX(HandFlame3.MOVE_MATRIX, -90 * Math.PI / 180);
+  LIBS.rotateX(HandFlame3.MOVE_MATRIX, -80 * Math.PI / 180);
   LIBS.rotateY(HandFlame3.MOVE_MATRIX, 225 * Math.PI / 180);
   LIBS.rotateZ(HandFlame3.MOVE_MATRIX, -15 * Math.PI / 180);  
   //subhand kiri belakang
