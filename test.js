@@ -1,3 +1,4 @@
+import { Head } from "./Lampent/Head.js";
 import { HatParaboloid } from "./Lampent/HatParaboloid.js";
 import { TopHat } from "./Lampent/TopHat.js";
 
@@ -70,23 +71,29 @@ function main() {
   GL.useProgram(SHADER_PROGRAM);
 
   // Objects
-  var TopHat = new TopHat(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 1, 4);
+  // var TopHat = new TopHat(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 1, 4);
+  var Object1 = new Head (GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var OutsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 5, 2.1);
   var InsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
 
   // Child object relationship
-  OutsideHat.childs.push(TopHat);
+  // OutsideHat.childs.push(TopHat);
+  Object1.childs.push(OutsideHat);
   OutsideHat.childs.push(InsideHat);
   //   Object1.childs.push(HeadVerticalStrip1);
   //   Object1.childs.push(HeadEye1);
 
   // Scale + Positioning objects
   // object1 (head)
-  LIBS.scaleX(OutsideHat.POSITION_MATRIX, 0.5);
-  LIBS.scaleY(OutsideHat.POSITION_MATRIX, 0.5);
-  LIBS.scaleZ(OutsideHat.POSITION_MATRIX, 0.5);
+
+  // hat outside
+  LIBS.scaleX(OutsideHat.POSITION_MATRIX, 0.25);
+  LIBS.scaleY(OutsideHat.POSITION_MATRIX, 0.25);
+  LIBS.scaleZ(OutsideHat.POSITION_MATRIX, 0.25);
+  LIBS.translateY(OutsideHat.POSITION_MATRIX, 0.5);
+  // hat inside
   LIBS.translateY(InsideHat.POSITION_MATRIX, -0.1);
-  LIBS.translateY(TopHat.POSITION_MATRIX, 1.5);
+  // LIBS.translateY(TopHat.POSITION_MATRIX, 1.5);
 
   var PROJMATRIX = LIBS.get_projection(40, CANVAS.width / CANVAS.height, 1, 100);
   // var MOVEMATRIX = LIBS.get_I4();
@@ -135,7 +142,7 @@ function main() {
   GL.clearColor(0.0, 0.0, 0.0, 0.0);
   GL.clearDepth(1.0);
 
-  OutsideHat.setup();
+  Object1.setup();
 
   /*========================= Animation ========================= */
   var time_prev = 0;
@@ -161,7 +168,7 @@ function main() {
     GL.uniformMatrix4fv(_Pmatrix, false, PROJMATRIX);
     GL.uniformMatrix4fv(_Vmatrix, false, cam);
 
-    OutsideHat.render(LIBS.get_I4());
+    Object1.render(LIBS.get_I4());
 
     GL.flush();
     window.requestAnimationFrame(animate);
