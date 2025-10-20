@@ -1,6 +1,6 @@
 import { Head } from "./Lampent/Head.js";
 import { HatParaboloid } from "./Lampent/HatParaboloid.js";
-import { TopHat } from "./Lampent/TopHat.js";
+import { HeadTip } from "./Lampent/HeadTip.js";
 
 
 function main() {
@@ -75,6 +75,7 @@ function main() {
   var Object1 = new Head (GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var OutsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 5, 2.1);
   var InsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
+  var HeadTip = new HeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
   // OutsideHat.childs.push(TopHat);
