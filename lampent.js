@@ -1,4 +1,11 @@
-// import { Head } from "./Chandelure/Head.js";
+import { Head } from "./Lampent/Head.js";
+import { HatParaboloid } from "./Lampent/HatParaboloid.js";
+import { BodyParaboloid } from "./Lampent/BodyParaboloid.js";
+import { BodyClylinder } from "./Lampent/BodyCylinder.js";
+import { UnderBodyParaboloid } from "./Lampent/UnderBodyParaboloid.js";
+import { BodyBottomCone } from "./Lampent/BodyBottomCone.js";
+import { HeadTip } from "./Lampent/HeadTip.js";
+
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -68,20 +75,74 @@ function main() {
   GL.useProgram(SHADER_PROGRAM);
 
   // Objects
-//   var Object1 = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  // var TopHat = new TopHat(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 1, 4);
+  var Object1 = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 5, 2.1);
+  var InsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
+  var TopBodyParaboloid = new BodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var BodyClylinder1 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var BottomBodyParaboloid = new UnderBodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var BodyCone = new BodyBottomCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  
+  var HeadTip1 = new HeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
-//   Object1.childs.push(HeadStrip1);
-//   Object1.childs.push(HeadVerticalStrip1);
-//   Object1.childs.push(HeadEye1);
+  // OutsideHat.childs.push(TopHat);
+  Object1.childs.push(OutsideHat);
+  OutsideHat.childs.push(InsideHat);
+  Object1.childs.push(TopBodyParaboloid);
+  TopBodyParaboloid.childs.push(BodyClylinder1);
+  BodyClylinder1.childs.push(BottomBodyParaboloid);
+  BottomBodyParaboloid.childs.push(BodyCone);
+  OutsideHat.childs.push(HeadTip1);
+  //   Object1.childs.push(HeadVerticalStrip1);
+  //   Object1.childs.push(HeadEye1);
+
 
   // Scale + Positioning objects
-//   //object1 (head)
-//   LIBS.rotateX(Object1.MOVE_MATRIX, 90 * Math.PI / 180);
-//   LIBS.rotateY(Object1.MOVE_MATRIX, 90 * Math.PI / 180);
-//   LIBS.scaleX(Object1.POSITION_MATRIX, 2);
-//   LIBS.scaleY(Object1.POSITION_MATRIX, 2);
-//   LIBS.scaleZ(Object1.POSITION_MATRIX, 2);
+  // object1 (head)
+  LIBS.scaleX(Object1.POSITION_MATRIX, 2);
+  LIBS.scaleY(Object1.POSITION_MATRIX, 2);
+  LIBS.scaleZ(Object1.POSITION_MATRIX, 2);
+
+  // hat outside
+  LIBS.scaleX(OutsideHat.POSITION_MATRIX, 0.25);
+  LIBS.scaleY(OutsideHat.POSITION_MATRIX, 0.25);
+  LIBS.scaleZ(OutsideHat.POSITION_MATRIX, 0.25);
+  LIBS.translateY(OutsideHat.POSITION_MATRIX, 0.5);
+  // hat inside
+  LIBS.translateY(InsideHat.POSITION_MATRIX, -0.1);
+  // head tip
+  LIBS.scaleX(HeadTip1.POSITION_MATRIX, 4);
+  LIBS.scaleY(HeadTip1.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(HeadTip1.POSITION_MATRIX, 4);
+  LIBS.rotateX(HeadTip1.MOVE_MATRIX, -90 * (Math.PI / 180));
+  LIBS.translateY(HeadTip1.POSITION_MATRIX, 1);
+  // LIBS.translateY(TopHat.POSITION_MATRIX, 1.5);
+
+  // body paraboloid
+  LIBS.scaleX(TopBodyParaboloid.POSITION_MATRIX, 0.1);
+  LIBS.scaleY(TopBodyParaboloid.POSITION_MATRIX, 0.1);
+  LIBS.scaleZ(TopBodyParaboloid.POSITION_MATRIX, 0.1);
+  LIBS.translateY(TopBodyParaboloid.POSITION_MATRIX, -0.8025);
+
+  // body cylinder
+  LIBS.translateY(BodyClylinder1.POSITION_MATRIX, -0.6);
+  LIBS.scaleX(BodyClylinder1.POSITION_MATRIX, 25);
+  LIBS.scaleY(BodyClylinder1.POSITION_MATRIX, 25);
+  LIBS.scaleZ(BodyClylinder1.POSITION_MATRIX, 25);
+
+  // bottom body paraboloid
+  LIBS.scaleX(BottomBodyParaboloid.POSITION_MATRIX, 0.045);
+  LIBS.scaleY(BottomBodyParaboloid.POSITION_MATRIX, 0.045);
+  LIBS.scaleZ(BottomBodyParaboloid.POSITION_MATRIX, 0.045);
+  LIBS.translateY(BottomBodyParaboloid.POSITION_MATRIX, -0.075);
+
+  // body bottom cone
+  LIBS.translateY(BodyCone.POSITION_MATRIX, -1.5);
+
+
+
 
   var PROJMATRIX = LIBS.get_projection(40, CANVAS.width / CANVAS.height, 1, 100);
   // var MOVEMATRIX = LIBS.get_I4();
@@ -130,7 +191,7 @@ function main() {
   GL.clearColor(0.0, 0.0, 0.0, 0.0);
   GL.clearDepth(1.0);
 
-//   Object1.setup();
+  Object1.setup();
 
   /*========================= Animation ========================= */
   var time_prev = 0;
