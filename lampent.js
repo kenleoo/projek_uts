@@ -1,4 +1,4 @@
-import { HeadParaboloid } from "./Lampent/HeadParaboloid.js";
+// import { Head } from "./Chandelure/Head.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -68,20 +68,20 @@ function main() {
   GL.useProgram(SHADER_PROGRAM);
 
   // Objects
-  var Object1 = new HeadParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 5, 3.1);
-  var Object2 = new HeadParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
+//   var Object1 = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
-  Object1.childs.push(Object2);
-  //   Object1.childs.push(HeadVerticalStrip1);
-  //   Object1.childs.push(HeadEye1);
+//   Object1.childs.push(HeadStrip1);
+//   Object1.childs.push(HeadVerticalStrip1);
+//   Object1.childs.push(HeadEye1);
 
   // Scale + Positioning objects
-  // object1 (head)
-  LIBS.scaleX(Object1.POSITION_MATRIX, 0.5);
-  LIBS.scaleY(Object1.POSITION_MATRIX, 0.5);
-  LIBS.scaleZ(Object1.POSITION_MATRIX, 0.5);
-  LIBS.translateY(Object2.POSITION_MATRIX, -0.1);
+//   //object1 (head)
+//   LIBS.rotateX(Object1.MOVE_MATRIX, 90 * Math.PI / 180);
+//   LIBS.rotateY(Object1.MOVE_MATRIX, 90 * Math.PI / 180);
+//   LIBS.scaleX(Object1.POSITION_MATRIX, 2);
+//   LIBS.scaleY(Object1.POSITION_MATRIX, 2);
+//   LIBS.scaleZ(Object1.POSITION_MATRIX, 2);
 
   var PROJMATRIX = LIBS.get_projection(40, CANVAS.width / CANVAS.height, 1, 100);
   // var MOVEMATRIX = LIBS.get_I4();
@@ -130,7 +130,7 @@ function main() {
   GL.clearColor(0.0, 0.0, 0.0, 0.0);
   GL.clearDepth(1.0);
 
-  Object1.setup();
+//   Object1.setup();
 
   /*========================= Animation ========================= */
   var time_prev = 0;
