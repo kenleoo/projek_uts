@@ -1,4 +1,4 @@
-export class HeadParaboloid {
+export class TopHat {
   GL = null;
   SHADER_PROGRAM = null;
 
