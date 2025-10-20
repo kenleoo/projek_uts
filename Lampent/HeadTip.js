@@ -62,7 +62,7 @@ export class HeadTip {
         this.vertex.push(x, y, z);
 
         // Color gradient: light blue → dark blue/purple
-        this.vertex.push(0.075, 0, 0.15, 0.8);
+        this.vertex.push(0.075, 0, 0.15, 1);
       }
     }
 
