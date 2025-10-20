@@ -51,7 +51,7 @@ export class Head {
           let z = c * Math.cos(phi);
 
           this.vertex.push(x, y, z);
-          this.vertex.push(0.7, 0.8, 1); // Purple color
+          this.vertex.push(0.4, 0.4, 1, 0.6); // Purple color
 
       }
    }
@@ -92,8 +92,8 @@ export class Head {
     this.GL.uniformMatrix4fv(this._MMatrix, false, this.MODEL_MATRIX);
 
     this.GL.bindBuffer(this.GL.ARRAY_BUFFER, this.OBJECT_VERTEX);
-    this.GL.vertexAttribPointer(this._position, 3, this.GL.FLOAT, false, 24, 0);
-    this.GL.vertexAttribPointer(this._color, 3, this.GL.FLOAT, false, 24, 12);
+    this.GL.vertexAttribPointer(this._position, 3, this.GL.FLOAT, false, 28, 0);
+    this.GL.vertexAttribPointer(this._color, 4, this.GL.FLOAT, false, 28, 12);
 
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
     this.GL.drawElements(this.GL.TRIANGLES, this.faces.length, this.GL.UNSIGNED_SHORT, 0);

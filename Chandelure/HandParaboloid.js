@@ -1,4 +1,4 @@
-export class HeadFlame {
+export class HandParaboloid {
   GL = null;
   SHADER_PROGRAM = null;
 
@@ -22,63 +22,56 @@ export class HeadFlame {
     SHADER_PROGRAM,
     _position,
     _color,
-    _MMatrix,
-    a = 0.3,      // base radius
-    c = 2.5,      // flame height
-    uSeg = 60,    // radial segments
-    vSeg = 360     // vertical segments
+    _Mmatrix,
+
+    // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
+    paraboloidRadius = 0.5,
+    paraboloidHeight = 2,
+    segments = 36
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
     this._position = _position;
     this._color = _color;
-    this._MMatrix = _MMatrix;
+    this._MMatrix = _Mmatrix;
 
     this.vertex = [];
     this.faces = [];
 
-    const base_radius = a;
-    const height = c;
+    /*========================= Paraboloid Eliptik Terbalik Runcing ========================= */
+    const rings = 30; // semakin besar, semakin halus
+    const a = paraboloidHeight / (paraboloidRadius * paraboloidRadius); // konstanta parabola
 
-    for (let i = 0; i <= vSeg; i++) {
-      const t = i / vSeg;
-      const z = height * t;
+    // Simpan index awal vertex
+    const baseIndex = this.vertex.length / 6;
 
-      // Flame profile: tapering + bulges
-      const taper = 1 - t;
-      const bulge = 1;
-      const radius = base_radius * taper * bulge;
+    // Build vertex paraboloid terbalik (runcing ke bawah)
+    for (let i = 0; i <= rings; i++) {
+      const t = i / rings;
+      const r = paraboloidRadius * (1 - t);             // radius mengecil ke bawah
+    //   const y = -paraboloidHeight / 2 + a * (r * r);    // buka ke bawah, runcing di bawah
+        const y = -paraboloidHeight / 2 + a * Math.pow(r, 7.5);
 
-      // Flame curve offset — curve sideways (like S-shape)
-      const offsetX = 0.2 * Math.sin(2 * Math.PI * t) + 0.15 * t;
+      for (let j = 0; j <= segments; j++) {
+        const theta = (j / segments) * Math.PI * 2;
+        const x = Math.cos(theta) * r;
+        const z = Math.sin(theta) * r;
 
-
-      for (let j = 0; j <= uSeg; j++) {
-        const theta = (j / uSeg) * 2 * Math.PI;
-
-        const x = offsetX + radius * Math.cos(theta);
-        const y = radius * Math.sin(theta);
-
-        this.vertex.push(x, y, z);
-
-        // Color gradient: light blue → dark blue/purple
-        const rCol = 0.3 + 0.15 * (1 - t);
-        const gCol = 0.6 * (1 - t);
-        const bCol = 1;
-        this.vertex.push(rCol, gCol, bCol, 0.8);
+        // warna hitam 
+        this.vertex.push(x, y, z, 0.075, 0, 0.15);
       }
     }
 
-    // Create triangle faces (quads split into 2 triangles)
-    for (let i = 0; i < vSeg; i++) {
-      for (let j = 0; j < uSeg; j++) {
-        let p1 = i * (uSeg + 1) + j;
-        let p2 = p1 + 1;
-        let p3 = p1 + (uSeg + 1);
-        let p4 = p3 + 1;
+    // Build faces paraboloid
+    for (let i = 0; i < rings; i++) {
+      for (let j = 0; j < segments; j++) {
+        const p1 = baseIndex + i * (segments + 1) + j;
+        const p2 = baseIndex + (i + 1) * (segments + 1) + j;
+        const p3 = baseIndex + (i + 1) * (segments + 1) + (j + 1);
+        const p4 = baseIndex + i * (segments + 1) + (j + 1);
 
+        this.faces.push(p1, p2, p3);
         this.faces.push(p1, p3, p4);
-        this.faces.push(p1, p4, p2);
       }
     }
   }
@@ -106,8 +99,8 @@ export class HeadFlame {
     this.GL.uniformMatrix4fv(this._MMatrix, false, this.MODEL_MATRIX);
 
     this.GL.bindBuffer(this.GL.ARRAY_BUFFER, this.OBJECT_VERTEX);
-    this.GL.vertexAttribPointer(this._position, 3, this.GL.FLOAT, false, 28, 0);
-    this.GL.vertexAttribPointer(this._color, 4, this.GL.FLOAT, false, 28, 12);
+    this.GL.vertexAttribPointer(this._position, 3, this.GL.FLOAT, false, 24, 0);
+    this.GL.vertexAttribPointer(this._color, 3, this.GL.FLOAT, false, 24, 12);
 
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
     this.GL.drawElements(this.GL.TRIANGLES, this.faces.length, this.GL.UNSIGNED_SHORT, 0);

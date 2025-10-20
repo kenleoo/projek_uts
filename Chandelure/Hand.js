@@ -23,10 +23,8 @@ export class Hand {
     _position,
     _color,
     _Mmatrix,
-    stacks = 60,
-    circleSegments = 14,
-    radius = 5,
-    height = 10
+    circleSegments = 60,
+    radius = 10,
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -45,7 +43,7 @@ export class Hand {
 
       for (let i = 0; i <= points; i++) {
         const t = i / points;
-        const r = startRadius - radiusDiff * Math.pow(t, curvePower);
+        const r = startRadius - radiusDiff * Math.pow(t, curvePower) + 3;
         const theta = Math.pow(t, 0.7) * turns * 2 * Math.PI;
         const x = r * Math.cos(theta);
         const y = r * Math.sin(theta);
@@ -57,7 +55,7 @@ export class Hand {
     }
 
     // Tube generator
-    function generateTubeAlongPath(path, circleSegments = 24, tubeRadius = 0.25) {
+    function generateTubeAlongPath(path, circleSegments = 60, tubeRadius = 0.5) {
       const vertices = [];
       const faces = [];
 
@@ -86,7 +84,7 @@ export class Hand {
           const vy = y + side[1] * cx + localUp[1] * cy;
           const vz = z + side[2] * cx + localUp[2] * cy;
 
-          vertices.push(vx, vy, vz, 0.1, 0.1, 0.1);
+          vertices.push(vx, vy, vz, 0.075, 0, 0.15);
         }
       }
 
@@ -149,7 +147,7 @@ export class Hand {
 
     const fullPath = [...extension, ...basePath];
 
-    const tube = generateTubeAlongPath(fullPath, circleSegments, radius * 0.18);
+    const tube = generateTubeAlongPath(fullPath, circleSegments, 5 * 0.25);
 
     this.vertex = tube.vertices;
     this.faces = tube.faces;
@@ -183,8 +181,8 @@ export class Hand {
     this.GL.vertexAttribPointer(this._color, 3, this.GL.FLOAT, false, 24, 12);
 
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
-    // this.GL.drawElements(this.GL.TRIANGLES, this.faces.length, this.GL.UNSIGNED_SHORT, 0);
-    this.GL.drawElements(this.GL.LINES, this.faces.length, this.GL.UNSIGNED_SHORT, 0);
+    this.GL.drawElements(this.GL.TRIANGLES, this.faces.length, this.GL.UNSIGNED_SHORT, 0);
+    // this.GL.drawElements(this.GL.LINES, this.faces.length, this.GL.UNSIGNED_SHORT, 0);
 
     this.childs.forEach((child) => child.render(this.MODEL_MATRIX));
   }

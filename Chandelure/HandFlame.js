@@ -1,4 +1,4 @@
-export class HeadFlame {
+export class HandFlame {
   GL = null;
   SHADER_PROGRAM = null;
 
@@ -25,8 +25,8 @@ export class HeadFlame {
     _MMatrix,
     a = 0.3,      // base radius
     c = 2.5,      // flame height
-    uSeg = 60,    // radial segments
-    vSeg = 360     // vertical segments
+    uSeg = 32,    // radial segments
+    vSeg = 60     // vertical segments
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -49,9 +49,7 @@ export class HeadFlame {
       const bulge = 1;
       const radius = base_radius * taper * bulge;
 
-      // Flame curve offset — curve sideways (like S-shape)
-      const offsetX = 0.2 * Math.sin(2 * Math.PI * t) + 0.15 * t;
-
+      const offsetX = 0.1 * Math.sin(2 * Math.PI * t) + 0.15 * t;
 
       for (let j = 0; j <= uSeg; j++) {
         const theta = (j / uSeg) * 2 * Math.PI;
@@ -62,8 +60,8 @@ export class HeadFlame {
         this.vertex.push(x, y, z);
 
         // Color gradient: light blue → dark blue/purple
-        const rCol = 0.3 + 0.15 * (1 - t);
-        const gCol = 0.6 * (1 - t);
+        const rCol = 0.4 + 0.25 * (1 - t);
+        const gCol = 0.8 * (1 - t);
         const bCol = 1;
         this.vertex.push(rCol, gCol, bCol, 0.8);
       }
