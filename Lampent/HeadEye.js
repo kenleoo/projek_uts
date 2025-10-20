@@ -1,4 +1,4 @@
-export class HatParaboloid {
+export class HeadEye {
   GL = null;
   SHADER_PROGRAM = null;
 
@@ -24,12 +24,10 @@ export class HatParaboloid {
     _color,
     _Mmatrix,
 
-    color = [0.075, 0, 0.15],
-
     // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
-    paraboloidRadius = 5,
-    paraboloidHeight = 5,
-    segments = 36
+    radius = 0.1,
+    height = 0.025,
+    segments = 360
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -40,41 +38,41 @@ export class HatParaboloid {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Paraboloid Eliptik Terbalik Runcing ========================= */
-    const rings = 30; // semakin besar, semakin halus
-    const a = paraboloidHeight / (paraboloidRadius * paraboloidRadius); // konstanta parabola
+    /*========================= Upside-down cone (penyangga kepala) ========================= */
+    // Build vertex
+    this.vertex.push(0, 0, height / 2);    // top center
+    this.vertex.push(1, 1, 0);             // top color
 
-    // Simpan index awal vertex
-    const baseIndex = this.vertex.length / 6;
+    this.vertex.push(0, 0, -height / 2);   // bottom center
+    this.vertex.push(1, 1, 0);             // bottom color
 
-    // Build vertex paraboloid terbalik (runcing ke bawah)
-    for (let i = 0; i <= rings; i++) {
-      const t = i / rings;
-      const r = paraboloidRadius * (1 - t); // radius mengecil ke bawah
-      // const y = paraboloidHeight / 2 - a * (r * r); // buka ke bawah, runcing di bawah
-      const y = paraboloidHeight / 2 - a * Math.pow(r, 1.5); // buka ke bawah, runcing di bawah
+    for (let i = 0; i <= segments; i++) {
+        let theta = 2 * Math.PI * i / segments;
+        let x = radius * Math.cos(theta);
+        let y = radius * Math.sin(theta);
+        let zTop = height / 2;
+        let zBottom = -height / 2;
 
-      for (let j = 0; j <= segments; j++) {
-        const theta = (j / segments) * Math.PI * 2;
-        const x = Math.cos(theta) * r;
-        const z = Math.sin(theta) * r;
-
-        // warna hitam
-        this.vertex.push(x, y, z, color[0], color[1], color[2]);
-      }
+        this.vertex.push(x, y, zTop);
+        this.vertex.push(1, 1, 0); // Yellow color
+        // Bottom circle
+        this.vertex.push(x, y, zBottom);
+        this.vertex.push(1, 1, 0); // Yellow color
+        
     }
-
-    // Build faces paraboloid
-    for (let i = 0; i < rings; i++) {
-      for (let j = 0; j < segments; j++) {
-        const p1 = baseIndex + i * (segments + 1) + j;
-        const p2 = baseIndex + (i + 1) * (segments + 1) + j;
-        const p3 = baseIndex + (i + 1) * (segments + 1) + (j + 1);
-        const p4 = baseIndex + i * (segments + 1) + (j + 1);
-
-        this.faces.push(p1, p2, p3);
-        this.faces.push(p1, p3, p4);
-      }
+    // Faces
+    for (let i = 0; i < segments; i++) {
+        let top1 = i * 2;
+        let bottom1 = top1 + 1;
+        let top2 = ((i + 1) % segments) * 2;
+        let bottom2 = top2 + 1;
+        // Side faces
+        this.faces.push(top1, bottom1, bottom2);
+        this.faces.push(top1, bottom2, top2);
+        // Top face
+        this.faces.push(top1, top2, (segments * 2));
+        // Bottom face
+        this.faces.push(bottom1, (segments * 2) + 1, bottom2);
     }
   }
   setup() {
@@ -84,7 +82,11 @@ export class HatParaboloid {
 
     this.OBJECT_FACES = this.GL.createBuffer();
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
-    this.GL.bufferData(this.GL.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), this.GL.STATIC_DRAW);
+    this.GL.bufferData(
+      this.GL.ELEMENT_ARRAY_BUFFER,
+      new Uint16Array(this.faces),
+      this.GL.STATIC_DRAW
+    );
 
     this.childs.forEach((child) => child.setup());
   }
