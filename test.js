@@ -4,6 +4,8 @@ import { BodyParaboloid } from "./Lampent/BodyParaboloid.js";
 import { BodyClylinder } from "./Lampent/BodyCylinder.js";
 import { UnderBodyParaboloid } from "./Lampent/UnderBodyParaboloid.js";
 import { BodyBottomCone } from "./Lampent/BodyBottomCone.js";
+import { HeadTip } from "./Lampent/HeadTip.js";
+
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -82,6 +84,7 @@ function main() {
   var BottomBodyParaboloid = new UnderBodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var BodyCone = new BodyBottomCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   
+  var HeadTip1 = new HeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
   // OutsideHat.childs.push(TopHat);
@@ -91,6 +94,7 @@ function main() {
   TopBodyParaboloid.childs.push(BodyClylinder1);
   BodyClylinder1.childs.push(BottomBodyParaboloid);
   BottomBodyParaboloid.childs.push(BodyCone);
+  OutsideHat.childs.push(HeadTip1);
   //   Object1.childs.push(HeadVerticalStrip1);
   //   Object1.childs.push(HeadEye1);
 
@@ -108,6 +112,12 @@ function main() {
   LIBS.translateY(OutsideHat.POSITION_MATRIX, 0.5);
   // hat inside
   LIBS.translateY(InsideHat.POSITION_MATRIX, -0.1);
+  // head tip
+  LIBS.scaleX(HeadTip1.POSITION_MATRIX, 4);
+  LIBS.scaleY(HeadTip1.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(HeadTip1.POSITION_MATRIX, 4);
+  LIBS.rotateX(HeadTip1.MOVE_MATRIX, -90 * (Math.PI / 180));
+  LIBS.translateY(HeadTip1.POSITION_MATRIX, 1);
   // LIBS.translateY(TopHat.POSITION_MATRIX, 1.5);
 
   // body paraboloid
