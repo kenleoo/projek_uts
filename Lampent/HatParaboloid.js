@@ -1,4 +1,4 @@
-export class HeadParaboloid {
+export class HatParaboloid {
   GL = null;
   SHADER_PROGRAM = null;
 
@@ -28,7 +28,7 @@ export class HeadParaboloid {
 
     // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
     paraboloidRadius = 5,
-    paraboloidHeight = 3,
+    paraboloidHeight = 2,
     segments = 36
   ) {
     this.GL = GL;
