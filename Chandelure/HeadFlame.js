@@ -23,7 +23,7 @@ export class HeadFlame {
     _position,
     _color,
     _MMatrix,
-    a = 0.3,      // base radius
+    a = 0.29,      // base radius
     c = 2.5,      // flame height
     uSeg = 60,    // radial segments
     vSeg = 360     // vertical segments
@@ -51,13 +51,13 @@ export class HeadFlame {
 
       // Flame curve offset — curve sideways (like S-shape)
       const offsetX = 0.2 * Math.sin(2 * Math.PI * t) + 0.15 * t;
-
+      const offsetY = 0.2 * Math.cos(2 * Math.PI * t) + 0.15 * t;
 
       for (let j = 0; j <= uSeg; j++) {
         const theta = (j / uSeg) * 2 * Math.PI;
 
         const x = offsetX + radius * Math.cos(theta);
-        const y = radius * Math.sin(theta);
+        const y = offsetY + radius * Math.sin(theta);
 
         this.vertex.push(x, y, z);
 

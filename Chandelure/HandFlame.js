@@ -23,7 +23,7 @@ export class HandFlame {
     _position,
     _color,
     _MMatrix,
-    a = 0.4,      // base radius
+    a = 0.36,      // base radius
     c = 2.5,      // flame height
     uSeg = 32,    // radial segments
     vSeg = 60     // vertical segments
@@ -50,12 +50,13 @@ export class HandFlame {
       const radius = base_radius * taper * bulge;
 
       const offsetX = 0.1 * Math.sin(2 * Math.PI * t) + 0.15 * t;
+      const offsetY = 0.1 * Math.cos(2 * Math.PI * t) + 0.15 * t;
 
       for (let j = 0; j <= uSeg; j++) {
         const theta = (j / uSeg) * 2 * Math.PI;
 
         const x = offsetX + radius * Math.cos(theta);
-        const y = radius * Math.sin(theta);
+        const y = offsetY + radius * Math.sin(theta);
 
         this.vertex.push(x, y, z);
 

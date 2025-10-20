@@ -181,6 +181,7 @@ function main() {
   LIBS.rotateX(HeadFlame1.POSITION_MATRIX, 180 * Math.PI / 180);
   LIBS.rotateZ(HeadFlame1.POSITION_MATRIX, 90 * Math.PI / 180);
   LIBS.translateX(HeadFlame1.MOVE_MATRIX, -0.05);
+  LIBS.translateY(HeadFlame1.MOVE_MATRIX, -0.2);
   LIBS.translateZ(HeadFlame1.MOVE_MATRIX, 0.4);
   //object2 (body paraboloid)
   LIBS.scaleX(Object2.POSITION_MATRIX, 0.1);
@@ -238,6 +239,8 @@ function main() {
   LIBS.rotateX(HandFlame1.MOVE_MATRIX, -80 * Math.PI / 180);
   LIBS.rotateY(HandFlame1.MOVE_MATRIX, 45 * Math.PI / 180);
   LIBS.rotateZ(HandFlame1.MOVE_MATRIX, 15 * Math.PI / 180);  
+  LIBS.translateX(HandFlame1.MOVE_MATRIX, 0.1);
+  LIBS.translateZ(HandFlame1.MOVE_MATRIX, 0.1);
   //subhand kanan belakang
   LIBS.scaleX(SubHand2.POSITION_MATRIX, 6);
   LIBS.scaleY(SubHand2.POSITION_MATRIX, 6);
@@ -267,6 +270,8 @@ function main() {
   LIBS.rotateX(HandFlame2.MOVE_MATRIX, -80 * Math.PI / 180);
   LIBS.rotateY(HandFlame2.MOVE_MATRIX, 225 * Math.PI / 180);
   LIBS.rotateZ(HandFlame2.MOVE_MATRIX, -15 * Math.PI / 180);  
+  LIBS.translateX(HandFlame2.MOVE_MATRIX, -0.1);
+  LIBS.translateZ(HandFlame2.MOVE_MATRIX, -0.1);
   //subhand kiri depan
   LIBS.scaleX(SubHand3.POSITION_MATRIX, 6);
   LIBS.scaleY(SubHand3.POSITION_MATRIX, 6);
@@ -295,7 +300,9 @@ function main() {
   LIBS.scaleZ(HandFlame3.POSITION_MATRIX, 3.5);
   LIBS.rotateX(HandFlame3.MOVE_MATRIX, -80 * Math.PI / 180);
   LIBS.rotateY(HandFlame3.MOVE_MATRIX, 225 * Math.PI / 180);
-  LIBS.rotateZ(HandFlame3.MOVE_MATRIX, -15 * Math.PI / 180);  
+  LIBS.rotateZ(HandFlame3.MOVE_MATRIX, -15 * Math.PI / 180);
+  LIBS.translateX(HandFlame3.MOVE_MATRIX, -0.1);
+  LIBS.translateZ(HandFlame3.MOVE_MATRIX, -0.1);  
   //subhand kiri belakang
   LIBS.scaleX(SubHand4.POSITION_MATRIX, 6);
   LIBS.scaleY(SubHand4.POSITION_MATRIX, 6);
@@ -325,6 +332,8 @@ function main() {
   LIBS.rotateX(HandFlame4.MOVE_MATRIX, -80 * Math.PI / 180);
   LIBS.rotateY(HandFlame4.MOVE_MATRIX, 45 * Math.PI / 180);
   LIBS.rotateZ(HandFlame4.MOVE_MATRIX, 15 * Math.PI / 180);
+  LIBS.translateX(HandFlame4.MOVE_MATRIX, 0.1);
+  LIBS.translateZ(HandFlame4.MOVE_MATRIX, 0.1);
 
 
 
