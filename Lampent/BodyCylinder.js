@@ -74,7 +74,7 @@ export class BodyClylinder {
       this.faces.push(top1, bottom2, top2);
 
       // Top face
-      this.faces.push(top1, top2, topCenterIndex);
+      // this.faces.push(top1, top2, topCenterIndex);
 
       // Bottom face
       this.faces.push(bottom1, bottomCenterIndex, bottom2);

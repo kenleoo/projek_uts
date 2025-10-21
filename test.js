@@ -89,8 +89,9 @@ function main() {
   var BodyCone = new BodyBottomCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
-  // OutsideHat.childs.push(TopHat);
+
   Object1.childs.push(OutsideHat);
+
   OutsideHat.childs.push(InsideHat);
   OutsideHat.childs.push(HeadTip1);
   Object1.childs.push(HeadEye1);
@@ -115,23 +116,23 @@ function main() {
   LIBS.translateY(OutsideHat.POSITION_MATRIX, 0.1);
   // hat inside
   LIBS.translateY(InsideHat.POSITION_MATRIX, -0.05);
-  
+
   // head tip
   LIBS.scaleX(HeadTip1.POSITION_MATRIX, 4);
   LIBS.scaleY(HeadTip1.POSITION_MATRIX, 1.5);
   LIBS.scaleZ(HeadTip1.POSITION_MATRIX, 4);
   LIBS.rotateX(HeadTip1.MOVE_MATRIX, -90 * (Math.PI / 180));
-  LIBS.translateY(HeadTip1.POSITION_MATRIX, 2);
+  LIBS.translateY(HeadTip1.POSITION_MATRIX, 2.36);
   // LIBS.translateY(TopHat.POSITION_MATRIX, 1.5);
 
   // head eye (kanan)
-  LIBS.translateZ(HeadEye1.POSITION_MATRIX, 0.645);
+  LIBS.translateZ(HeadEye1.POSITION_MATRIX, 0.625);
   LIBS.translateX(HeadEye1.POSITION_MATRIX, 0.3);
   LIBS.scaleY(HeadEye1.POSITION_MATRIX, 1.3);
   LIBS.rotateY(HeadEye1.MOVE_MATRIX, 25 * (Math.PI / 180));
 
   // head eye (kiri)
-  LIBS.translateZ(HeadEye2.POSITION_MATRIX, 0.645);
+  LIBS.translateZ(HeadEye2.POSITION_MATRIX, 0.625);
   LIBS.translateX(HeadEye2.POSITION_MATRIX, -0.3);
   LIBS.scaleY(HeadEye2.POSITION_MATRIX, 1.3);
   LIBS.rotateY(HeadEye2.MOVE_MATRIX, -25 * (Math.PI / 180));
@@ -230,11 +231,38 @@ function main() {
     GL.uniformMatrix4fv(_Pmatrix, false, PROJMATRIX);
     GL.uniformMatrix4fv(_Vmatrix, false, cam);
 
-    Object1.render(LIBS.get_I4());
+    // Object1.render(LIBS.get_I4());
+
+    // PASS 1: Render opaque objects (all children) with depth writing
+    GL.depthMask(true);
+    // Render all children without the head itself
+    Object1.childs.forEach((child) => child.render(LIBS.multiply(Object1.MOVE_MATRIX, Object1.POSITION_MATRIX)));
+
+    // PASS 2: Render translucent head without depth writing
+    GL.depthMask(false);
+    // Only render the Head sphere, not its children
+    renderHeadOnly(Object1, LIBS.get_I4());
 
     GL.flush();
     window.requestAnimationFrame(animate);
   };
+
+  // render Head only without children
+  function renderHeadOnly(head, PARENT_MATRIX) {
+    head.MODEL_MATRIX = LIBS.multiply(head.MOVE_MATRIX, head.POSITION_MATRIX);
+    head.MODEL_MATRIX = LIBS.multiply(head.MODEL_MATRIX, PARENT_MATRIX);
+
+    GL.useProgram(SHADER_PROGRAM);
+    GL.uniformMatrix4fv(_Mmatrix, false, head.MODEL_MATRIX);
+
+    GL.bindBuffer(GL.ARRAY_BUFFER, head.OBJECT_VERTEX);
+    GL.vertexAttribPointer(_position, 3, GL.FLOAT, false, 28, 0);
+    GL.vertexAttribPointer(_color, 4, GL.FLOAT, false, 28, 12);
+
+    GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, head.OBJECT_FACES);
+    GL.drawElements(GL.TRIANGLES, head.faces.length, GL.UNSIGNED_SHORT, 0);
+  }
+
   animate(0);
 }
 window.addEventListener("load", main);
