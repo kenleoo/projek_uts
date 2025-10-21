@@ -51,7 +51,7 @@ export class Head {
           let z = c * Math.cos(phi);
 
           this.vertex.push(x, y, z);
-          this.vertex.push(0.4, 0.4, 1, 0.6); // Purple color
+          this.vertex.push(0.8, 0.8, 1, 1); // Purple color
 
       }
    }
