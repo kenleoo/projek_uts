@@ -24,6 +24,8 @@ export class Head {
     _color,
     _Mmatrix,
 
+    color = [0.4, 0.4, 1, 0.4],
+
     a = 0.7,
     b = 0.7,
     c = 0.7,
@@ -51,7 +53,7 @@ export class Head {
           let z = c * Math.cos(phi);
 
           this.vertex.push(x, y, z);
-          this.vertex.push(0.4, 0.4, 1, 0.4); // Purple color
+          this.vertex.push(color[0], color[1],color[2],color[3]); // Purple color
 
       }
    }

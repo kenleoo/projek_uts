@@ -29,7 +29,7 @@ export class HatParaboloid {
     // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
     paraboloidRadius = 5,
     paraboloidHeight = 5,
-    segments = 36
+    segments = 360
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;

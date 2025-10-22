@@ -6,6 +6,7 @@ import { BodyClylinder } from "./Lampent/BodyCylinder.js";
 import { UnderBodyParaboloid } from "./Lampent/UnderBodyParaboloid.js";
 import { BodyBottomCone } from "./Lampent/BodyBottomCone.js";
 import { HeadTip } from "./Lampent/HeadTip.js";
+import { HeadFlame } from "./Lampent/HeadFlame.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -77,37 +78,67 @@ function main() {
   GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
   // Objects
-  var Object1 = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutHead = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.14, 0.4]);
+  var InHead = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.4, 0.4, 1, 0.05]);
+  var HeadFlame1 = new HeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var HeadFlame2 = new HeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.72, 0.91, 1.0, 1], 0.2, 1.2);
   var HeadTip1 = new HeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var OutsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15]);
   var InsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
   var HeadEye1 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutlineEye1 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.15], 0.106, 0.009);
   var HeadEye2 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutlineEye2 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.15], 0.106, 0.009);
   var TopBodyParaboloid = new BodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var BodyClylinder1 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var BottomBodyParaboloid = new UnderBodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var BodyCone = new BodyBottomCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
+    OutHead.childs.push(InHead);
 
-  Object1.childs.push(OutsideHat);
-
+  OutHead.childs.push(HeadFlame1);
+  HeadFlame1.childs.push(HeadFlame2);
+  InHead.childs.push(OutsideHat);
   OutsideHat.childs.push(InsideHat);
   OutsideHat.childs.push(HeadTip1);
-  Object1.childs.push(HeadEye1);
-  Object1.childs.push(HeadEye2);
-  Object1.childs.push(TopBodyParaboloid);
+  InHead.childs.push(HeadEye1);
+  HeadEye1.childs.push(OutlineEye1);
+  InHead.childs.push(HeadEye2);
+  HeadEye2.childs.push(OutlineEye2);
+  InHead.childs.push(TopBodyParaboloid);
   TopBodyParaboloid.childs.push(BodyClylinder1);
   BodyClylinder1.childs.push(BottomBodyParaboloid);
   BottomBodyParaboloid.childs.push(BodyCone);
-  //   Object1.childs.push(HeadVerticalStrip1);
-  //   Object1.childs.push(HeadEye1);
 
+  // FIXME: Inner Head tidak ikut bergerak bersama OutHead
   // Scale + Positioning objects
-  // object1 (head)
-  LIBS.scaleX(Object1.POSITION_MATRIX, 2);
-  LIBS.scaleY(Object1.POSITION_MATRIX, 2);
-  LIBS.scaleZ(Object1.POSITION_MATRIX, 2);
+  // Outer Glass (head)
+  LIBS.scaleX(OutHead.POSITION_MATRIX, 2);
+  LIBS.scaleY(OutHead.POSITION_MATRIX, 2);
+  LIBS.scaleZ(OutHead.POSITION_MATRIX, 2);
+
+  // Inner Glass (head inner)
+  LIBS.scaleX(InHead.POSITION_MATRIX, 1.85);
+  LIBS.scaleY(InHead.POSITION_MATRIX, 1.85);
+  LIBS.scaleZ(InHead.POSITION_MATRIX, 1.85);
+
+  // Head flame
+  LIBS.rotateX(HeadFlame1.MOVE_MATRIX, -90 * (Math.PI / 180));
+  LIBS.rotateY(HeadFlame1.MOVE_MATRIX, -90 * (Math.PI / 180));
+  LIBS.translateY(HeadFlame1.POSITION_MATRIX, -0.65);
+  LIBS.translateZ(HeadFlame1.POSITION_MATRIX, -0.02);
+  LIBS.translateX(HeadFlame1.POSITION_MATRIX, -0.1);
+
+  // Small head flame
+  LIBS.scaleX(HeadFlame2.POSITION_MATRIX, 0.45);
+  LIBS.scaleY(HeadFlame2.POSITION_MATRIX, 0.45);
+  LIBS.scaleZ(HeadFlame2.POSITION_MATRIX, 0.45);
+  LIBS.translateY(HeadFlame2.POSITION_MATRIX, 0.08);
+  LIBS.translateX(HeadFlame2.POSITION_MATRIX, 0.05);
+  LIBS.rotateZ(HeadFlame2.MOVE_MATRIX, 40 * (Math.PI / 180));
+  LIBS.rotateX(HeadFlame2.MOVE_MATRIX, 20 * (Math.PI / 180));
+  LIBS.rotateY(HeadFlame2.MOVE_MATRIX, 10 * (Math.PI / 180));
 
   // hat outside
   LIBS.scaleX(OutsideHat.POSITION_MATRIX, 0.25);
@@ -122,20 +153,26 @@ function main() {
   LIBS.scaleY(HeadTip1.POSITION_MATRIX, 1.5);
   LIBS.scaleZ(HeadTip1.POSITION_MATRIX, 4);
   LIBS.rotateX(HeadTip1.MOVE_MATRIX, -90 * (Math.PI / 180));
-  LIBS.translateY(HeadTip1.POSITION_MATRIX, 2.36);
+  LIBS.translateY(HeadTip1.POSITION_MATRIX, 2.4);
   // LIBS.translateY(TopHat.POSITION_MATRIX, 1.5);
 
   // head eye (kanan)
-  LIBS.translateZ(HeadEye1.POSITION_MATRIX, 0.625);
-  LIBS.translateX(HeadEye1.POSITION_MATRIX, 0.3);
+  LIBS.translateZ(HeadEye1.POSITION_MATRIX, 0.6);
+  LIBS.translateX(HeadEye1.POSITION_MATRIX, 0.347);
+  LIBS.translateY(HeadEye1.POSITION_MATRIX, -0.05);
+  LIBS.scaleX(HeadEye1.POSITION_MATRIX, 1.1);
   LIBS.scaleY(HeadEye1.POSITION_MATRIX, 1.3);
-  LIBS.rotateY(HeadEye1.MOVE_MATRIX, 25 * (Math.PI / 180));
+  LIBS.rotateY(HeadEye1.MOVE_MATRIX, 33 * (Math.PI / 180));
+  LIBS.rotateZ(HeadEye1.MOVE_MATRIX, -10 * (Math.PI / 180));
 
   // head eye (kiri)
-  LIBS.translateZ(HeadEye2.POSITION_MATRIX, 0.625);
-  LIBS.translateX(HeadEye2.POSITION_MATRIX, -0.3);
+  LIBS.translateZ(HeadEye2.POSITION_MATRIX, 0.6);
+  LIBS.translateX(HeadEye2.POSITION_MATRIX, -0.347);
+  LIBS.translateY(HeadEye2.POSITION_MATRIX, -0.05);
+  LIBS.scaleX(HeadEye2.POSITION_MATRIX, 1.1);
   LIBS.scaleY(HeadEye2.POSITION_MATRIX, 1.3);
-  LIBS.rotateY(HeadEye2.MOVE_MATRIX, -25 * (Math.PI / 180));
+  LIBS.rotateY(HeadEye2.MOVE_MATRIX, -33 * (Math.PI / 180));
+  LIBS.rotateZ(HeadEye2.MOVE_MATRIX, 10 * (Math.PI / 180));
 
   // body paraboloid
   LIBS.scaleX(TopBodyParaboloid.POSITION_MATRIX, 0.1);
@@ -205,7 +242,7 @@ function main() {
   GL.clearColor(0.0, 0.0, 0.0, 0.0);
   GL.clearDepth(1.0);
 
-  Object1.setup();
+  OutHead.setup();
 
   /*========================= Animation ========================= */
   var time_prev = 0;
@@ -215,7 +252,7 @@ function main() {
 
     var dt = time - time_prev;
     time_prev = time;
-    // LIBS.rotateZ(HeadFlame1.MOVE_MATRIX, dt * 0.0025);
+    // LIBS.rotateY(HeadFlame1.MOVE_MATRIX, dt * 0.0025);
     // LIBS.rotateX(Object3.MOVE_MATRIX, dt * -0.001);
     // LIBS.rotateX(Object4.MOVE_MATRIX, dt * 0.001);
 
@@ -236,33 +273,43 @@ function main() {
     // PASS 1: Render opaque objects (all children) with depth writing
     GL.depthMask(true);
     // Render all children without the head itself
-    Object1.childs.forEach((child) => child.render(LIBS.multiply(Object1.MOVE_MATRIX, Object1.POSITION_MATRIX)));
+    InHead.childs.forEach((child) => child.render(LIBS.multiply(OutHead.MOVE_MATRIX, OutHead.POSITION_MATRIX)));
 
     // PASS 2: Render translucent head without depth writing
     GL.depthMask(false);
     // Only render the Head sphere, not its children
-    renderHeadOnly(Object1, LIBS.get_I4());
+    renderHeadOnly(OutHead, LIBS.get_I4());
+    renderHeadOnly(InHead, LIBS.get_I4());
 
     GL.flush();
     window.requestAnimationFrame(animate);
   };
 
-  // render Head only without children
-  function renderHeadOnly(head, PARENT_MATRIX) {
-    head.MODEL_MATRIX = LIBS.multiply(head.MOVE_MATRIX, head.POSITION_MATRIX);
-    head.MODEL_MATRIX = LIBS.multiply(head.MODEL_MATRIX, PARENT_MATRIX);
+  // render Head only untuk efek transparansi kaca
+  function renderHeadOnly(obj, PARENT_MATRIX) {
+    obj.MODEL_MATRIX = LIBS.multiply(obj.MOVE_MATRIX, obj.POSITION_MATRIX);
+    obj.MODEL_MATRIX = LIBS.multiply(obj.MODEL_MATRIX, PARENT_MATRIX);
 
     GL.useProgram(SHADER_PROGRAM);
-    GL.uniformMatrix4fv(_Mmatrix, false, head.MODEL_MATRIX);
+    GL.uniformMatrix4fv(_Mmatrix, false, obj.MODEL_MATRIX);
 
-    GL.bindBuffer(GL.ARRAY_BUFFER, head.OBJECT_VERTEX);
+    GL.bindBuffer(GL.ARRAY_BUFFER, obj.OBJECT_VERTEX);
     GL.vertexAttribPointer(_position, 3, GL.FLOAT, false, 28, 0);
     GL.vertexAttribPointer(_color, 4, GL.FLOAT, false, 28, 12);
 
-    GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, head.OBJECT_FACES);
-    GL.drawElements(GL.TRIANGLES, head.faces.length, GL.UNSIGNED_SHORT, 0);
-  }
+    GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, obj.OBJECT_FACES);
+    GL.drawElements(GL.TRIANGLES, obj.faces.length, GL.UNSIGNED_SHORT, 0);
 
+    // If this is InHead, stop recursion and don't render its children
+    if (obj === InHead) {
+      return;
+    }
+
+    // Otherwise, continue rendering children recursively
+    obj.childs.forEach((child) => {
+      renderHeadOnly(child, obj.MODEL_MATRIX);
+    });
+  }
   animate(0);
 }
 window.addEventListener("load", main);

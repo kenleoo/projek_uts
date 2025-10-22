@@ -24,9 +24,11 @@ export class HeadEye {
     _color,
     _Mmatrix,
 
+    color = [1, 1, 0],
+
     // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
     radius = 0.1,
-    height = 0.025,
+    height = 0.01,
     segments = 360
   ) {
     this.GL = GL;
@@ -40,39 +42,38 @@ export class HeadEye {
 
     /*========================= Upside-down cone (penyangga kepala) ========================= */
     // Build vertex
-    this.vertex.push(0, 0, height / 2);    // top center
-    this.vertex.push(1, 1, 0);             // top color
+    this.vertex.push(0, 0, height / 2); // top center
+    this.vertex.push(color[0], color[1], color[2]); // top color
 
-    this.vertex.push(0, 0, -height / 2);   // bottom center
-    this.vertex.push(1, 1, 0);             // bottom color
+    this.vertex.push(0, 0, -height / 2); // bottom center
+    this.vertex.push(color[0], color[1], color[2]); // bottom color
 
     for (let i = 0; i <= segments; i++) {
-        let theta = 2 * Math.PI * i / segments;
-        let x = radius * Math.cos(theta);
-        let y = radius * Math.sin(theta);
-        let zTop = height / 2;
-        let zBottom = -height / 2;
+      let theta = (2 * Math.PI * i) / segments;
+      let x = radius * Math.cos(theta);
+      let y = radius * Math.sin(theta);
+      let zTop = height / 2;
+      let zBottom = -height / 2;
 
-        this.vertex.push(x, y, zTop);
-        this.vertex.push(1, 1, 0); // Yellow color
-        // Bottom circle
-        this.vertex.push(x, y, zBottom);
-        this.vertex.push(1, 1, 0); // Yellow color
-        
+      this.vertex.push(x, y, zTop);
+      this.vertex.push(color[0], color[1], color[2]); // Yellow color
+      // Bottom circle
+      this.vertex.push(x, y, zBottom);
+      this.vertex.push(color[0], color[1], color[2]); // Yellow color
     }
     // Faces
     for (let i = 0; i < segments; i++) {
-        let top1 = i * 2;
-        let bottom1 = top1 + 1;
-        let top2 = ((i + 1) % segments) * 2;
-        let bottom2 = top2 + 1;
-        // Side faces
-        this.faces.push(top1, bottom1, bottom2);
-        this.faces.push(top1, bottom2, top2);
-        // Top face
-        this.faces.push(top1, top2, (segments * 2));
-        // Bottom face
-        this.faces.push(bottom1, (segments * 2) + 1, bottom2);
+      let top1 = i * 2;
+      let bottom1 = top1 + 1;
+      let top2 = ((i + 1) % segments) * 2;
+      let bottom2 = top2 + 1;
+      // Side faces
+      this.faces.push(top1, bottom1, bottom2);
+      this.faces.push(top1, bottom2, top2);
+      // Top face
+      this.faces.push(top1, top2, segments * 2);
+      // Bottom face
+      this.faces.push(bottom1, segments * 2 + 1, bottom2);
     }
   }
   setup() {
@@ -82,11 +83,7 @@ export class HeadEye {
 
     this.OBJECT_FACES = this.GL.createBuffer();
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
-    this.GL.bufferData(
-      this.GL.ELEMENT_ARRAY_BUFFER,
-      new Uint16Array(this.faces),
-      this.GL.STATIC_DRAW
-    );
+    this.GL.bufferData(this.GL.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), this.GL.STATIC_DRAW);
 
     this.childs.forEach((child) => child.setup());
   }

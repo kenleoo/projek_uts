@@ -1,4 +1,4 @@
-export class HeadTip {
+export class HeadFlame {
   GL = null;
   SHADER_PROGRAM = null;
 
@@ -23,10 +23,13 @@ export class HeadTip {
     _position,
     _color,
     _MMatrix,
-    a = 0.19, // base radius
-    c = 1.75, // flame height
-    uSeg = 60, // radial segments
-    vSeg = 360 // vertical segments
+
+    color = [0.10, 0.11, 0.50, 0.8],
+
+    base_radius = 0.2,      // base radius
+    height = 1.2,      // flame height
+    uSeg = 32,    // radial segments
+    vSeg = 60     // vertical segments
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -37,21 +40,18 @@ export class HeadTip {
     this.vertex = [];
     this.faces = [];
 
-    const base_radius = a;
-    const height = c;
-
     for (let i = 0; i <= vSeg; i++) {
       const t = i / vSeg;
       const z = height * t;
 
       // Flame profile: tapering + bulges
-      const taper = Math.sqrt(1 - t); // Creates gentle rounded tip
-      const bulge = 0.8 + 0.2 * Math.sin(Math.PI * t); // Less pronounced bulge
+      const taper = 1 - t;
+      const bulge = 1.2;
       const radius = base_radius * taper * bulge;
+      
 
-      // Flame curve offset — curve sideways (like S-shape)
-      const offsetX = 0;
-      const offsetY = 0;
+      const offsetX = 0.1 * Math.sin(2 * Math.PI * t) + 0.15 * t;
+      const offsetY = 0.1 * Math.cos(2 * Math.PI * t) + 0.15 * t;
 
       for (let j = 0; j <= uSeg; j++) {
         const theta = (j / uSeg) * 2 * Math.PI;
@@ -61,8 +61,8 @@ export class HeadTip {
 
         this.vertex.push(x, y, z);
 
-        // Color gradient: light blue → dark blue/purple
-        this.vertex.push(0.075, 0, 0.15, 1);
+        // Single constant color - light blue
+        this.vertex.push(color[0], color[1],color[2],color[3]);
       }
     }
 
@@ -86,7 +86,11 @@ export class HeadTip {
 
     this.OBJECT_FACES = this.GL.createBuffer();
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
-    this.GL.bufferData(this.GL.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), this.GL.STATIC_DRAW);
+    this.GL.bufferData(
+      this.GL.ELEMENT_ARRAY_BUFFER,
+      new Uint16Array(this.faces),
+      this.GL.STATIC_DRAW
+    );
 
     this.childs.forEach((child) => child.setup());
   }
@@ -104,7 +108,6 @@ export class HeadTip {
 
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
     this.GL.drawElements(this.GL.TRIANGLES, this.faces.length, this.GL.UNSIGNED_SHORT, 0);
-    // this.GL.drawElements(this.GL.LINES, this.faces.length, this.GL.UNSIGNED_SHORT, 0);
 
     this.childs.forEach((child) => child.render(this.MODEL_MATRIX));
   }
