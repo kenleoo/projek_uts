@@ -14,6 +14,10 @@ import { SubHand } from "./Chandelure/SubHand.js";
 import { HandParaboloid } from "./Chandelure/HandParaboloid.js";
 import { HandCrown } from "./Chandelure/HandCrown.js";
 import { HandFlame } from "./Chandelure/HandFlame.js";
+import { GravestoneA } from "./Environment/Grave1.js";
+import { DirtGrassLand } from "./Environment/Grass.js";
+import { GraveArch } from "./Environment/GraveyardArch.js";
+import { Fence } from "./Environment/Fence.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -117,6 +121,11 @@ function main() {
   var HandParaboloid4 = new HandParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var HandCrown4 = new HandCrown(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var HandFlame4 = new HandFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Gravestone1 = new GravestoneA(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Land = new DirtGrassLand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var GraveArch1 = new GraveArch(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Fence1 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Fence2 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
   Object1.childs.push(HeadStrip1);
@@ -149,6 +158,12 @@ function main() {
   SubHand4.childs.push(HandParaboloid4);
   HandParaboloid4.childs.push(HandCrown4);
   HandCrown4.childs.push(HandFlame4);
+  Land.childs.push(GraveArch1);
+  Land.childs.push(Gravestone1);
+  Land.childs.push(Object1);
+  GraveArch1.childs.push(Fence1);
+  GraveArch1.childs.push(Fence2);
+
 
 
   // Scale + Positioning objects
@@ -158,6 +173,7 @@ function main() {
   LIBS.scaleX(Object1.POSITION_MATRIX, 1.5);
   LIBS.scaleY(Object1.POSITION_MATRIX, 1.5);
   LIBS.scaleZ(Object1.POSITION_MATRIX, 1.5);
+  LIBS.translateY(Object1.MOVE_MATRIX, 4.5);
   //eye kanan
   LIBS.rotateY(HeadEye1.MOVE_MATRIX, 90 * Math.PI / 180);
   LIBS.rotateZ(HeadEye1.MOVE_MATRIX, -45 * Math.PI / 180);
@@ -335,6 +351,24 @@ function main() {
   LIBS.translateX(HandFlame4.MOVE_MATRIX, 0.1);
   LIBS.translateZ(HandFlame4.MOVE_MATRIX, 0.1);
 
+  //land
+  LIBS.translateY(Land.POSITION_MATRIX, -5);
+  LIBS.scaleX(Land.POSITION_MATRIX, 0.5);
+  LIBS.scaleY(Land.POSITION_MATRIX, 0.5);
+  LIBS.scaleZ(Land.POSITION_MATRIX, 0.5);
+  //graveyard arch
+  LIBS.translateZ(GraveArch1.POSITION_MATRIX, -30);
+  //fence1
+  LIBS.scaleX(Fence1.POSITION_MATRIX, 5);
+  LIBS.scaleY(Fence1.POSITION_MATRIX, 5);
+  LIBS.scaleZ(Fence1.POSITION_MATRIX, 5);
+  LIBS.translateX(Fence1.POSITION_MATRIX, -30);
+  //fence2
+  LIBS.scaleX(Fence2.POSITION_MATRIX, 5);
+  LIBS.scaleY(Fence2.POSITION_MATRIX, 5);
+  LIBS.scaleZ(Fence2.POSITION_MATRIX, 5);
+  LIBS.translateX(Fence2.POSITION_MATRIX, 10);
+
 
 
   // LIBS.translateY(Object2.POSITION_MATRIX, -1.7);
@@ -386,8 +420,9 @@ function main() {
   GL.clearColor(0.0, 0.0, 0.0, 0.0);
   GL.clearDepth(1.0);
 
-  Object1.setup();
-
+  // Object1.setup();
+  // Gravestone1.setup();
+  Land.setup();
   /*========================= Animation ========================= */
   var time_prev = 0;
   var animate = function (time) {
@@ -404,7 +439,7 @@ function main() {
     // rebuild VIEWMATRIX each frame from identity so rotations accumulate only from THETA/PHI
     var cam = LIBS.get_I4();
     // move camera back first
-    LIBS.translateZ(cam, -12);
+    LIBS.translateZ(cam, -80);
     // apply pitch (PHI) then yaw (THETA)
     LIBS.rotateX(cam, PHI);
     LIBS.rotateY(cam, THETA);
@@ -412,7 +447,9 @@ function main() {
     GL.uniformMatrix4fv(_Pmatrix, false, PROJMATRIX);
     GL.uniformMatrix4fv(_Vmatrix, false, cam);
 
-    Object1.render(LIBS.get_I4());
+    // Object1.render(LIBS.get_I4());
+    // Gravestone1.render(LIBS.get_I4());
+    Land.render(LIBS.get_I4());
 
     GL.flush();
     window.requestAnimationFrame(animate);
