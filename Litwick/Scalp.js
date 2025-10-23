@@ -23,7 +23,7 @@ export class Scalp {
     _position,
     _color,
     _Mmatrix,
-    Color = [0.9,0.91,0.91, 0.4],
+    Color = [0.9,0.91,0.91, 1],
 
     a = 0.625, // base radius (at the cone/paraboloid joint)
     b = 0.7, // total height

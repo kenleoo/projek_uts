@@ -1,4 +1,4 @@
-export class HeadEye {
+export class LitwickHeadEye {
   GL = null;
   SHADER_PROGRAM = null;
 

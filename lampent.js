@@ -267,82 +267,78 @@ function main() {
 
   /*========================= Animation ========================= */
   var time_prev = 0;
-var animate = function(time) {
-  GL.viewport(0, 0, CANVAS.width, CANVAS.height);
-  GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+  var animate = function (time) {
+    GL.viewport(0, 0, CANVAS.width, CANVAS.height);
+    GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 
-  var dt = time - time_prev;
-  time_prev = time;
+    var dt = time - time_prev;
+    time_prev = time;
 
-  // =========================
-  // SWING ANIMATION using sine wave
-  // =========================
-  var swingAmplitude = 0.3; // ~17 degrees in radians
-  var swingSpeed = 0.0015;
-  var swingAngle = swingAmplitude * Math.sin(time * swingSpeed);
+    // =========================
+    // SWING ANIMATION using sine wave
+    // =========================
+    var swingAmplitude = 0.3; // ~17 degrees in radians
+    var swingSpeed = 0.0015;
+    var swingAngle = swingAmplitude * Math.sin(time * swingSpeed);
 
-  // Reset OutHead matrix and apply swing + base tilt
-  OutHead.MOVE_MATRIX = LIBS.get_I4();
-  LIBS.rotateZ(OutHead.MOVE_MATRIX, 15 * (Math.PI / 180)); // base tilt ~15 degrees
-  LIBS.rotateY(OutHead.MOVE_MATRIX, swingAngle);
+    // Reset OutHead matrix and apply swing + base tilt
+    OutHead.MOVE_MATRIX = LIBS.get_I4();
+    LIBS.rotateZ(OutHead.MOVE_MATRIX, 15 * (Math.PI / 180)); // base tilt ~15 degrees
+    LIBS.rotateY(OutHead.MOVE_MATRIX, swingAngle);
 
-  // =========================
-  // INFINITY PATH (lemniscate ∞) for OutHead position
-  // =========================
-  var A = 3.0; // horizontal amplitude
-  var B = 2.0; // depth amplitude
-  var t = time * 0.001;
-  var posX = A * Math.sin(t);
-  var posZ = B * Math.sin(t) * Math.cos(t);
-  var posY = 4.5 + 0.5 * Math.sin(t * 2);
+    // =========================
+    // INFINITY PATH (lemniscate ∞) for OutHead position
+    // =========================
+    var A = 3.0; // horizontal amplitude
+    var B = 2.0; // depth amplitude
+    var t = time * 0.001;
+    var posX = A * Math.sin(t);
+    var posZ = B * Math.sin(t) * Math.cos(t);
+    var posY = 4.5 + 0.5 * Math.sin(t * 2);
 
-  LIBS.translateX(OutHead.MOVE_MATRIX, posX);
-  LIBS.translateZ(OutHead.MOVE_MATRIX, posZ);
-  LIBS.translateY(OutHead.MOVE_MATRIX, posY);
+    LIBS.translateX(OutHead.MOVE_MATRIX, posX);
+    LIBS.translateZ(OutHead.MOVE_MATRIX, posZ);
+    LIBS.translateY(OutHead.MOVE_MATRIX, posY);
 
-  // =========================
-  // HAND ROTATION ANIMATION using sine wave
-  // =========================
-  var armAmplitude = 0.4; // radians (~23 degrees)
-  var armSpeed = 0.002;
-  var armAngle = armAmplitude * Math.sin(time * armSpeed);
+    // =========================
+    // HAND ROTATION ANIMATION using sine wave
+    // =========================
+    var armAmplitude = 0.4; // radians (~23 degrees)
+    var armSpeed = 0.002;
+    var armAngle = armAmplitude * Math.sin(time * armSpeed);
 
-  // Right Hand
-  Hand1.MOVE_MATRIX = LIBS.get_I4();
-  LIBS.rotateZ(Hand1.MOVE_MATRIX, 90 * (Math.PI / 180) + armAngle);
-  LIBS.rotateX(Hand1.MOVE_MATRIX, 180 * (Math.PI / 180));
-  
-  // Left Hand (opposite direction)
-  Hand2.MOVE_MATRIX = LIBS.get_I4();
-  LIBS.rotateZ(Hand2.MOVE_MATRIX, -90 * (Math.PI / 180) + armAngle);
+    // Right Hand
+    Hand1.MOVE_MATRIX = LIBS.get_I4();
+    LIBS.rotateZ(Hand1.MOVE_MATRIX, 90 * (Math.PI / 180) + armAngle);
+    LIBS.rotateX(Hand1.MOVE_MATRIX, 180 * (Math.PI / 180));
 
-  // =========================
-  // CAMERA CONTROL (mouse rotation)
-  // =========================
-  var cam = LIBS.get_I4();
-  LIBS.translateZ(cam, -12);
-  LIBS.rotateX(cam, PHI);
-  LIBS.rotateY(cam, THETA);
+    // Left Hand (opposite direction)
+    Hand2.MOVE_MATRIX = LIBS.get_I4();
+    LIBS.rotateZ(Hand2.MOVE_MATRIX, -90 * (Math.PI / 180) + armAngle);
 
-  GL.uniformMatrix4fv(_Pmatrix, false, PROJMATRIX);
-  GL.uniformMatrix4fv(_Vmatrix, false, cam);
+    // =========================
+    // CAMERA CONTROL (mouse rotation)
+    // =========================
+    var cam = LIBS.get_I4();
+    LIBS.translateZ(cam, -12);
+    LIBS.rotateX(cam, PHI);
+    LIBS.rotateY(cam, THETA);
 
-  // =========================
-  // RENDER SCENE
-  // =========================
-  GL.depthMask(true);
-  InHead.childs.forEach(child => 
-    child.render(LIBS.multiply(OutHead.MOVE_MATRIX, OutHead.POSITION_MATRIX))
-  );
+    GL.uniformMatrix4fv(_Pmatrix, false, PROJMATRIX);
+    GL.uniformMatrix4fv(_Vmatrix, false, cam);
 
-  GL.depthMask(false);
-  renderHeadOnly(OutHead, LIBS.get_I4());
+    // =========================
+    // RENDER SCENE
+    // =========================
+    GL.depthMask(true);
+    InHead.childs.forEach((child) => child.render(LIBS.multiply(OutHead.MOVE_MATRIX, OutHead.POSITION_MATRIX)));
 
-  GL.flush();
-  window.requestAnimationFrame(animate);
-};
+    GL.depthMask(false);
+    renderHeadOnly(OutHead, LIBS.get_I4());
 
-
+    GL.flush();
+    window.requestAnimationFrame(animate);
+  };
 
   // render Head only untuk efek transparansi kaca
   function renderHeadOnly(obj, PARENT_MATRIX) {

@@ -1,4 +1,4 @@
-export class Head {
+export class LitwickHead {
   GL = null;
   SHADER_PROGRAM = null;
 
@@ -23,7 +23,7 @@ export class Head {
     _position,
     _color,
     _Mmatrix,
-    Color = [0.87,0.88,0.88, 0.4],
+    Color = [0.87,0.88,0.88, 1],
 
     a = 0.6, // base radius
     b = 0.9, // height

@@ -1,4 +1,11 @@
 // Litwick
+import { LitwickHead } from "./Litwick/Head.js";
+import { BodyClylinder } from "./Litwick/Feet.js";
+import { HeadTip } from "./Litwick/HeadFlame.js";
+import { LitwickHeadEye } from "./Litwick/HeadEye.js";
+import { Hair } from "./Litwick/Hair.js";
+import { NoseHand } from "./Litwick/NoseOrHandParaboloid.js";
+import { Scalp } from "./Litwick/Scalp.js";
 
 // Lampent
 import { LampentHead } from "./Lampent/Head.js";
@@ -108,9 +115,231 @@ function main() {
   GL.enable(GL.BLEND);
   GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
-  // Lampent
+  // Litwick Model
+  var LitwickHead1 = new LitwickHead(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Nose = new NoseHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Left_hand = new NoseHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Right_hand = new NoseHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  // var hair = new Hair(GL, SHADER_PROGRAM, _position, _color, _Mmatrix)
+  // Example: Create a cheese wheel with a 45-degree slice and a 10-degree hole in the middle vertical layer (index 2)
+  // Contoh: Keju cembung dengan lubang tembus 5 derajat (sangat kecil, seperti tembakan)
+  // Contoh pemanggilan di main.js:
+
+  var hair = new Hair(
+    GL,
+    SHADER_PROGRAM,
+    _position,
+    _color,
+    _Mmatrix,
+    0.7, // radius
+    0.8, // height
+    32, // segments
+    [0.9, 0.91, 0.91], // gradient color
+    [0.9, 0.91, 0.91] // color
+  );
+  var hair2 = new Hair(
+    GL,
+    SHADER_PROGRAM,
+    _position,
+    _color,
+    _Mmatrix,
+    0.7, // radius
+    0.8, // height
+    32, // segments
+    [0.9, 0.91, 0.91], // gradient color
+    [0.9, 0.91, 0.91] // color
+  );
+  var hair3 = new Hair(
+    GL,
+    SHADER_PROGRAM,
+    _position,
+    _color,
+    _Mmatrix,
+    0.7, // radius
+    0.8, // height
+    32, // segments
+    [0.9, 0.91, 0.91], // gradient color
+    [0.9, 0.91, 0.91] // color
+  );
+  var LitwickBodyClylinder1 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Eyes = new LitwickHeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var feet1 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var feet2 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var feet3 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var feet4 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var feet5 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var feet6 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var feet7 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var LitwickHeadTip1 = new HeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var scalp = new Scalp(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  // Child object relationship
+  LitwickBodyClylinder1.childs.push(
+    LitwickHead1,
+    Eyes,
+    feet1,
+    feet2,
+    feet3,
+    feet4,
+    feet5,
+    feet6,
+    feet7,
+    LitwickHeadTip1,
+    Nose,
+    Left_hand,
+    Right_hand,
+    hair,
+    hair2,
+    hair3,
+    scalp
+  );
+
+  // ====== Hair / Wax positioning ======
+  // Middle hair
+  LIBS.translateX(hair.POSITION_MATRIX, -0);
+  LIBS.translateY(hair.POSITION_MATRIX, 0.28);
+  LIBS.translateZ(hair.POSITION_MATRIX, 0);
+  LIBS.scaleX(hair.POSITION_MATRIX, 0.3);
+  LIBS.scaleY(hair.POSITION_MATRIX, 0.4);
+  LIBS.scaleZ(hair.POSITION_MATRIX, 0.45);
+  LIBS.rotateX(hair.POSITION_MATRIX, Math.PI);
+
+  // Left-side hair
+  LIBS.translateX(hair2.POSITION_MATRIX, 0.07);
+  LIBS.translateY(hair2.POSITION_MATRIX, 0.28);
+  LIBS.translateZ(hair2.POSITION_MATRIX, 0);
+  LIBS.scaleX(hair2.POSITION_MATRIX, 0.4);
+  LIBS.scaleY(hair2.POSITION_MATRIX, 0.4);
+  LIBS.scaleZ(hair2.POSITION_MATRIX, 0.35);
+  LIBS.rotateX(hair2.POSITION_MATRIX, Math.PI);
+
+  // Right-side hair
+  LIBS.translateX(hair3.POSITION_MATRIX, -0.07);
+  LIBS.translateY(hair3.POSITION_MATRIX, 0.24);
+  LIBS.translateZ(hair3.POSITION_MATRIX, 0);
+  LIBS.scaleX(hair3.POSITION_MATRIX, 0.4);
+  LIBS.scaleY(hair3.POSITION_MATRIX, 0.5);
+  LIBS.scaleZ(hair3.POSITION_MATRIX, 0.4);
+
+  LIBS.rotateX(hair3.POSITION_MATRIX, Math.PI);
+
+  // feet1 front-left
+  LIBS.translateZ(feet1.POSITION_MATRIX, 0.1);
+  LIBS.translateY(feet1.POSITION_MATRIX, -0.2);
+  LIBS.translateX(feet1.POSITION_MATRIX, 0.15);
+  LIBS.scaleX(feet1.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(feet1.POSITION_MATRIX, 1.5);
+  LIBS.scaleY(feet1.POSITION_MATRIX, 0.3);
+
+  // feet2 front-right
+  LIBS.translateZ(feet2.POSITION_MATRIX, 0.1);
+  LIBS.translateY(feet2.POSITION_MATRIX, -0.2);
+  LIBS.translateX(feet2.POSITION_MATRIX, -0.15);
+  LIBS.scaleX(feet2.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(feet2.POSITION_MATRIX, 1.5);
+  LIBS.scaleY(feet2.POSITION_MATRIX, 0.3);
+
+  // feet3 front-middle
+  LIBS.translateY(feet3.POSITION_MATRIX, -0.2);
+  LIBS.translateZ(feet3.POSITION_MATRIX, 0.2);
+  LIBS.scaleX(feet3.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(feet3.POSITION_MATRIX, 1.5);
+  LIBS.scaleY(feet3.POSITION_MATRIX, 0.3);
+
+  // feet4 middle-right
+  LIBS.translateZ(feet4.POSITION_MATRIX, 0);
+  LIBS.translateY(feet4.POSITION_MATRIX, -0.2);
+  LIBS.translateX(feet4.POSITION_MATRIX, 0.15);
+  LIBS.scaleX(feet4.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(feet4.POSITION_MATRIX, 1.5);
+  LIBS.scaleY(feet4.POSITION_MATRIX, 0.3);
+
+  // feet5 middle-middle
+  LIBS.translateY(feet5.POSITION_MATRIX, -0.2);
+  LIBS.translateZ(feet5.POSITION_MATRIX, 0);
+  LIBS.scaleY(feet5.POSITION_MATRIX, 0.3);
+  LIBS.scaleZ(feet5.POSITION_MATRIX, 2);
+  LIBS.scaleX(feet5.POSITION_MATRIX, 2);
+
+  // feet6 middle-left
+  LIBS.translateZ(feet6.POSITION_MATRIX, 0);
+  LIBS.translateY(feet6.POSITION_MATRIX, -0.2);
+  LIBS.translateX(feet6.POSITION_MATRIX, -0.15);
+  LIBS.scaleX(feet6.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(feet6.POSITION_MATRIX, 1.5);
+  LIBS.scaleY(feet6.POSITION_MATRIX, 0.3);
+
+  // feet7 back the big one
+  LIBS.translateZ(feet7.POSITION_MATRIX, -0.1);
+  LIBS.translateY(feet7.POSITION_MATRIX, -0.2);
+  LIBS.scaleY(feet7.POSITION_MATRIX, 0.3);
+  LIBS.scaleZ(feet7.POSITION_MATRIX, 2);
+  LIBS.scaleX(feet7.POSITION_MATRIX, 2);
+
+  // object1 (head)
+  LIBS.scaleX(LitwickHead1.POSITION_MATRIX, 0.5);
+  LIBS.scaleY(LitwickHead1.POSITION_MATRIX, 0.45);
+  LIBS.scaleZ(LitwickHead1.POSITION_MATRIX, 0.5);
+  LIBS.rotateX(LitwickHead1.MOVE_MATRIX, 3.15);
+
+  // eye left
+  LIBS.translateX(Eyes.POSITION_MATRIX, 0.2);
+  LIBS.translateZ(Eyes.POSITION_MATRIX, 0.25);
+  LIBS.translateY(Eyes.POSITION_MATRIX, 0.09);
+  LIBS.scaleX(Eyes.POSITION_MATRIX, 0.3);
+  LIBS.scaleY(Eyes.POSITION_MATRIX, 0.7);
+  LIBS.rotateX(Eyes.MOVE_MATRIX, 0.25);
+  LIBS.rotateY(Eyes.MOVE_MATRIX, 0.25);
+
+  // head tip
+  LIBS.scaleX(LitwickHeadTip1.POSITION_MATRIX, 0.6);
+  LIBS.scaleY(LitwickHeadTip1.POSITION_MATRIX, 0.2);
+  LIBS.scaleZ(LitwickHeadTip1.POSITION_MATRIX, 0.6);
+  LIBS.rotateX(LitwickHeadTip1.MOVE_MATRIX, -90 * (Math.PI / 180));
+  LIBS.translateY(LitwickHeadTip1.POSITION_MATRIX, 0.5);
+
+  // scalp
+  LIBS.scaleX(scalp.POSITION_MATRIX, 0.55);
+  LIBS.scaleY(scalp.POSITION_MATRIX, 0.3);
+  LIBS.scaleZ(scalp.POSITION_MATRIX, 0.5);
+  LIBS.translateY(scalp.POSITION_MATRIX, 0.4075);
+  LIBS.rotateX(scalp.MOVE_MATRIX, 3.15);
+
+  // nose
+  LIBS.scaleX(Nose.POSITION_MATRIX, 0.15);
+  LIBS.scaleY(Nose.POSITION_MATRIX, 3);
+  LIBS.scaleZ(Nose.POSITION_MATRIX, 0.1);
+  LIBS.translateZ(Nose.POSITION_MATRIX, -2.5);
+  LIBS.translateY(Nose.POSITION_MATRIX, 0.85);
+  LIBS.rotateX(Nose.POSITION_MATRIX, 5);
+
+  // left hand
+  LIBS.scaleX(Left_hand.POSITION_MATRIX, 0.1);
+  LIBS.scaleY(Left_hand.POSITION_MATRIX, 3);
+  LIBS.scaleZ(Left_hand.POSITION_MATRIX, 0.1);
+  LIBS.translateX(Left_hand.POSITION_MATRIX, -1.8);
+  LIBS.translateY(Left_hand.POSITION_MATRIX, 2);
+  LIBS.rotateZ(Left_hand.POSITION_MATRIX, -5.5);
+
+  // right hand
+  LIBS.scaleX(Right_hand.POSITION_MATRIX, 0.1);
+  LIBS.scaleY(Right_hand.POSITION_MATRIX, 3);
+  LIBS.scaleZ(Right_hand.POSITION_MATRIX, 0.1);
+  LIBS.translateX(Right_hand.POSITION_MATRIX, 1.8);
+  LIBS.translateY(Right_hand.POSITION_MATRIX, 2);
+  LIBS.rotateZ(Right_hand.POSITION_MATRIX, 5.5);
+
+  // body cylinder
+  LIBS.translateY(LitwickBodyClylinder1.POSITION_MATRIX, -4.2);
+  LIBS.translateX(LitwickBodyClylinder1.POSITION_MATRIX, -7);
+  LIBS.translateZ(LitwickBodyClylinder1.POSITION_MATRIX, 1.3);
+  LIBS.rotateY(LitwickBodyClylinder1.MOVE_MATRIX, 100 * (Math.PI / 180));
+  LIBS.scaleX(LitwickBodyClylinder1.POSITION_MATRIX, 1);
+  LIBS.scaleY(LitwickBodyClylinder1.POSITION_MATRIX, 1);
+  LIBS.scaleZ(LitwickBodyClylinder1.POSITION_MATRIX, 1);
+
+  // Lampent Model
   var OutHead = new LampentHead(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.14, 0.4]);
-  var InHead = new LampentHead(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.4, 0.4, 1, 0.05]);
+  var InHead = new LampentHead(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.4, 0.4, 1, 0.6]);
   var HeadFire1 = new LampentHeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var HeadFire2 = new LampentHeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.72, 0.91, 1.0, 1], 0.2, 1.2);
   var HeadTip1 = new LampentHeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
@@ -150,10 +379,10 @@ function main() {
   LIBS.scaleX(OutHead.POSITION_MATRIX, 0.5);
   LIBS.scaleY(OutHead.POSITION_MATRIX, 0.5);
   LIBS.scaleZ(OutHead.POSITION_MATRIX, 0.5);
-  LIBS.rotateZ(OutHead.MOVE_MATRIX, 15 * (Math.PI / 180));
-  LIBS.translateY(OutHead.POSITION_MATRIX, -1);
-  LIBS.translateZ(OutHead.POSITION_MATRIX, 0);
-  LIBS.translateX(OutHead.POSITION_MATRIX, -4);
+  LIBS.rotateY(OutHead.POSITION_MATRIX, 25 * (Math.PI / 180));
+  LIBS.translateY(OutHead.POSITION_MATRIX, -4);
+  LIBS.translateZ(OutHead.POSITION_MATRIX, -8.5);
+  LIBS.translateX(OutHead.POSITION_MATRIX, -5);
 
   // Inner Glass (head inner)
   LIBS.scaleX(InHead.POSITION_MATRIX, 0.95);
@@ -281,11 +510,7 @@ function main() {
   var HandFlame4 = new HandFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   var Land = new DirtGrassLand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  //   var Gravestone1 = new GravestoneA(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var GraveArch1 = new GraveArch(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  //   var OutwardDirt1 = new OutwardDirt(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  //   var CandleBody1 = new CandleBody(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  //   var CandleFlame1 = new CandleFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
   Object1.childs.push(HeadStrip1);
@@ -324,13 +549,10 @@ function main() {
 
   // Scale + Positioning objects
   //object1 (head)
-  LIBS.rotateX(Object1.MOVE_MATRIX, (90 * Math.PI) / 180);
-  LIBS.rotateY(Object1.MOVE_MATRIX, (90 * Math.PI) / 180);
-  LIBS.scaleX(Object1.POSITION_MATRIX, 1.5);
-  LIBS.scaleY(Object1.POSITION_MATRIX, 1.5);
-  LIBS.scaleZ(Object1.POSITION_MATRIX, 1.5);
-  LIBS.translateY(Object1.MOVE_MATRIX, 4.5);
-  LIBS.translateX(Object1.MOVE_MATRIX, 4.5);
+  LIBS.scaleX(Object1.POSITION_MATRIX, 2.3);
+  LIBS.scaleY(Object1.POSITION_MATRIX, 2.3);
+  LIBS.scaleZ(Object1.POSITION_MATRIX, 2.3);
+
 
   //eye kanan
   LIBS.rotateY(HeadEye1.MOVE_MATRIX, (90 * Math.PI) / 180);
@@ -728,88 +950,212 @@ function main() {
   // Gravestone1.setup();
   Land.setup();
   OutHead.setup();
+  LitwickBodyClylinder1.setup();
 
-  // FIXME: rotate just camera
-/*========================= Free Camera with Orbital Rotation =========================*/
-const camPos = [0, 0, 0]; // Start position
-var yaw = 0;
-var pitch = 0;
+  /*========================= Free Camera with Orbital Rotation =========================*/
+  const camPos = [0, 0, 0]; // Start position
+  var yaw = 0;
+  var pitch = 0;
 
-var camSpeed = 0.005;
-var rotSpeed = 0.001;
-var keys = {};
+  var camSpeed = 0.005;
+  var rotSpeed = 0.001;
+  var keys = {};
 
-window.addEventListener("keydown", (e) => (keys[e.key.toLowerCase()] = true));
-window.addEventListener("keyup", (e) => (keys[e.key.toLowerCase()] = false));
+  window.addEventListener("keydown", (e) => (keys[e.key.toLowerCase()] = true));
+  window.addEventListener("keyup", (e) => (keys[e.key.toLowerCase()] = false));
 
-function updateCamera(dt) {
-  const moveSpeed = camSpeed * dt;
-  const rotStep = rotSpeed * dt;
+  function updateCamera(dt) {
+    const moveSpeed = camSpeed * dt;
+    const rotStep = rotSpeed * dt;
 
-  // Rotation input
-  if (keys["arrowleft"]) yaw += rotStep;
-  if (keys["arrowright"]) yaw -= rotStep;
-  if (keys["arrowup"]) pitch += rotStep;
-  if (keys["arrowdown"]) pitch -= rotStep;
+    // Rotation input
+    if (keys["arrowleft"]) yaw += rotStep;
+    if (keys["arrowright"]) yaw -= rotStep;
+    if (keys["arrowup"]) pitch += rotStep;
+    if (keys["arrowdown"]) pitch -= rotStep;
 
-  // Clamp pitch to prevent flipping
-  const limit = Math.PI / 2 - 0.01;
-  if (pitch > limit) pitch = limit;
-  if (pitch < -limit) pitch = -limit;
+    // Clamp pitch to prevent flipping
+    const limit = Math.PI / 2 - 0.01;
+    if (pitch > limit) pitch = limit;
+    if (pitch < -limit) pitch = -limit;
 
-  // Direction vectors based on current yaw/pitch
-  const forward = [
-    Math.sin(yaw) * Math.cos(pitch),
-    Math.sin(pitch),
-    Math.cos(yaw) * Math.cos(pitch)
-  ];
-  const right = [Math.cos(yaw), 0, -Math.sin(yaw)];
-  const up = [0, 1, 0];
+    // Direction vectors based on current yaw/pitch
+    const forward = [Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch)];
+    const right = [Math.cos(yaw), 0, -Math.sin(yaw)];
+    const up = [0, 1, 0];
 
-  // Movement input
-  let move = [0, 0, 0];
-  
-  if (keys["w"]) move = LIBS.subtract(move, forward);
-  if (keys["s"]) move = LIBS.add(move, forward);
-  if (keys["a"]) move = LIBS.subtract(move, right);
-  if (keys["d"]) move = LIBS.add(move, right);
-  if (keys[" "]) move = LIBS.add(move, up);
-  if (keys["shift"]) move = LIBS.subtract(move, up);
+    // Movement input
+    let move = [0, 0, 0];
 
-  // Apply movement
-  const len = Math.hypot(...move);
-  if (len > 0) {
-    move = move.map((v) => (v / len) * moveSpeed);
-    camPos[0] += move[0];
-    camPos[1] += move[1];
-    camPos[2] += move[2];
+    if (keys["w"]) move = LIBS.subtract(move, forward);
+    if (keys["s"]) move = LIBS.add(move, forward);
+    if (keys["a"]) move = LIBS.subtract(move, right);
+    if (keys["d"]) move = LIBS.add(move, right);
+    if (keys[" "]) move = LIBS.add(move, up);
+    if (keys["shift"]) move = LIBS.subtract(move, up);
+
+    // Apply movement
+    const len = Math.hypot(...move);
+    if (len > 0) {
+      move = move.map((v) => (v / len) * moveSpeed);
+      camPos[0] += move[0];
+      camPos[1] += move[1];
+      camPos[2] += move[2];
+    }
+
+    // Build view matrix: camera position is always the center (0,0,0)
+    const view = LIBS.get_I4();
+
+    // First: translate to camera position (making camPos the new origin)
+    LIBS.translateX(view, -camPos[0]);
+    LIBS.translateY(view, -camPos[1]);
+    LIBS.translateZ(view, -camPos[2]);
+
+    // Then: rotate around that origin
+    LIBS.rotateY(view, -yaw);
+    LIBS.rotateX(view, -pitch);
+
+    return view;
   }
-
-  // Build view matrix: camera position is always the center (0,0,0)
-  const view = LIBS.get_I4();
-
-  // First: translate to camera position (making camPos the new origin)
-  LIBS.translateX(view, -camPos[0]);
-  LIBS.translateY(view, -camPos[1]);
-  LIBS.translateZ(view, -camPos[2]);
-
-  // Then: rotate around that origin
-  LIBS.rotateY(view, -yaw);
-  LIBS.rotateX(view, -pitch);
-
-  return view;
-}
   /*========================= Animation ========================= */
   var time_prev = 0;
+  var bounceHeight = 0.5; // Max vertical bounce height
+  var bounceSpeed = 0.0025; // Bounce speed multiplier
+  var bounceTime = 0; // Time accumulator for bouncing
+
   var animate = function (time) {
     GL.viewport(0, 0, CANVAS.width, CANVAS.height);
     GL.clear(GL.COLOR_BUFFER_BIT);
 
     var dt = time - time_prev;
     time_prev = time;
-    // LIBS.rotateZ(HeadFlame1.MOVE_MATRIX, dt * 0.0025);
-    // LIBS.rotateX(Object3.MOVE_MATRIX, dt * -0.001);
-    // LIBS.rotateX(Object4.MOVE_MATRIX, dt * 0.001);
+
+    /*========================= Litwick ========================= */
+    bounceTime += dt;
+
+    // Calculate bounce offsets for smooth movement in 3D
+    var bounceOffsetY = Math.abs(Math.sin(bounceTime * bounceSpeed)) * bounceHeight; // Up and down
+    var bounceOffsetX = Math.sin(bounceTime * bounceSpeed * 0.5) * 0.2; // Side to side slower
+    var bounceOffsetZ = Math.cos(bounceTime * bounceSpeed * 0.5) * 0.2; // Forward/back slower
+
+    // stretch Y when jumping
+
+    // Reset previous translations before applying new ones (to prevent accumulation)
+    if (LitwickBodyClylinder1.prevBounceOffsetY !== undefined) {
+      LIBS.translateY(LitwickBodyClylinder1.POSITION_MATRIX, -LitwickBodyClylinder1.prevBounceOffsetY);
+      LIBS.translateX(LitwickBodyClylinder1.POSITION_MATRIX, -LitwickBodyClylinder1.prevBounceOffsetX);
+      LIBS.translateZ(LitwickBodyClylinder1.POSITION_MATRIX, -LitwickBodyClylinder1.prevBounceOffsetZ);
+    }
+    // Undo previous scale before applying new one
+    if (LitwickBodyClylinder1.prevScaleY !== undefined) {
+      var inversePrevScaleY = 1 / LitwickBodyClylinder1.prevScaleY;
+      LIBS.scaleY(LitwickBodyClylinder1.POSITION_MATRIX, inversePrevScaleY);
+    }
+
+    // Apply new bounce translation
+    LIBS.translateY(LitwickBodyClylinder1.POSITION_MATRIX, bounceOffsetY);
+    LIBS.translateX(LitwickBodyClylinder1.POSITION_MATRIX, bounceOffsetX);
+    LIBS.translateZ(LitwickBodyClylinder1.POSITION_MATRIX, bounceOffsetZ);
+
+    // Apply new scale based on bounce (stretch Y)
+    var baseScaleY = 1.0;
+    var maxStretch = 0.1;
+    var scaleY = baseScaleY + (bounceOffsetY / bounceHeight) * maxStretch;
+    LIBS.scaleY(LitwickBodyClylinder1.POSITION_MATRIX, scaleY);
+
+    // Save current offsets and scale for next frame
+    LitwickBodyClylinder1.prevBounceOffsetY = bounceOffsetY;
+    LitwickBodyClylinder1.prevBounceOffsetX = bounceOffsetX;
+    LitwickBodyClylinder1.prevBounceOffsetZ = bounceOffsetZ;
+    LitwickBodyClylinder1.prevScaleY = scaleY;
+
+    /*========================= Lampent ========================= */
+    // SWING ANIMATION using sine wave
+    var swingAmplitude = 0.3; // ~17 degrees in radians
+    var swingSpeed = 0.0015;
+    var swingAngle = swingAmplitude * Math.sin(time * swingSpeed);
+
+    // Reset OutHead matrix and apply swing + base tilt
+    OutHead.MOVE_MATRIX = LIBS.get_I4();
+    LIBS.rotateZ(OutHead.MOVE_MATRIX, 15 * (Math.PI / 180)); // base tilt ~15 degrees
+    LIBS.rotateY(OutHead.MOVE_MATRIX, swingAngle);
+
+    // INFINITY PATH (lemniscate ∞) for OutHead position
+    var A = 3.0; // horizontal amplitude
+    var B = 2.0; // depth amplitude
+    var t = time * 0.001;
+    var posX = A * Math.sin(t);
+    var posZ = B * Math.sin(t) * Math.cos(t);
+    var posY = 4.5 + 0.5 * Math.sin(t * 2);
+
+    LIBS.translateX(OutHead.MOVE_MATRIX, posX);
+    LIBS.translateZ(OutHead.MOVE_MATRIX, posZ);
+    LIBS.translateY(OutHead.MOVE_MATRIX, posY);
+
+    // HAND ROTATION ANIMATION using sine wave
+    var armAmplitude = 0.4; // radians (~23 degrees)
+    var armSpeed = 0.002;
+    var armAngle = armAmplitude * Math.sin(time * armSpeed);
+
+    // Right Hand
+    LampentHand1.MOVE_MATRIX = LIBS.get_I4();
+    LIBS.rotateZ(LampentHand1.MOVE_MATRIX, 90 * (Math.PI / 180) + armAngle);
+    LIBS.rotateX(LampentHand1.MOVE_MATRIX, 180 * (Math.PI / 180));
+
+    // Left Hand (opposite direction)
+    LampentHand2.MOVE_MATRIX = LIBS.get_I4();
+    LIBS.rotateZ(LampentHand2.MOVE_MATRIX, -90 * (Math.PI / 180) + armAngle);
+
+    /*========================= Chandelure ========================= */
+    // ANIMASI BERAYUN (swing)
+    var amplitude = (10 * Math.PI) / 180; // 10 derajat
+    var speed = 0.0015;
+    var angle = amplitude * Math.sin(time * speed);
+
+    // reset head matrix
+    Object1.MOVE_MATRIX = LIBS.get_I4();
+    LIBS.rotateX(Object1.MOVE_MATRIX, (90 * Math.PI) / 180);
+    LIBS.rotateY(Object1.MOVE_MATRIX, (30 * Math.PI) / 180);
+    LIBS.rotateZ(Object1.MOVE_MATRIX, angle);
+    LIBS.rotateX(Object1.MOVE_MATRIX, angle / 2);
+
+    // INFINITY PATH (lemniscate ∞)
+    // Parametric equations for an infinity (lemniscate) path
+    // x = A * sin(t), z = B * sin(t) * cos(t)
+    var A = 3.0; // horizontal size
+    var B = 2.0; // depth size
+    var t = time * 0.001; // speed of movement
+    var posX = A * Math.sin(t);
+    var posZ = B * Math.sin(t) * Math.cos(t);
+    var posY = 4.5 + 0.5 * Math.sin(t * 2); // slight up-down motion
+
+    // Apply translation to move Chandelure along infinity path
+    LIBS.translateX(Object1.MOVE_MATRIX, posX + 8);
+    LIBS.translateZ(Object1.MOVE_MATRIX, posZ -4);
+    LIBS.translateY(Object1.MOVE_MATRIX, posY -1);
+
+    // ANIMASI GERAK TANGAN (arms)
+    var armAmplitude = (8 * Math.PI) / 180;
+    var armSpeed = 0.005;
+    var armAngle = armAmplitude * Math.sin(time * armSpeed);
+
+    // Right Arm
+    Hand1.MOVE_MATRIX = LIBS.get_I4();
+    LIBS.rotateX(Hand1.MOVE_MATRIX, (90 * Math.PI) / 180);
+    LIBS.rotateY(Hand1.MOVE_MATRIX, (-20 * Math.PI) / 180 - armAngle);
+    LIBS.rotateZ(Hand1.MOVE_MATRIX, (-90 * Math.PI) / 180);
+    LIBS.translateY(Hand1.MOVE_MATRIX, 13);
+    LIBS.translateZ(Hand1.MOVE_MATRIX, 26);
+
+    // Left Arm
+    Hand2.MOVE_MATRIX = LIBS.get_I4();
+    LIBS.rotateX(Hand2.MOVE_MATRIX, (-90 * Math.PI) / 180);
+    LIBS.rotateY(Hand2.MOVE_MATRIX, (20 * Math.PI) / 180 + armAngle);
+    LIBS.rotateZ(Hand2.MOVE_MATRIX, (-90 * Math.PI) / 180);
+    LIBS.translateY(Hand2.MOVE_MATRIX, 13);
+    LIBS.translateZ(Hand2.MOVE_MATRIX, -26);
+
+    /*============================================================= */
 
     var cam = updateCamera(dt);
 
@@ -830,6 +1176,8 @@ function updateCamera(dt) {
     // Only render the Head sphere, not its children
     renderHeadOnly(OutHead, LIBS.get_I4());
     GL.depthMask(true);
+
+    LitwickBodyClylinder1.render(LIBS.get_I4());
 
     GL.flush();
     window.requestAnimationFrame(animate);
