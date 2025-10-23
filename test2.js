@@ -18,6 +18,9 @@ import { GravestoneA } from "./Environment/Grave1.js";
 import { DirtGrassLand } from "./Environment/Grass.js";
 import { GraveArch } from "./Environment/GraveyardArch.js";
 import { Fence } from "./Environment/Fence.js";
+import { OutwardDirt } from "./Environment/OutDirt.js";
+import { CandleBody } from "./Environment/CandleBody.js";
+import { CandleFlame } from "./Environment/CandleFlame.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -125,7 +128,30 @@ function main() {
   var Land = new DirtGrassLand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var GraveArch1 = new GraveArch(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var Fence1 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var verFence1 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
   var Fence2 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var verFence2 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
+  var Fence3 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Fence4 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Fence5 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var verFence3 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
+  var verFence4 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
+  var verFence5 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
+  var Fence6 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Fence7 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Fence8 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var verFence6 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
+  var verFence7 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
+  var verFence8 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
+  var Fence9 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Fence10 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Fence11 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var verFence9 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
+  var verFence10 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
+  var verFence11 = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
+  var OutwardDirt1 = new OutwardDirt(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var CandleBody1 = new CandleBody(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var CandleFlame1 = new CandleFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
   Object1.childs.push(HeadStrip1);
@@ -162,9 +188,30 @@ function main() {
   Land.childs.push(Gravestone1);
   Land.childs.push(Object1);
   GraveArch1.childs.push(Fence1);
+  Fence1.childs.push(verFence1);
   GraveArch1.childs.push(Fence2);
-
-
+  Fence2.childs.push(verFence2);
+  Land.childs.push(Fence3);
+  Fence3.childs.push(Fence4);
+  Fence3.childs.push(Fence5);
+  Fence3.childs.push(verFence3);
+  Fence4.childs.push(verFence4);
+  Fence5.childs.push(verFence5);
+  Land.childs.push(Fence6);
+  Fence6.childs.push(Fence7);
+  Fence6.childs.push(Fence8);
+  Fence6.childs.push(verFence6);
+  Fence7.childs.push(verFence7);
+  Fence8.childs.push(verFence8);
+  Land.childs.push(Fence9);
+  Fence9.childs.push(Fence10);
+  Fence9.childs.push(Fence11);
+  Fence9.childs.push(verFence9);
+  Fence10.childs.push(verFence10);
+  Fence11.childs.push(verFence11);
+  Gravestone1.childs.push(OutwardDirt1);
+  Gravestone1.childs.push(CandleBody1);
+  CandleBody1.childs.push(CandleFlame1);
 
   // Scale + Positioning objects
   //object1 (head)
@@ -357,19 +404,116 @@ function main() {
   LIBS.scaleY(Land.POSITION_MATRIX, 0.5);
   LIBS.scaleZ(Land.POSITION_MATRIX, 0.5);
   //graveyard arch
-  LIBS.translateZ(GraveArch1.POSITION_MATRIX, -30);
+  LIBS.translateZ(GraveArch1.POSITION_MATRIX, 30);
   //fence1
   LIBS.scaleX(Fence1.POSITION_MATRIX, 5);
   LIBS.scaleY(Fence1.POSITION_MATRIX, 5);
   LIBS.scaleZ(Fence1.POSITION_MATRIX, 5);
   LIBS.translateX(Fence1.POSITION_MATRIX, -30);
+  //ver fence1
+  LIBS.rotateZ(verFence1.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(verFence1.MOVE_MATRIX, 0.5);
+  LIBS.translateX(verFence1.MOVE_MATRIX, 4);
   //fence2
   LIBS.scaleX(Fence2.POSITION_MATRIX, 5);
   LIBS.scaleY(Fence2.POSITION_MATRIX, 5);
   LIBS.scaleZ(Fence2.POSITION_MATRIX, 5);
   LIBS.translateX(Fence2.POSITION_MATRIX, 10);
-
-
+  //ver fence2
+  LIBS.rotateZ(verFence2.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(verFence2.MOVE_MATRIX, 0.5);
+  LIBS.translateX(verFence2.MOVE_MATRIX, 3.935);
+  //fence3
+  LIBS.scaleX(Fence3.POSITION_MATRIX, 5);
+  LIBS.scaleY(Fence3.POSITION_MATRIX, 5);
+  LIBS.scaleZ(Fence3.POSITION_MATRIX, 5);
+  LIBS.translateZ(Fence3.POSITION_MATRIX, -30);
+  LIBS.translateX(Fence3.POSITION_MATRIX, -9.75);
+  //ver fence3
+  LIBS.rotateZ(verFence3.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(verFence3.MOVE_MATRIX, 0.5);
+  LIBS.translateX(verFence3.MOVE_MATRIX, 4);
+  //fence4
+  LIBS.translateX(Fence4.POSITION_MATRIX, 4);
+  //ver fence4
+  LIBS.rotateZ(verFence4.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(verFence4.MOVE_MATRIX, 0.5);
+  LIBS.translateX(verFence4.MOVE_MATRIX, 4);
+  //fence5
+  LIBS.translateX(Fence5.POSITION_MATRIX, -4);
+  //ver fence5
+  LIBS.rotateZ(verFence5.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(verFence5.MOVE_MATRIX, 0.5);
+  LIBS.translateX(verFence5.MOVE_MATRIX, 4);
+  //fence6
+  LIBS.scaleX(Fence6.POSITION_MATRIX, 5);
+  LIBS.scaleY(Fence6.POSITION_MATRIX, 5);
+  LIBS.scaleZ(Fence6.POSITION_MATRIX, 5);
+  LIBS.rotateY(Fence6.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateX(Fence6.POSITION_MATRIX, -30);
+  LIBS.translateZ(Fence6.POSITION_MATRIX, 9.75);
+  //ver fence6
+  LIBS.rotateZ(verFence6.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(verFence6.MOVE_MATRIX, 0.5);
+  LIBS.translateX(verFence6.MOVE_MATRIX, 4);
+  //fence7
+  LIBS.translateX(Fence7.POSITION_MATRIX, 4);
+  //ver fence7
+  LIBS.rotateZ(verFence7.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(verFence7.MOVE_MATRIX, 0.5);
+  LIBS.translateX(verFence7.MOVE_MATRIX, 4);
+  //fence8
+  LIBS.translateX(Fence8.POSITION_MATRIX, -4);
+  //ver fence8
+  LIBS.rotateZ(verFence8.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(verFence8.MOVE_MATRIX, 0.5);
+  LIBS.translateX(verFence8.MOVE_MATRIX, 4);
+  //fence9
+  LIBS.scaleX(Fence9.POSITION_MATRIX, 5);
+  LIBS.scaleY(Fence9.POSITION_MATRIX, 5);
+  LIBS.scaleZ(Fence9.POSITION_MATRIX, 5);
+  LIBS.rotateY(Fence9.MOVE_MATRIX, -90 * Math.PI / 180);
+  LIBS.translateX(Fence9.POSITION_MATRIX, 30);
+  LIBS.translateZ(Fence9.POSITION_MATRIX, -9.75);
+  //ver fence9
+  LIBS.rotateZ(verFence9.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(verFence9.MOVE_MATRIX, 0.5);
+  LIBS.translateX(verFence9.MOVE_MATRIX, 4);
+  //fence10
+  LIBS.translateX(Fence10.POSITION_MATRIX, 4);
+  //ver fence10 
+  LIBS.rotateZ(verFence10.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(verFence10.MOVE_MATRIX, 0.5);
+  LIBS.translateX(verFence10.MOVE_MATRIX, 4);
+  //fence11
+  LIBS.translateX(Fence11.POSITION_MATRIX, -4);
+  //ver fence11
+  LIBS.rotateZ(verFence11.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(verFence11.MOVE_MATRIX, 0.5);
+  LIBS.translateX(verFence11.MOVE_MATRIX, 4);
+  //gravestone1
+  LIBS.scaleX(Gravestone1.POSITION_MATRIX, 1.5);
+  LIBS.scaleY(Gravestone1.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(Gravestone1.POSITION_MATRIX, 1.5);
+  LIBS.translateX(Gravestone1.POSITION_MATRIX, -25);
+  LIBS.translateZ(Gravestone1.POSITION_MATRIX, -24);
+  //dirt outward1
+  LIBS.scaleX(OutwardDirt1.POSITION_MATRIX, 2);
+  LIBS.scaleY(OutwardDirt1.POSITION_MATRIX, 2);
+  LIBS.scaleZ(OutwardDirt1.POSITION_MATRIX, 2);
+  LIBS.translateY(OutwardDirt1.POSITION_MATRIX, 0.7);
+  //candle body1
+  LIBS.rotateX(CandleBody1.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateX(CandleBody1.POSITION_MATRIX, 1.5);
+  LIBS.translateY(CandleBody1.POSITION_MATRIX, 1.2);
+  LIBS.translateZ(CandleBody1.POSITION_MATRIX, 0.2);
+  //candle flame1
+  LIBS.rotateX(CandleFlame1.POSITION_MATRIX, 180 * Math.PI / 180);
+  LIBS.rotateZ(CandleFlame1.POSITION_MATRIX, 90 * Math.PI / 180);
+  LIBS.scaleX(CandleFlame1.POSITION_MATRIX, 0.35);
+  LIBS.scaleY(CandleFlame1.POSITION_MATRIX, 0.35);
+  LIBS.scaleZ(CandleFlame1.POSITION_MATRIX, 0.5);
+  LIBS.translateZ(CandleFlame1.MOVE_MATRIX, 1);
 
   // LIBS.translateY(Object2.POSITION_MATRIX, -1.7);
 
