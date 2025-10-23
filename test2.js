@@ -569,12 +569,57 @@ function main() {
   Land.setup();
   /*========================= Animation ========================= */
   var time_prev = 0;
-  var animate = function (time) {
-    GL.viewport(0, 0, CANVAS.width, CANVAS.height);
-    GL.clear(GL.COLOR_BUFFER_BIT);
+var animate = function (time) {
+  GL.viewport(0, 0, CANVAS.width, CANVAS.height);
+  GL.clear(GL.COLOR_BUFFER_BIT);
 
-    var dt = time - time_prev;
-    time_prev = time;
+  var dt = time - time_prev;
+  time_prev = time;
+
+  // =========================
+  // ANIMASI BERAYUN (swing)
+  // =========================
+  // amplitude = besar ayunan (radian)
+// =========================
+// ANIMASI BERAYUN (swing)
+// =========================
+  var amplitude = 10 * Math.PI / 180; // 10 derajat
+  var speed = 0.0015; // semakin besar makin cepat
+  var angle = amplitude * Math.sin(time * speed);
+
+  // reset rotasi terlebih dahulu agar tidak terus bertambah
+  Object1.MOVE_MATRIX = LIBS.get_I4();
+  LIBS.rotateX(Object1.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.rotateY(Object1.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.translateY(Object1.MOVE_MATRIX, 4.5);
+
+  // apply the main head swing
+  LIBS.rotateZ(Object1.MOVE_MATRIX, angle);
+  LIBS.rotateX(Object1.MOVE_MATRIX, angle / 2);
+
+  // =========================
+  // ANIMASI GERAK TANGAN (arms)
+  // =========================
+  var armAmplitude = 8 * Math.PI / 180; // 8° outward-inward rotation
+  var armSpeed = 0.002; // a bit faster than the head swing
+  var armAngle = armAmplitude * Math.sin(time * armSpeed);
+
+  // reset arms first to their original transforms
+  Hand1.MOVE_MATRIX = LIBS.get_I4();
+  LIBS.rotateX(Hand1.MOVE_MATRIX, 90 * Math.PI / 180);
+  LIBS.rotateY(Hand1.MOVE_MATRIX, -20 * Math.PI / 180 - armAngle); // right arm moves out/in
+  LIBS.rotateZ(Hand1.MOVE_MATRIX, -90 * Math.PI / 180);
+  LIBS.translateY(Hand1.MOVE_MATRIX, 13);
+  LIBS.translateZ(Hand1.MOVE_MATRIX, 26);
+
+  Hand2.MOVE_MATRIX = LIBS.get_I4();
+  LIBS.rotateX(Hand2.MOVE_MATRIX, -90 * Math.PI / 180);
+  LIBS.rotateY(Hand2.MOVE_MATRIX, 20 * Math.PI / 180 + armAngle); // left arm moves opposite
+  LIBS.rotateZ(Hand2.MOVE_MATRIX, -90 * Math.PI / 180);
+  LIBS.translateY(Hand2.MOVE_MATRIX, 13);
+  LIBS.translateZ(Hand2.MOVE_MATRIX, -26);
+
+
     // LIBS.rotateZ(HeadFlame1.MOVE_MATRIX, dt * 0.0025);
     // LIBS.rotateX(Object3.MOVE_MATRIX, dt * -0.001);
     // LIBS.rotateX(Object4.MOVE_MATRIX, dt * 0.001);
@@ -583,7 +628,7 @@ function main() {
     // rebuild VIEWMATRIX each frame from identity so rotations accumulate only from THETA/PHI
     var cam = LIBS.get_I4();
     // move camera back first
-    LIBS.translateZ(cam, -80);
+    LIBS.translateZ(cam, -20);
     // apply pitch (PHI) then yaw (THETA)
     LIBS.rotateX(cam, PHI);
     LIBS.rotateY(cam, THETA);
