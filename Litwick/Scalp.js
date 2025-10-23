@@ -23,10 +23,10 @@ export class Scalp {
     _position,
     _color,
     _Mmatrix,
-    Color = [0.95,0.95,0.85, 0.4],
+    Color = [0.9,0.91,0.91, 0.4],
 
-    a = 0.7, // base radius (at the cone/paraboloid joint)
-    b = 0.9, // total height
+    a = 0.625, // base radius (at the cone/paraboloid joint)
+    b = 0.7, // total height
     c = 0.7, // depth (used for scaling symmetry - unused in this surface of revolution)
     uSeg = 360,
     vSeg = 60

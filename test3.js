@@ -76,7 +76,7 @@ function main() {
 
     // Objects
     // var TopHat = new TopHat(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15], 1, 4);
-    var Object1 = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+    var Object1 = new Head(GL, SHADER_PROGRAM, _position,_color, _Mmatrix);
 
     var Nose = new NoseHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
     var Left_hand = new NoseHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
@@ -95,8 +95,8 @@ var hair = new Hair(
     0.7,     // radius
     0.8,     // height
     32,      // segments
-    [0.95,0.95,0.85], // gradient color
-    [0.95,0.95,0.85],  // color
+    [0.9,0.91,0.91], // gradient color
+    [0.9,0.91,0.91],  // color
     
 );
 
@@ -109,8 +109,8 @@ var hair2 = new Hair(
     0.7,     // radius
     0.8,     // height
     32,      // segments
-    [0.95,0.95,0.85], // gradient color
-    [0.95,0.95,0.85],  // color
+    [0.9,0.91,0.91], // gradient color
+    [0.9,0.91,0.91],  // color
     
 );
 
@@ -123,8 +123,8 @@ var hair3 = new Hair(
     0.7,     // radius
     0.8,     // height
     32,      // segments
-    [0.95,0.95,0.85], // gradient color
-    [0.95,0.95,0.85],  // color
+    [0.9,0.91,0.91], // gradient color
+    [0.9,0.91,0.91],  // color
     
 );
 
@@ -198,24 +198,24 @@ LIBS.rotateX(hair3.POSITION_MATRIX, Math.PI)
 
 
     // feet1 front-left
-    LIBS.translateZ(feet1.POSITION_MATRIX, 0.2)
+    LIBS.translateZ(feet1.POSITION_MATRIX, 0.1)
     LIBS.translateY(feet1.POSITION_MATRIX, -0.2)
-    LIBS.translateX(feet1.POSITION_MATRIX, 0.2)
+    LIBS.translateX(feet1.POSITION_MATRIX, 0.15)
     LIBS.scaleX(feet1.POSITION_MATRIX, 1.5)
     LIBS.scaleZ(feet1.POSITION_MATRIX, 1.5)
 
     LIBS.scaleY(feet1.POSITION_MATRIX, 0.3)
     // feet2 front-right
-    LIBS.translateZ(feet2.POSITION_MATRIX, 0.2)
+    LIBS.translateZ(feet2.POSITION_MATRIX, 0.1)
     LIBS.translateY(feet2.POSITION_MATRIX, -0.2)
-    LIBS.translateX(feet2.POSITION_MATRIX, -0.2)
+    LIBS.translateX(feet2.POSITION_MATRIX, -0.15)
     LIBS.scaleX(feet2.POSITION_MATRIX, 1.5)
     LIBS.scaleZ(feet2.POSITION_MATRIX, 1.5)
 
     LIBS.scaleY(feet2.POSITION_MATRIX, 0.3)
     // feet3 front-middle
     LIBS.translateY(feet3.POSITION_MATRIX, -0.2)
-    LIBS.translateZ(feet3.POSITION_MATRIX, 0.3)
+    LIBS.translateZ(feet3.POSITION_MATRIX, 0.2)
     LIBS.scaleX(feet3.POSITION_MATRIX, 1.5)
     LIBS.scaleZ(feet3.POSITION_MATRIX, 1.5)
 
@@ -243,7 +243,7 @@ LIBS.rotateX(hair3.POSITION_MATRIX, Math.PI)
 
     LIBS.scaleY(feet6.POSITION_MATRIX, 0.3)
     // feet7 back the big one
-    LIBS.translateZ(feet7.POSITION_MATRIX, -0.15)
+    LIBS.translateZ(feet7.POSITION_MATRIX, -0.1)
     LIBS.translateY(feet7.POSITION_MATRIX, -0.2)
     LIBS.scaleY(feet7.POSITION_MATRIX, 0.3)
     LIBS.scaleZ(feet7.POSITION_MATRIX, 2)
@@ -282,7 +282,7 @@ LIBS.rotateX(hair3.POSITION_MATRIX, Math.PI)
     LIBS.scaleX(scalp.POSITION_MATRIX, 0.55);
     LIBS.scaleY(scalp.POSITION_MATRIX, 0.3);
     LIBS.scaleZ(scalp.POSITION_MATRIX, 0.5);
-    LIBS.translateY(scalp.POSITION_MATRIX, 0.38);
+    LIBS.translateY(scalp.POSITION_MATRIX, 0.4075);
     LIBS.rotateX(scalp.MOVE_MATRIX, 3.15)
 
     // nose
@@ -387,33 +387,73 @@ LIBS.rotateX(hair3.POSITION_MATRIX, Math.PI)
 
     /*========================= Animation ========================= */
     var time_prev = 0;
+    var bounceHeight = 0.5;    // Max vertical bounce height
+    var bounceSpeed = 0.0025;   // Bounce speed multiplier
+    var bounceTime = 0;        // Time accumulator for bouncing
+
     var animate = function (time) {
-        GL.viewport(0, 0, CANVAS.width, CANVAS.height);
-        GL.clear(GL.COLOR_BUFFER_BIT);
+    GL.viewport(0, 0, CANVAS.width, CANVAS.height);
+    GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 
-        var dt = time - time_prev;
-        time_prev = time;
-        // LIBS.rotateY(Object1.MOVE_MATRIX, dt * 0.001);
-        // LIBS.rotateX(Object3.MOVE_MATRIX, dt * -0.001);
-        // LIBS.rotateX(Object4.MOVE_MATRIX, dt * 0.001);
+    var dt = time - time_prev;
+    time_prev = time;
 
-        // apply simple camera rotation from mouse drag (THETA, PHI)
-        // rebuild VIEWMATRIX each frame from identity so rotations accumulate only from THETA/PHI
-        var cam = LIBS.get_I4();
-        // move camera back first
-                LIBS.translateZ(cam, ZOOM);
-        // apply pitch (PHI) then yaw (THETA)
-        LIBS.rotateX(cam, PHI);
-        LIBS.rotateY(cam, THETA);
+    bounceTime += dt;
 
-        GL.uniformMatrix4fv(_Pmatrix, false, PROJMATRIX);
-        GL.uniformMatrix4fv(_Vmatrix, false, cam);
+    // Calculate bounce offsets for smooth movement in 3D
+    var bounceOffsetY = Math.abs(Math.sin(bounceTime * bounceSpeed)) * bounceHeight;  // Up and down
+    var bounceOffsetX = Math.sin(bounceTime * bounceSpeed * 0.5) * 0.2;  // Side to side slower
+    var bounceOffsetZ = Math.cos(bounceTime * bounceSpeed * 0.5) * 0.2;  // Forward/back slower
 
-        BodyClylinder1.render(LIBS.get_I4());
+    // stretch Y when jumping
 
-        GL.flush();
-        window.requestAnimationFrame(animate);
-    };
+
+    // Reset previous translations before applying new ones (to prevent accumulation)
+    if (BodyClylinder1.prevBounceOffsetY !== undefined) {
+        LIBS.translateY(BodyClylinder1.POSITION_MATRIX, -BodyClylinder1.prevBounceOffsetY);
+        LIBS.translateX(BodyClylinder1.POSITION_MATRIX, -BodyClylinder1.prevBounceOffsetX);
+        LIBS.translateZ(BodyClylinder1.POSITION_MATRIX, -BodyClylinder1.prevBounceOffsetZ);
+    }
+    // Undo previous scale before applying new one
+    if (BodyClylinder1.prevScaleY !== undefined) {
+        var inversePrevScaleY = 1 / BodyClylinder1.prevScaleY;
+        LIBS.scaleY(BodyClylinder1.POSITION_MATRIX, inversePrevScaleY);
+    }
+
+    // Apply new bounce translation
+    LIBS.translateY(BodyClylinder1.POSITION_MATRIX, bounceOffsetY);
+    LIBS.translateX(BodyClylinder1.POSITION_MATRIX, bounceOffsetX);
+    LIBS.translateZ(BodyClylinder1.POSITION_MATRIX, bounceOffsetZ);
+
+    // Apply new scale based on bounce (stretch Y)
+    var baseScaleY = 1.0;
+    var maxStretch = 0.1;
+    var scaleY = baseScaleY + (bounceOffsetY / bounceHeight) * maxStretch;
+    LIBS.scaleY(BodyClylinder1.POSITION_MATRIX, scaleY);
+
+    // Save current offsets and scale for next frame
+    BodyClylinder1.prevBounceOffsetY = bounceOffsetY;
+    BodyClylinder1.prevBounceOffsetX = bounceOffsetX;
+    BodyClylinder1.prevBounceOffsetZ = bounceOffsetZ;
+    BodyClylinder1.prevScaleY = scaleY;
+
+
+    // Camera controls from mouse drag
+    var cam = LIBS.get_I4();
+    LIBS.translateZ(cam, ZOOM);
+    LIBS.rotateX(cam, PHI);
+    LIBS.rotateY(cam, THETA);
+
+    GL.uniformMatrix4fv(_Pmatrix, false, PROJMATRIX);
+    GL.uniformMatrix4fv(_Vmatrix, false, cam);
+
+    // Render the whole model with updated position matrix
+    BodyClylinder1.render(LIBS.get_I4());
+
+    GL.flush();
+    window.requestAnimationFrame(animate);
+};
+
     animate(0);
 }
 window.addEventListener("load", main);

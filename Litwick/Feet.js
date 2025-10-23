@@ -24,7 +24,7 @@ export class BodyClylinder {
     segments = 72,
     roundFactor = 0.25, // proportion of total height used for rounding
     roundSegments = 12, // how many vertical divisions for the rounded parts
-    Color = [0.95,0.95,0.85]
+    Color = [0.9,0.91,0.91]
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;

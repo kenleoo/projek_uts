@@ -58,7 +58,7 @@ export class NoseHand {
         const z = Math.sin(theta) * r;
 
         // warna hitam 
-        this.vertex.push(x, y, z, 1,1,0.95);
+        this.vertex.push(x, y, z, 0.9,0.91,0.91);
       }
     }
 
