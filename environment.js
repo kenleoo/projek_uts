@@ -115,15 +115,11 @@ function main() {
   GL.enable(GL.BLEND);
   GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
-  // Litwick Model
+  // TODO: Litwick Model
   var LitwickHead1 = new LitwickHead(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var Nose = new NoseHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var Left_hand = new NoseHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var Right_hand = new NoseHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  // var hair = new Hair(GL, SHADER_PROGRAM, _position, _color, _Mmatrix)
-  // Example: Create a cheese wheel with a 45-degree slice and a 10-degree hole in the middle vertical layer (index 2)
-  // Contoh: Keju cembung dengan lubang tembus 5 derajat (sangat kecil, seperti tembakan)
-  // Contoh pemanggilan di main.js:
 
   var hair = new Hair(
     GL,
@@ -337,7 +333,7 @@ function main() {
   LIBS.scaleY(LitwickBodyClylinder1.POSITION_MATRIX, 1);
   LIBS.scaleZ(LitwickBodyClylinder1.POSITION_MATRIX, 1);
 
-  // Lampent Model
+  // TODO: Lampent Model
   var OutHead = new LampentHead(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.14, 0.4]);
   var InHead = new LampentHead(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.4, 0.4, 1, 0.6]);
   var HeadFire1 = new LampentHeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
@@ -476,7 +472,7 @@ function main() {
   // body bottom cone
   LIBS.translateY(LampentBodyCone.POSITION_MATRIX, -1.5);
 
-  // Chandelure
+  // TODO: Chandelure Model
   var Object1 = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var HeadStrip1 = new HeadStrip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var HeadVerticalStrip1 = new HeadVerticalStrip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
@@ -731,13 +727,14 @@ function main() {
   LIBS.translateX(HandFlame4.MOVE_MATRIX, 0.1);
   LIBS.translateZ(HandFlame4.MOVE_MATRIX, 0.1);
 
+  // TODO: Enviroment Model
   //land
   LIBS.translateY(Land.POSITION_MATRIX, -5);
   LIBS.scaleX(Land.POSITION_MATRIX, 0.5);
   LIBS.scaleY(Land.POSITION_MATRIX, 0.5);
   LIBS.scaleZ(Land.POSITION_MATRIX, 0.5);
 
-  //graveyard arch
+  // graveyard arch
   LIBS.translateZ(GraveArch1.POSITION_MATRIX, 30);
 
   // loop for fences
@@ -958,7 +955,7 @@ function main() {
   var pitch = 0;
 
   var camSpeed = 0.005;
-  var rotSpeed = 0.001;
+  var rotSpeed = 0.0005;
   var keys = {};
 
   window.addEventListener("keydown", (e) => (keys[e.key.toLowerCase()] = true));
