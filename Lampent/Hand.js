@@ -62,7 +62,7 @@ export class Hand {
     }
 
     // Flat ribbon generator (rectangular cross-section, not tube)
-    function generateFlatRibbon(path, width = 1.5, thickness = 0.3) {
+    function generateFlatRibbon(path, width = 1.5, thickness = 0.5) {
       const vertices = [];
       const faces = [];
 
