@@ -1,4 +1,4 @@
-export class BodyClylinder {
+export class LampentBodyClylinder {
   GL = null;
   SHADER_PROGRAM = null;
 

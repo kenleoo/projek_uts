@@ -1,4 +1,4 @@
-export class UnderBodyParaboloid {
+export class LampentUnderBodyParaboloid {
   GL = null;
   SHADER_PROGRAM = null;
 

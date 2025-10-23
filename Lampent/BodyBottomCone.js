@@ -1,4 +1,4 @@
-export class BodyBottomCone {
+export class LampentBodyBottomCone {
   GL = null;
   SHADER_PROGRAM = null;
 

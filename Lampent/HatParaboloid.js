@@ -1,4 +1,4 @@
-export class HatParaboloid {
+export class LampentHatParaboloid {
   GL = null;
   SHADER_PROGRAM = null;
 

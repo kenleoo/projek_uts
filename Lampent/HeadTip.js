@@ -1,4 +1,4 @@
-export class HeadTip {
+export class LampentHeadTip {
   GL = null;
   SHADER_PROGRAM = null;
 

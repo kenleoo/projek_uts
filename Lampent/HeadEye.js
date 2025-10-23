@@ -1,4 +1,4 @@
-export class HeadEye {
+export class LampentHeadEye {
   GL = null;
   SHADER_PROGRAM = null;
 

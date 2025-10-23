@@ -125,4 +125,5 @@ var LIBS = {
     const len = Math.hypot(v[0], v[1], v[2]);
     return len > 0 ? [v[0] / len, v[1] / len, v[2] / len] : [0, 0, 0];
   },
+  add: (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]],
 };

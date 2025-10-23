@@ -1,4 +1,4 @@
-export class Hand {
+export class LampentHand {
   GL = null;
   SHADER_PROGRAM = null;
 
