@@ -7,6 +7,7 @@ import { UnderBodyParaboloid } from "./Lampent/UnderBodyParaboloid.js";
 import { BodyBottomCone } from "./Lampent/BodyBottomCone.js";
 import { HeadTip } from "./Lampent/HeadTip.js";
 import { HeadFlame } from "./Lampent/HeadFlame.js";
+import { Hand } from "./Lampent/Hand.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -91,12 +92,13 @@ function main() {
   var OutlineEye2 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.15], 0.106, 0.009);
   var TopBodyParaboloid = new BodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var BodyClylinder1 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Hand1 = new Hand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Hand2 = new Hand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 60, 10, 0.5, 0.5);
   var BottomBodyParaboloid = new UnderBodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var BodyCone = new BodyBottomCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
-    OutHead.childs.push(InHead);
-
+  OutHead.childs.push(InHead);
   OutHead.childs.push(HeadFlame1);
   HeadFlame1.childs.push(HeadFlame2);
   InHead.childs.push(OutsideHat);
@@ -109,19 +111,21 @@ function main() {
   InHead.childs.push(TopBodyParaboloid);
   TopBodyParaboloid.childs.push(BodyClylinder1);
   BodyClylinder1.childs.push(BottomBodyParaboloid);
+  BodyClylinder1.childs.push(Hand1);
+  BodyClylinder1.childs.push(Hand2);
   BottomBodyParaboloid.childs.push(BodyCone);
 
-  // FIXME: Inner Head tidak ikut bergerak bersama OutHead
   // Scale + Positioning objects
   // Outer Glass (head)
-  LIBS.scaleX(OutHead.POSITION_MATRIX, 2);
-  LIBS.scaleY(OutHead.POSITION_MATRIX, 2);
-  LIBS.scaleZ(OutHead.POSITION_MATRIX, 2);
+  LIBS.scaleX(OutHead.POSITION_MATRIX, 1.5);
+  LIBS.scaleY(OutHead.POSITION_MATRIX, 1.5);
+  LIBS.scaleZ(OutHead.POSITION_MATRIX, 1.5);
+  LIBS.rotateZ(OutHead.MOVE_MATRIX, 15 * (Math.PI / 180));
 
   // Inner Glass (head inner)
-  LIBS.scaleX(InHead.POSITION_MATRIX, 1.85);
-  LIBS.scaleY(InHead.POSITION_MATRIX, 1.85);
-  LIBS.scaleZ(InHead.POSITION_MATRIX, 1.85);
+  LIBS.scaleX(InHead.POSITION_MATRIX, 0.95);
+  LIBS.scaleY(InHead.POSITION_MATRIX, 0.95);
+  LIBS.scaleZ(InHead.POSITION_MATRIX, 0.95);
 
   // Head flame
   LIBS.rotateX(HeadFlame1.MOVE_MATRIX, -90 * (Math.PI / 180));
@@ -154,7 +158,6 @@ function main() {
   LIBS.scaleZ(HeadTip1.POSITION_MATRIX, 4);
   LIBS.rotateX(HeadTip1.MOVE_MATRIX, -90 * (Math.PI / 180));
   LIBS.translateY(HeadTip1.POSITION_MATRIX, 2.4);
-  // LIBS.translateY(TopHat.POSITION_MATRIX, 1.5);
 
   // head eye (kanan)
   LIBS.translateZ(HeadEye1.POSITION_MATRIX, 0.6);
@@ -185,6 +188,22 @@ function main() {
   LIBS.scaleX(BodyClylinder1.POSITION_MATRIX, 25);
   LIBS.scaleY(BodyClylinder1.POSITION_MATRIX, 25);
   LIBS.scaleZ(BodyClylinder1.POSITION_MATRIX, 25);
+
+  // hand kanan
+  LIBS.scaleX(Hand1.POSITION_MATRIX, 0.08);
+  LIBS.scaleY(Hand1.POSITION_MATRIX, 0.08);
+  LIBS.scaleZ(Hand1.POSITION_MATRIX, 0.08);
+  LIBS.rotateZ(Hand1.MOVE_MATRIX, 90 * (Math.PI / 180));
+  LIBS.translateX(Hand1.POSITION_MATRIX, 0.09);
+  LIBS.translateY(Hand1.POSITION_MATRIX, 0.05);
+
+  // hand kiri
+  LIBS.scaleX(Hand2.POSITION_MATRIX, 0.08);
+  LIBS.scaleY(Hand2.POSITION_MATRIX, 0.08);
+  LIBS.scaleZ(Hand2.POSITION_MATRIX, 0.08);
+  LIBS.rotateZ(Hand2.MOVE_MATRIX, -90 * (Math.PI / 180));
+  LIBS.translateX(Hand2.POSITION_MATRIX, -0.09);
+  LIBS.translateY(Hand2.POSITION_MATRIX, 0.05);
 
   // bottom body paraboloid
   LIBS.scaleX(BottomBodyParaboloid.POSITION_MATRIX, 0.045);
@@ -279,7 +298,6 @@ function main() {
     GL.depthMask(false);
     // Only render the Head sphere, not its children
     renderHeadOnly(OutHead, LIBS.get_I4());
-    renderHeadOnly(InHead, LIBS.get_I4());
 
     GL.flush();
     window.requestAnimationFrame(animate);
