@@ -24,6 +24,7 @@ export class LampentHatParaboloid {
     _color,
     _Mmatrix,
 
+    // warna
     color = [0.075, 0, 0.15],
 
     // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
@@ -40,26 +41,29 @@ export class LampentHatParaboloid {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Paraboloid Eliptik Terbalik Runcing ========================= */
-    const rings = 30; // semakin besar, semakin halus
-    const a = paraboloidHeight / (paraboloidRadius * paraboloidRadius); // konstanta parabola
+    /*========================= Paraboloid Eliptik ========================= */
+    const rings = 30; // Jumlah cincin (vertikal) yang membentuk paraboloid
+
+    // Koefisien parabola: mengontrol seberapa cepat bentuk melengkung
+    const a = paraboloidHeight / (paraboloidRadius * paraboloidRadius);
 
     // Simpan index awal vertex
     const baseIndex = this.vertex.length / 6;
 
-    // Build vertex paraboloid terbalik (runcing ke bawah)
+    // Build vertex paraboloid (runcing ke atas)
     for (let i = 0; i <= rings; i++) {
-      const t = i / rings;
-      const r = paraboloidRadius * (1 - t); // radius mengecil ke bawah
-      // const y = paraboloidHeight / 2 - a * (r * r); // buka ke bawah, runcing di bawah
-      const y = paraboloidHeight / 2 - a * Math.pow(r, 1.5); // buka ke bawah, runcing di bawah
+      const t = i / rings; // posisi vertikal ring dari atas ke bawah
+      const r = paraboloidRadius * (1 - t); // radius mengecil
+      // const y = paraboloidHeight / 2 + a * (r * r);        // runcing di bawah
+      const y = paraboloidHeight / 2 - a * Math.pow(r, 1.5); // runcing di atas
 
+      // Loop untuk build vertex melingkar pada cincin
       for (let j = 0; j <= segments; j++) {
-        const theta = (j / segments) * Math.PI * 2;
+        const theta = (j / segments) * Math.PI * 2; // sudut melingkar 0–360°
         const x = Math.cos(theta) * r;
         const z = Math.sin(theta) * r;
 
-        // warna hitam
+        // Simpan posisi dan warna
         this.vertex.push(x, y, z, color[0], color[1], color[2]);
       }
     }
@@ -67,11 +71,13 @@ export class LampentHatParaboloid {
     // Build faces paraboloid
     for (let i = 0; i < rings; i++) {
       for (let j = 0; j < segments; j++) {
+        // Hitung indeks empat titik pada dua cincin yang berdekatan
         const p1 = baseIndex + i * (segments + 1) + j;
         const p2 = baseIndex + (i + 1) * (segments + 1) + j;
         const p3 = baseIndex + (i + 1) * (segments + 1) + (j + 1);
         const p4 = baseIndex + i * (segments + 1) + (j + 1);
 
+        // Buat 2 segitiga untuk membentuk 1 panel permukaan
         this.faces.push(p1, p2, p3);
         this.faces.push(p1, p3, p4);
       }

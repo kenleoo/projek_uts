@@ -23,8 +23,9 @@ export class LampentHeadTip {
     _position,
     _color,
     _MMatrix,
+
     a = 0.19, // base radius
-    c = 1.75, // flame height
+    c = 1.75, // height
     uSeg = 60, // radial segments
     vSeg = 360 // vertical segments
   ) {
@@ -40,33 +41,34 @@ export class LampentHeadTip {
     const base_radius = a;
     const height = c;
 
+    // Loop build lapisan dari bawah ke atas
     for (let i = 0; i <= vSeg; i++) {
-      const t = i / vSeg;
+      const t = i / vSeg; // posisi vertikal
       const z = height * t;
 
-      // Flame profile: tapering + bulges
-      const taper = Math.sqrt(1 - t); // Creates gentle rounded tip
-      const bulge = 0.8 + 0.2 * Math.sin(Math.PI * t); // Less pronounced bulge
+      // Radius mengecil ke atas → ujung lebih runcing
+      const taper = Math.sqrt(1 - t); // membuat ujung tumpul / curve
+      const bulge = 0.8 + 0.2 * Math.sin(Math.PI * t); // sedikit membesar di tengah
       const radius = base_radius * taper * bulge;
 
-      // Flame curve offset — curve sideways (like S-shape)
+      // kalo mau di spiral
       const offsetX = 0;
       const offsetY = 0;
 
+      // build vertex lingkaran di lapisan ini
       for (let j = 0; j <= uSeg; j++) {
         const theta = (j / uSeg) * 2 * Math.PI;
 
         const x = offsetX + radius * Math.cos(theta);
         const y = offsetY + radius * Math.sin(theta);
 
+        // Simpan vertex (posisi + warna)
         this.vertex.push(x, y, z);
-
-        // Color gradient: light blue → dark blue/purple
         this.vertex.push(0.075, 0, 0.15, 1);
       }
     }
 
-    // Create triangle faces (quads split into 2 triangles)
+    // Build Faces
     for (let i = 0; i < vSeg; i++) {
       for (let j = 0; j < uSeg; j++) {
         let p1 = i * (uSeg + 1) + j;

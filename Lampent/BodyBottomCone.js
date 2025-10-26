@@ -38,7 +38,7 @@ export class LampentBodyBottomCone {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Upside-down cone (penyangga kepala) ========================= */
+    /*========================= Upside-down cone ========================= */
     // Build vertex
     const halfH = height / 2;
     const bottomY = -halfH; // posisi titik puncak kerucut (bagian bawah)

@@ -23,6 +23,7 @@ export class LampentHand {
     _position,
     _color,
     _Mmatrix,
+
     segments = 60,
     radius = 10,
     startCurveAngle = 0.5,
@@ -37,82 +38,98 @@ export class LampentHand {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Curved Ribbon/Blade Path =========================*/
+    /*========================= Curved Ribbon =========================*/
 
+    // generate jalur melengkung 2D (pada bidang X–Y)
     function generateCurvedPath(points, length, startAngle, endAngle) {
       const path = [];
-      
+
       for (let i = 0; i <= points; i++) {
         const t = i / points;
-        
-        // Interpolate between start and end curve angles
-        // Use power function to control acceleration
+
+        // agar kurva makin tajam mendekati akhir
         const curveIntensity = startAngle + Math.pow(t, 2) * (endAngle - startAngle);
+
+        // Hitung sudut dan jarak berdasarkan parameter kurva
         const angle = t * curveIntensity * Math.PI * 0.5;
         const distance = t * length;
-        
+
+        // Hitung koordinat titik di bidang 2D
         const x = Math.sin(angle) * distance;
         const y = -Math.cos(angle) * distance;
         const z = 0;
-        
+
+        // Simpan posisi titik di sepanjang jalur
         path.push([x, y, z]);
       }
 
       return path;
     }
 
-    // Flat ribbon generator (rectangular cross-section, not tube)
+    // Flat ribbon generator
     function generateFlatRibbon(path, width = 1.5, thickness = 0.5) {
       const vertices = [];
       const faces = [];
 
+      // Loop untuk setiap titik pada jalur (path)
       for (let i = 0; i < path.length; i++) {
-        const [x, y, z] = path[i];
-        
-        // Calculate tangent direction
+        const [x, y, z] = path[i]; // Ambil posisi titik sekarang
+
+        // Hitung arah maju pita
         const forward =
           i < path.length - 1
-            ? LIBS.normalize(LIBS.subtract(path[i + 1], path[i]))
-            : LIBS.normalize(LIBS.subtract(path[i], path[i - 1]));
+            ? // Kalau belum di ujung, pakai titik berikutnya untuk tahu arah ke depan
+              LIBS.normalize(LIBS.subtract(path[i + 1], path[i]))
+            : // Kalau sudah di ujung, pakai titik sebelumnya
+              LIBS.normalize(LIBS.subtract(path[i], path[i - 1]));
 
         // Calculate perpendicular directions for flat ribbon
-        const up = [0, 0, 1]; // Z-axis is "up" (thickness direction)
-        let side = LIBS.cross(forward, up);
+        const up = [0, 0, 1]; // arah "atas" pita (Z-axis jadi tebalnya)
+        let side = LIBS.cross(forward, up); // arah "samping" dari cross product antara arah maju & atas
+
+        // Kalau hasilnya hampir nol (misal path-nya sejajar sumbu Z), pakai arah default (1,0,0)
         if (Math.hypot(side[0], side[1], side[2]) < 0.001) side = [1, 0, 0];
         side = LIBS.normalize(side);
 
-        // REVERSED taper: smaller at start (0.2), larger at end (1.0)
-        const taper = 0.2 + (i / path.length) * 0.8; // Start at 20%, grow to 100%
+        // Efek Taper: bagian awal kecil, makin ke ujung makin lebar
+        // dimulai dari 20% ukuran hingga 100% di ujung
+        const taper = 0.2 + (i / path.length) * 0.8;
         const currentWidth = width * taper;
         const currentThickness = thickness * taper;
 
-        // Create 4 corners of rectangular cross-section
+        // Setengah lebar dan tebal, dipakai untuk bikin posisi sudut
         const halfWidth = currentWidth / 2;
         const halfThickness = currentThickness / 2;
 
-        // Top-left, top-right, bottom-left, bottom-right
+        /*  buat 4 titik sudut (corner) untuk pita:
+            TL ---- TR     (atas)
+             |      |
+            BL ---- BR     (bawah)  */
         const corners = [
-          [-halfWidth, halfThickness],   // top-left
-          [halfWidth, halfThickness],    // top-right
-          [-halfWidth, -halfThickness],  // bottom-left
-          [halfWidth, -halfThickness],   // bottom-right
+          [-halfWidth, halfThickness], // TL = top-left
+          [halfWidth, halfThickness], // TR = top-right
+          [-halfWidth, -halfThickness], // BL = bottom-left
+          [halfWidth, -halfThickness], // BR = bottom-right
         ];
 
+        // Ubah koordinat lokal sudut ke koordinat dunia (global)
         for (let c = 0; c < corners.length; c++) {
           const [s, u] = corners[c];
-          
+
+          // Kombinasi posisi path + arah samping (side) + arah atas (up)
           const vx = x + side[0] * s + up[0] * u;
           const vy = y + side[1] * s + up[1] * u;
           const vz = z + side[2] * s + up[2] * u;
 
+          // Simpan ke daftar vertex (dengan warna ungu tua)
           vertices.push(vx, vy, vz, 0.075, 0, 0.15);
         }
       }
 
-      // Create faces for the ribbon (box-shaped)
+      // Build faces
       for (let i = 0; i < path.length - 1; i++) {
-        const base = i * 4;
-        const next = (i + 1) * 4;
+        const base = i * 4; // empat titik pada potongan ke-i
+        const next = (i + 1) * 4; // empat titik pada potongan berikutnya
 
         // Top face
         faces.push(base + 0, next + 0, base + 1);
@@ -131,23 +148,21 @@ export class LampentHand {
         faces.push(next + 1, next + 3, base + 3);
       }
 
-      // Add starting cap (small end)
-      const firstBase = 0;
+      // Tutup Ujung Pita
+      const firstBase = 0; // Bagian awal (kecil)
       faces.push(firstBase + 0, firstBase + 2, firstBase + 1);
       faces.push(firstBase + 1, firstBase + 2, firstBase + 3);
 
-      // Close the end with a flat cap (large end)
+      // Bagian akhir (besar)
       const lastIdx = path.length - 1;
       const lastBase = lastIdx * 4;
-      
-      // End cap face (flat rectangle)
       faces.push(lastBase + 0, lastBase + 1, lastBase + 2);
       faces.push(lastBase + 1, lastBase + 3, lastBase + 2);
 
       return { vertices, faces };
     }
 
-    // Generate curved path with start and end angles
+    /*========================= Generate Curved Arm =========================*/
     const armPath = generateCurvedPath(segments, radius, startCurveAngle, endCurveAngle);
     const ribbon = generateFlatRibbon(armPath, 1.5, 0.4);
 
@@ -162,11 +177,7 @@ export class LampentHand {
 
     this.OBJECT_FACES = this.GL.createBuffer();
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
-    this.GL.bufferData(
-      this.GL.ELEMENT_ARRAY_BUFFER,
-      new Uint16Array(this.faces),
-      this.GL.STATIC_DRAW
-    );
+    this.GL.bufferData(this.GL.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), this.GL.STATIC_DRAW);
 
     this.childs.forEach((child) => child.setup());
   }

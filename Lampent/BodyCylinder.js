@@ -47,20 +47,20 @@ export class LampentBodyClylinder {
       let yTop = height / 2;
       let yBottom = -height / 2;
 
-      // Top ring
+      // titik top ring
       this.vertex.push(x, yTop, z);
       this.vertex.push(0.075, 0, 0.15); // color
 
-      // Bottom ring
+      // titik bottom ring
       this.vertex.push(x, yBottom, z);
       this.vertex.push(0.075, 0, 0.15); // color
     }
 
-    // Add top and bottom centers
+    // titik pusat top and bottom ringg
     const topCenterIndex = this.vertex.length / 6;
-    this.vertex.push(0, height / 2, 0, 0.075, 0, 0.15); // top center
+    this.vertex.push(0, height / 2, 0, 0.075, 0, 0.15); // top
     const bottomCenterIndex = topCenterIndex + 1;
-    this.vertex.push(0, -height / 2, 0, 0.075, 0, 0.15); // bottom center
+    this.vertex.push(0, -height / 2, 0, 0.075, 0, 0.15); // bottom
 
     // Faces
     for (let i = 0; i < segments; i++) {

@@ -24,12 +24,13 @@ export class LampentHeadEye {
     _color,
     _Mmatrix,
 
+    // Warna kuning (R,G,B)
     color = [1, 1, 0],
 
-    // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
-    radius = 0.1,
-    height = 0.01,
-    segments = 360
+    // Parameter bentuk
+    radius = 0.1, // Jari-jari lingkaran
+    height = 0.01, // Tinggi tabung
+    segments = 360 // Jumlah segmen keliling
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -40,38 +41,48 @@ export class LampentHeadEye {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Upside-down cone (penyangga kepala) ========================= */
+    /*========================= Tabung ========================= */
     // Build vertex
-    this.vertex.push(0, 0, height / 2); // top center
+    this.vertex.push(0, 0, height / 2); // Pusat lingkaran atas
     this.vertex.push(color[0], color[1], color[2]); // top color
 
-    this.vertex.push(0, 0, -height / 2); // bottom center
+    this.vertex.push(0, 0, -height / 2); // Pusat lingkaran bawah
     this.vertex.push(color[0], color[1], color[2]); // bottom color
 
+    // Loop bikin vertex di keliling atas dan bawah
     for (let i = 0; i <= segments; i++) {
-      let theta = (2 * Math.PI * i) / segments;
+      let theta = (2 * Math.PI * i) / segments; // Sudut rotasi tiap segmen
+
+      // Posisi titik di keliling lingkaran
       let x = radius * Math.cos(theta);
       let y = radius * Math.sin(theta);
       let zTop = height / 2;
       let zBottom = -height / 2;
 
+      // Titik di lingkaran atas
       this.vertex.push(x, y, zTop);
-      this.vertex.push(color[0], color[1], color[2]); // Yellow color
-      // Bottom circle
+      this.vertex.push(color[0], color[1], color[2]);
+
+      // Titik di lingkaran bawah
       this.vertex.push(x, y, zBottom);
-      this.vertex.push(color[0], color[1], color[2]); // Yellow color
+      this.vertex.push(color[0], color[1], color[2]);
     }
-    // Faces
+
+    // Build Faces
     for (let i = 0; i < segments; i++) {
-      let top1 = i * 2;
-      let bottom1 = top1 + 1;
-      let top2 = ((i + 1) % segments) * 2;
-      let bottom2 = top2 + 1;
+      let top1 = i * 2; // Titik keliling atas segmen saat ini
+      let top2 = ((i + 1) % segments) * 2; // Titik keliling atas segmen berikutnya
+
+      let bottom1 = top1 + 1; // Titik keliling bawah segmen saat ini
+      let bottom2 = top2 + 1; // Titik keliling bawah segmen berikutnya
+
       // Side faces
       this.faces.push(top1, bottom1, bottom2);
       this.faces.push(top1, bottom2, top2);
+
       // Top face
       this.faces.push(top1, top2, segments * 2);
+
       // Bottom face
       this.faces.push(bottom1, segments * 2 + 1, bottom2);
     }

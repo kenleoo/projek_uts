@@ -1,13 +1,13 @@
-import { Head } from "./Lampent/Head.js";
-import { HatParaboloid } from "./Lampent/HatParaboloid.js";
-import { HeadEye } from "./Lampent/HeadEye.js";
-import { BodyParaboloid } from "./Lampent/BodyParaboloid.js";
-import { BodyClylinder } from "./Lampent/BodyCylinder.js";
-import { UnderBodyParaboloid } from "./Lampent/UnderBodyParaboloid.js";
-import { BodyBottomCone } from "./Lampent/BodyBottomCone.js";
-import { HeadTip } from "./Lampent/HeadTip.js";
-import { HeadFlame } from "./Lampent/HeadFlame.js";
-import { Hand } from "./Lampent/Hand.js";
+import { LampentHead } from "./Lampent/Head.js";
+import { LampentHatParaboloid } from "./Lampent/HatParaboloid.js";
+import { LampentHeadEye } from "./Lampent/HeadEye.js";
+import { LampentBodyParaboloid } from "./Lampent/BodyParaboloid.js";
+import { LampentBodyClylinder } from "./Lampent/BodyCylinder.js";
+import { LampentUnderBodyParaboloid } from "./Lampent/UnderBodyParaboloid.js";
+import { LampentBodyBottomCone } from "./Lampent/BodyBottomCone.js";
+import { LampentHeadTip } from "./Lampent/HeadTip.js";
+import { LampentHeadFlame } from "./Lampent/HeadFlame.js";
+import { LampentHand } from "./Lampent/Hand.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -79,23 +79,23 @@ function main() {
   GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
   // Objects
-  var OutHead = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.14, 0.4]);
-  var InHead = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.4, 0.4, 1, 0.05]);
-  var HeadFlame1 = new HeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HeadFlame2 = new HeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.72, 0.91, 1.0, 1], 0.2, 1.2);
-  var HeadTip1 = new HeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var OutsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15]);
-  var InsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
-  var HeadEye1 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var OutlineEye1 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.15], 0.106, 0.009);
-  var HeadEye2 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var OutlineEye2 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.15], 0.106, 0.009);
-  var TopBodyParaboloid = new BodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var BodyClylinder1 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var Hand1 = new Hand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var Hand2 = new Hand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 60, 10, 0.5, 0.5);
-  var BottomBodyParaboloid = new UnderBodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var BodyCone = new BodyBottomCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutHead = new LampentHead(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.14, 0.4]);
+  var InHead = new LampentHead(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.4, 0.4, 1, 0.05]);
+  var HeadFlame1 = new LampentHeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var HeadFlame2 = new LampentHeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.72, 0.91, 1.0, 1], 0.2, 1.2);
+  var HeadTip1 = new LampentHeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutsideHat = new LampentHatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15]);
+  var InsideHat = new LampentHatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
+  var HeadEye1 = new LampentHeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutlineEye1 = new LampentHeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.15], 0.106, 0.009);
+  var HeadEye2 = new LampentHeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutlineEye2 = new LampentHeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.15], 0.106, 0.009);
+  var TopBodyParaboloid = new LampentBodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var BodyClylinder1 = new LampentBodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Hand1 = new LampentHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Hand2 = new LampentHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 60, 10, 0.5, 0.5);
+  var BottomBodyParaboloid = new LampentUnderBodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var BodyCone = new LampentBodyBottomCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
   OutHead.childs.push(InHead);
@@ -149,6 +149,7 @@ function main() {
   LIBS.scaleY(OutsideHat.POSITION_MATRIX, 0.25);
   LIBS.scaleZ(OutsideHat.POSITION_MATRIX, 0.25);
   LIBS.translateY(OutsideHat.POSITION_MATRIX, 0.1);
+  
   // hat inside
   LIBS.translateY(InsideHat.POSITION_MATRIX, -0.05);
 
@@ -275,11 +276,11 @@ function main() {
     // LIBS.rotateX(Object3.MOVE_MATRIX, dt * -0.001);
     // LIBS.rotateX(Object4.MOVE_MATRIX, dt * 0.001);
 
-    // apply simple camera rotation from mouse drag (THETA, PHI)
-    // rebuild VIEWMATRIX each frame from identity so rotations accumulate only from THETA/PHI
     var cam = LIBS.get_I4();
+
     // move camera back first
     LIBS.translateZ(cam, -12);
+
     // apply pitch (PHI) then yaw (THETA)
     LIBS.rotateX(cam, PHI);
     LIBS.rotateY(cam, THETA);
@@ -287,23 +288,23 @@ function main() {
     GL.uniformMatrix4fv(_Pmatrix, false, PROJMATRIX);
     GL.uniformMatrix4fv(_Vmatrix, false, cam);
 
+    // // tidak pakai karena mau custom render
     // Object1.render(LIBS.get_I4());
 
-    // PASS 1: Render opaque objects (all children) with depth writing
+    // PASS 1: Render all objects yang tidak translucent
     GL.depthMask(true);
-    // Render all children without the head itself
+    // Render all children of the head 
     InHead.childs.forEach((child) => child.render(LIBS.multiply(OutHead.MOVE_MATRIX, OutHead.POSITION_MATRIX)));
 
-    // PASS 2: Render translucent head without depth writing
+    // PASS 2: Render semua object yg translucent
     GL.depthMask(false);
-    // Only render the Head sphere, not its children
     renderHeadOnly(OutHead, LIBS.get_I4());
 
     GL.flush();
     window.requestAnimationFrame(animate);
   };
 
-  // render Head only untuk efek transparansi kaca
+  // TODO: render Head untuk efek transparansi kaca
   function renderHeadOnly(obj, PARENT_MATRIX) {
     obj.MODEL_MATRIX = LIBS.multiply(obj.MOVE_MATRIX, obj.POSITION_MATRIX);
     obj.MODEL_MATRIX = LIBS.multiply(obj.MODEL_MATRIX, PARENT_MATRIX);
@@ -318,12 +319,12 @@ function main() {
     GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, obj.OBJECT_FACES);
     GL.drawElements(GL.TRIANGLES, obj.faces.length, GL.UNSIGNED_SHORT, 0);
 
-    // If this is InHead, stop recursion and don't render its children
+    // Stop render
     if (obj === InHead) {
       return;
     }
 
-    // Otherwise, continue rendering children recursively
+    // Lanjut render object yang translucent
     obj.childs.forEach((child) => {
       renderHeadOnly(child, obj.MODEL_MATRIX);
     });

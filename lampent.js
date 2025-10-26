@@ -1,13 +1,13 @@
-import { Head } from "./Lampent/Head.js";
-import { HatParaboloid } from "./Lampent/HatParaboloid.js";
-import { HeadEye } from "./Lampent/HeadEye.js";
-import { BodyParaboloid } from "./Lampent/BodyParaboloid.js";
-import { BodyClylinder } from "./Lampent/BodyCylinder.js";
-import { UnderBodyParaboloid } from "./Lampent/UnderBodyParaboloid.js";
-import { BodyBottomCone } from "./Lampent/BodyBottomCone.js";
-import { HeadTip } from "./Lampent/HeadTip.js";
-import { HeadFlame } from "./Lampent/HeadFlame.js";
-import { Hand } from "./Lampent/Hand.js";
+import { LampentHead } from "./Lampent/Head.js";
+import { LampentHatParaboloid } from "./Lampent/HatParaboloid.js";
+import { LampentHeadEye } from "./Lampent/HeadEye.js";
+import { LampentBodyParaboloid } from "./Lampent/BodyParaboloid.js";
+import { LampentBodyClylinder } from "./Lampent/BodyCylinder.js";
+import { LampentUnderBodyParaboloid } from "./Lampent/UnderBodyParaboloid.js";
+import { LampentBodyBottomCone } from "./Lampent/BodyBottomCone.js";
+import { LampentHeadTip } from "./Lampent/HeadTip.js";
+import { LampentHeadFlame } from "./Lampent/HeadFlame.js";
+import { LampentHand } from "./Lampent/Hand.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -79,23 +79,23 @@ function main() {
   GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
   // Objects
-  var OutHead = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.14, 0.4]);
-  var InHead = new Head(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.4, 0.4, 1, 0.05]);
-  var HeadFlame1 = new HeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var HeadFlame2 = new HeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.72, 0.91, 1.0, 1], 0.2, 1.2);
-  var HeadTip1 = new HeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var OutsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15]);
-  var InsideHat = new HatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
-  var HeadEye1 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var OutlineEye1 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.15], 0.106, 0.009);
-  var HeadEye2 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var OutlineEye2 = new HeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.15], 0.106, 0.009);
-  var TopBodyParaboloid = new BodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var BodyClylinder1 = new BodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var Hand1 = new Hand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var Hand2 = new Hand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 60, 10, 0.5, 0.5);
-  var BottomBodyParaboloid = new UnderBodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var BodyCone = new BodyBottomCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutHead = new LampentHead(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.14, 0.4]);
+  var InHead = new LampentHead(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.4, 0.4, 1, 0.05]);
+  var HeadFlame1 = new LampentHeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var HeadFlame2 = new LampentHeadFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.72, 0.91, 1.0, 1], 0.2, 1.2);
+  var HeadTip1 = new LampentHeadTip(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutsideHat = new LampentHatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.075, 0, 0.15]);
+  var InsideHat = new LampentHatParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.772, 0.651, 0.992]);
+  var HeadEye1 = new LampentHeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutlineEye1 = new LampentHeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.15], 0.106, 0.009);
+  var HeadEye2 = new LampentHeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var OutlineEye2 = new LampentHeadEye(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, [0.05, 0, 0.15], 0.106, 0.009);
+  var TopBodyParaboloid = new LampentBodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var BodyClylinder1 = new LampentBodyClylinder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Hand1 = new LampentHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Hand2 = new LampentHand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 60, 10, 0.5, 0.5);
+  var BottomBodyParaboloid = new LampentUnderBodyParaboloid(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var BodyCone = new LampentBodyBottomCone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
   OutHead.childs.push(InHead);
@@ -121,7 +121,8 @@ function main() {
   LIBS.scaleY(OutHead.POSITION_MATRIX, 1);
   LIBS.scaleZ(OutHead.POSITION_MATRIX, 1);
   LIBS.rotateZ(OutHead.MOVE_MATRIX, 15 * (Math.PI / 180));
-  LIBS.translateY(OutHead.POSITION_MATRIX, -5.5);
+  LIBS.translateY(OutHead.POSITION_MATRIX, -3.5);
+  LIBS.translateZ(OutHead.POSITION_MATRIX, 2);
 
   // Inner Glass (head inner)
   LIBS.scaleX(InHead.POSITION_MATRIX, 0.95);
@@ -266,59 +267,57 @@ function main() {
   OutHead.setup();
 
   /*========================= Animation ========================= */
-  var time_prev = 0;
+  // var time_prev = 0;
   var animate = function (time) {
     GL.viewport(0, 0, CANVAS.width, CANVAS.height);
     GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 
-    var dt = time - time_prev;
-    time_prev = time;
+    // var dt = time - time_prev;
+    // time_prev = time;
 
-    // =========================
-    // SWING ANIMATION using sine wave
-    // =========================
-    var swingAmplitude = 0.3; // ~17 degrees in radians
-    var swingSpeed = 0.0015;
-    var swingAngle = swingAmplitude * Math.sin(time * swingSpeed);
+    // TODO: SWING ANIMATION pakai graph sin (maju-mundur)
+    var swingAmplitude = 0.3; // Amplitudo ayunan (~17 derajat dalam radian)
+    var swingSpeed = 0.0015; // Kecepatan ayunan
+    var swingAngle = swingAmplitude * Math.sin(time * swingSpeed); // Sudut ayunan
 
     // Reset OutHead matrix and apply swing + base tilt
-    OutHead.MOVE_MATRIX = LIBS.get_I4();
-    LIBS.rotateZ(OutHead.MOVE_MATRIX, 15 * (Math.PI / 180)); // base tilt ~15 degrees
-    LIBS.rotateY(OutHead.MOVE_MATRIX, swingAngle);
+    OutHead.MOVE_MATRIX = LIBS.get_I4(); // Reset ke matriks
+    LIBS.rotateZ(OutHead.MOVE_MATRIX, 15 * (Math.PI / 180)); // Rotasi dasar pada sumbu Z
+    LIBS.rotateY(OutHead.MOVE_MATRIX, swingAngle); // ayunan ke kiri-kanan
 
-    // =========================
-    // INFINITY PATH (lemniscate ∞) for OutHead position
-    // =========================
-    var A = 3.0; // horizontal amplitude
-    var B = 2.0; // depth amplitude
-    var t = time * 0.001;
-    var posX = A * Math.sin(t);
-    var posZ = B * Math.sin(t) * Math.cos(t);
-    var posY = 4.5 + 0.5 * Math.sin(t * 2);
+    // INFINITY PATH (lemniscate ∞) untuk posisi OutHead
+    // Kepala bergerak mengikuti lintasan berbentuk simbol ∞ (horizontal)
+    var A = 3.0; // gerak horizontal (sumbu X)
+    var B = 2.0; // gerak kedalaman (sumbu Z)
+    var t = time * 0.001; // Waktu untuk pergerakan
 
+    // Rumus lintasan
+    var posX = A * Math.sin(t); // Gerak kiri-kanan
+    var posZ = B * Math.sin(t) * Math.cos(t); // Gerak maju-mundur
+    var posY = 4.5 + 0.5 * Math.sin(t * 2); // Gerak naik-turun
+
+    // Translasi posisi OutHead
     LIBS.translateX(OutHead.MOVE_MATRIX, posX);
     LIBS.translateZ(OutHead.MOVE_MATRIX, posZ);
     LIBS.translateY(OutHead.MOVE_MATRIX, posY);
 
-    // =========================
-    // HAND ROTATION ANIMATION using sine wave
-    // =========================
-    var armAmplitude = 0.4; // radians (~23 degrees)
-    var armSpeed = 0.002;
-    var armAngle = armAmplitude * Math.sin(time * armSpeed);
+    // TODO: HAND ROTATION ANIMATION pakai graph sin
+    var armAmplitude = 0.4; // rotasi tangan (~23 derajat)
+    var armSpeed = 0.002; // Kecepatan ayunan tangan
+    var armAngle = armAmplitude * Math.sin(time * armSpeed); // Sudut ayunan
 
     // Right Hand
     Hand1.MOVE_MATRIX = LIBS.get_I4();
     LIBS.rotateZ(Hand1.MOVE_MATRIX, 90 * (Math.PI / 180) + armAngle);
     LIBS.rotateX(Hand1.MOVE_MATRIX, 180 * (Math.PI / 180));
 
-    // Left Hand (opposite direction)
+    // Left Hand (kebalikan nya)
     Hand2.MOVE_MATRIX = LIBS.get_I4();
     LIBS.rotateZ(Hand2.MOVE_MATRIX, -90 * (Math.PI / 180) + armAngle);
 
-    // =========================
+    /*========================= Camera ========================= */
+
     // CAMERA CONTROL (mouse rotation)
-    // =========================
     var cam = LIBS.get_I4();
     LIBS.translateZ(cam, -12);
     LIBS.rotateX(cam, PHI);
@@ -327,12 +326,11 @@ function main() {
     GL.uniformMatrix4fv(_Pmatrix, false, PROJMATRIX);
     GL.uniformMatrix4fv(_Vmatrix, false, cam);
 
-    // =========================
-    // RENDER SCENE
-    // =========================
+    // PASS 1: Render all objects yang tidak translucent
     GL.depthMask(true);
     InHead.childs.forEach((child) => child.render(LIBS.multiply(OutHead.MOVE_MATRIX, OutHead.POSITION_MATRIX)));
 
+    // PASS 2: Render semua object yg translucent
     GL.depthMask(false);
     renderHeadOnly(OutHead, LIBS.get_I4());
 
@@ -355,12 +353,12 @@ function main() {
     GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, obj.OBJECT_FACES);
     GL.drawElements(GL.TRIANGLES, obj.faces.length, GL.UNSIGNED_SHORT, 0);
 
-    // If this is InHead, stop recursion and don't render its children
+    // Stop render
     if (obj === InHead) {
       return;
     }
 
-    // Otherwise, continue rendering children recursively
+    // Lanjut render object yang translucent
     obj.childs.forEach((child) => {
       renderHeadOnly(child, obj.MODEL_MATRIX);
     });

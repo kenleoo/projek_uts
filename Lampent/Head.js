@@ -24,13 +24,14 @@ export class LampentHead {
     _color,
     _Mmatrix,
 
+    // Warna objek (R, G, B, Alpha)
     color = [0.4, 0.4, 1, 0.4],
 
-    a = 0.7,
-    b = 0.7,
-    c = 0.7,
-    uSeg = 360,
-    vSeg = 60
+    a = 0.7, // Skala sumbu X
+    b = 0.7, // Skala sumbu Y
+    c = 0.7, // Skala sumbu Z
+    uSeg = 360, // Jumlah segmen horizontal (keliling)
+    vSeg = 60 // Jumlah segmen vertikal (dari atas ke bawah)
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -41,32 +42,36 @@ export class LampentHead {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Upside-down cone (penyangga kepala) ========================= */
-    // Build vertex
-   for (let i = 0; i <= vSeg; i++) {
-      let phi = Math.PI * i / vSeg; // 0 to π
+    /*========================= Ellipsoid (mirip bola) ========================= */
+    // Build vertex Loop
+    for (let i = 0; i <= vSeg; i++) {
+      let phi = (Math.PI * i) / vSeg; // phi = sudut vertikal (keliling)
       for (let j = 0; j <= uSeg; j++) {
-          let theta = 2 * Math.PI * j / uSeg; // 0 to 2π
+        let theta = (2 * Math.PI * j) / uSeg; // theta = sudut horizontal
 
-          let x = a * Math.sin(phi) * Math.cos(theta);
-          let y = b * Math.sin(phi) * Math.sin(theta);
-          let z = c * Math.cos(phi);
+        // Rumus posisi titik di ellipsoid
+        let x = a * Math.sin(phi) * Math.cos(theta);
+        let y = b * Math.sin(phi) * Math.sin(theta);
+        let z = c * Math.cos(phi);
 
-          this.vertex.push(x, y, z);
-          this.vertex.push(color[0], color[1],color[2],color[3]); // Purple color
-
+        // Simpan posisi dan warna vertex
+        this.vertex.push(x, y, z);
+        this.vertex.push(color[0], color[1], color[2], color[3]);
       }
-   }
-    // Faces (triangles)
-   for (let i = 0; i < vSeg; i++) {
-      for (let j = 0; j < uSeg; j++) {
-          let p1 = i * (uSeg + 1) + j;
-          let p2 = p1 + 1;
-          let p3 = p1 + (uSeg + 1);
-          let p4 = p3 + 1;
+    }
 
-          this.faces.push(p1, p2, p4);
-          this.faces.push(p1, p4, p3);
+    // Build Faces (2 triangles = box)
+    for (let i = 0; i < vSeg; i++) {
+      for (let j = 0; j < uSeg; j++) {
+        // vertex di grid
+        let p1 = i * (uSeg + 1) + j;
+        let p2 = p1 + 1;
+        let p3 = p1 + (uSeg + 1);
+        let p4 = p3 + 1;
+
+        // build 2 segitiga dari empat titik
+        this.faces.push(p1, p2, p4);
+        this.faces.push(p1, p4, p3);
       }
     }
   }
@@ -77,11 +82,7 @@ export class LampentHead {
 
     this.OBJECT_FACES = this.GL.createBuffer();
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
-    this.GL.bufferData(
-      this.GL.ELEMENT_ARRAY_BUFFER,
-      new Uint16Array(this.faces),
-      this.GL.STATIC_DRAW
-    );
+    this.GL.bufferData(this.GL.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), this.GL.STATIC_DRAW);
 
     this.childs.forEach((child) => child.setup());
   }
