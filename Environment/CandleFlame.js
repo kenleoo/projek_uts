@@ -23,10 +23,10 @@ export class CandleFlame {
     _position,
     _color,
     _MMatrix,
-    a = 0.125,      // base radius
-    c = 1.5,      // flame height
-    uSeg = 60,    // radial segments
-    vSeg = 360     // vertical segments
+    a = 0.125,     
+    c = 1.5,  
+    uSeg = 60,   
+    vSeg = 360  
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -44,12 +44,14 @@ export class CandleFlame {
       const t = i / vSeg;
       const z = height * t;
 
-      // Flame profile: tapering + bulges
+      //tapering + bulges
+      // taper : mengerucut diatas
       const taper = 1 - t;
+      // bulge : mengembang ditengah
       const bulge = 0.8 + 0.2 * Math.sin(Math.PI * t);
       const radius = base_radius * taper * bulge;
 
-      // Flame curve offset — curve sideways (like S-shape)
+      // Flame curve offset (agar tidak lurus)
       const offsetX = 0;
       const offsetY = 0;
 
@@ -61,15 +63,14 @@ export class CandleFlame {
 
         this.vertex.push(x, y, z);
 
-        // Color gradient: light blue → dark blue/purple
+        //light blue ke dark blue/purple
         const rCol = 0.3 + 0.15 * (1 - t);
         const gCol = 0.6 * (1 - t);
         const bCol = 1;
         this.vertex.push(rCol, gCol, bCol, 0.8);
       }
     }
-
-    // Create triangle faces (quads split into 2 triangles)
+    // face
     for (let i = 0; i < vSeg; i++) {
       for (let j = 0; j < uSeg; j++) {
         let p1 = i * (uSeg + 1) + j;

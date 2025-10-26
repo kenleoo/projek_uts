@@ -23,8 +23,6 @@ export class CandleBody {
     _position,
     _color,
     _Mmatrix,
-
-    // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
     radius = 0.2,
     height = 1,
     segments = 360
@@ -38,13 +36,12 @@ export class CandleBody {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Upside-down cone (penyangga kepala) ========================= */
-    // Build vertex
+    /*========================= silinder ========================= */
     this.vertex.push(0, 0, height / 2);    // top center
-    this.vertex.push(1, 1, 0.8);             // top color
+    this.vertex.push(1, 1, 0.8);             // warna
 
     this.vertex.push(0, 0, -height / 2);   // bottom center
-    this.vertex.push(1, 1, 0.8);             // bottom color
+    this.vertex.push(1, 1, 0.8);             //warna
 
     for (let i = 0; i <= segments; i++) {
         let theta = 2 * Math.PI * i / segments;
@@ -52,10 +49,10 @@ export class CandleBody {
         let y = radius * Math.sin(theta);
         let zTop = height / 2;
         let zBottom = -height / 2;
-
+        // circle atas
         this.vertex.push(x, y, zTop);
         this.vertex.push(1, 1, 0.9); // Yellow color
-        // Bottom circle
+        //circle bawah
         this.vertex.push(x, y, zBottom);
         this.vertex.push(1, 1, 0.9); // Yellow color
         
@@ -66,12 +63,12 @@ export class CandleBody {
         let bottom1 = top1 + 1;
         let top2 = ((i + 1) % segments) * 2;
         let bottom2 = top2 + 1;
-        // Side faces
+        // side/selimut tabung
         this.faces.push(top1, bottom1, bottom2);
         this.faces.push(top1, bottom2, top2);
-        // Top face
+        // top
         this.faces.push(top1, top2, (segments * 2));
-        // Bottom face
+        //bawah
         this.faces.push(bottom1, (segments * 2) + 1, bottom2);
     }
   }
