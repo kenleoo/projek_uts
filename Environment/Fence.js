@@ -23,10 +23,11 @@ export class Fence {
     _position,
     _color,
     _Mmatrix,
-    barWidth = 0.05,
-    barHeight = 2.0,
-    spacing = 0.1,
-    barCount = 40
+
+    barWidth = 0.05, // lebar
+    barHeight = 2.0, // tinggi
+    spacing = 0.1, // jarak antara
+    barCount = 40 // total besi
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -39,63 +40,64 @@ export class Fence {
 
     /*========================= Steel Fence ========================= */
 
+    // Loop untuk membuat tiap batang pagar
+    for (let i = 0; i < barCount; i++) {
+      let x = i * spacing; // posisi X
 
+      // Setengah lebar dan tinggi batang
+      let hw = barWidth / 2;
+      let hh = barHeight;
 
-for (let i = 0; i < barCount; i++) {
-  let x = i * spacing;
+      // Vertex batang
+      // prettier-ignore
+      let baseVertices = [
+        // Depan
+        x - hw, 0, hw,    0.1, 0.1, 0.1,
+        x + hw, 0, hw,    0.1, 0.1, 0.1,
+        x + hw, hh, hw,   0.1, 0.1, 0.1,
+        x - hw, hh, hw,   0.1, 0.1, 0.1,
 
-  // Define a cuboid bar (6 faces, 12 triangles, 8 vertices)
-  let hw = barWidth / 2;
-  let hh = barHeight;
+        // Belakang
+        x - hw, 0, -hw,   0.1, 0.1, 0.1,
+        x + hw, 0, -hw,   0.1, 0.1, 0.1,
+        x + hw, hh, -hw,  0.1, 0.1, 0.1,
+        x - hw, hh, -hw,  0.1, 0.1, 0.1,
+      ];
 
-  // Define vertices (two triangles per face, but using shared vertices)
-  let baseVertices = [
-    // Front face
-    x - hw, 0, hw,    0.1, 0.1, 0.1,
-    x + hw, 0, hw,    0.1, 0.1, 0.1,
-    x + hw, hh, hw,   0.1, 0.1, 0.1,
-    x - hw, hh, hw,   0.1, 0.1, 0.1,
+      // Simpan vertex
+      this.vertex.push(...baseVertices); // "..." = spread operator
 
-    // Back face
-    x - hw, 0, -hw,   0.1, 0.1, 0.1,
-    x + hw, 0, -hw,   0.1, 0.1, 0.1,
-    x + hw, hh, -hw,  0.1, 0.1, 0.1,
-    x - hw, hh, -hw,  0.1, 0.1, 0.1,
-  ];
+      // Indeks awal vertex batang ini
+      let baseIndex = i * 8;
 
-  // Push vertices
-  this.vertex.push(...baseVertices);
+      // Build  faces (2 triangles = 1 box)
+      // prettier-ignore
+      this.faces.push(
+        // depan
+        baseIndex + 0, baseIndex + 1, baseIndex + 2,
+        baseIndex + 0, baseIndex + 2, baseIndex + 3,
 
-  let baseIndex = i * 8;
+        // kanan
+        baseIndex + 1, baseIndex + 5, baseIndex + 6,
+        baseIndex + 1, baseIndex + 6, baseIndex + 2,
 
-  // Push faces (two triangles per face * 6 faces)
-  this.faces.push(
-    // Front
-    baseIndex + 0, baseIndex + 1, baseIndex + 2,
-    baseIndex + 0, baseIndex + 2, baseIndex + 3,
+        // belakang
+        baseIndex + 5, baseIndex + 4, baseIndex + 7,
+        baseIndex + 5, baseIndex + 7, baseIndex + 6,
 
-    // Right
-    baseIndex + 1, baseIndex + 5, baseIndex + 6,
-    baseIndex + 1, baseIndex + 6, baseIndex + 2,
+        // kiri
+        baseIndex + 4, baseIndex + 0, baseIndex + 3,
+        baseIndex + 4, baseIndex + 3, baseIndex + 7,
 
-    // Back
-    baseIndex + 5, baseIndex + 4, baseIndex + 7,
-    baseIndex + 5, baseIndex + 7, baseIndex + 6,
+        // Top
+        baseIndex + 3, baseIndex + 2, baseIndex + 6,
+        baseIndex + 3, baseIndex + 6, baseIndex + 7,
 
-    // Left
-    baseIndex + 4, baseIndex + 0, baseIndex + 3,
-    baseIndex + 4, baseIndex + 3, baseIndex + 7,
-
-    // Top
-    baseIndex + 3, baseIndex + 2, baseIndex + 6,
-    baseIndex + 3, baseIndex + 6, baseIndex + 7,
-
-    // Bottom
-    baseIndex + 4, baseIndex + 5, baseIndex + 1,
-    baseIndex + 4, baseIndex + 1, baseIndex + 0
-  );
-}
-
+        // Bottom
+        baseIndex + 4, baseIndex + 5, baseIndex + 1,
+        baseIndex + 4, baseIndex + 1, baseIndex + 0
+      );
+    }
   }
   setup() {
     this.OBJECT_VERTEX = this.GL.createBuffer();
@@ -104,11 +106,7 @@ for (let i = 0; i < barCount; i++) {
 
     this.OBJECT_FACES = this.GL.createBuffer();
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
-    this.GL.bufferData(
-      this.GL.ELEMENT_ARRAY_BUFFER,
-      new Uint16Array(this.faces),
-      this.GL.STATIC_DRAW
-    );
+    this.GL.bufferData(this.GL.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), this.GL.STATIC_DRAW);
 
     this.childs.forEach((child) => child.setup());
   }
