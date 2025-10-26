@@ -46,34 +46,33 @@ export class HeadCrown {
 
       // Vertex bawah
       const yBottom = -crownHeight / 2;
-      this.vertex.push(x, yBottom, z, 0.075, 0, 0.15); // hitam
+      this.vertex.push(x, yBottom, z, 0.075, 0, 0.15); // ungu
 
-      // Vertex atas (naik-turun untuk bentuk gigi mahkota)
       // Vertex atas (naik-turun untuk bentuk gigi mahkota)
       const isPeak = i % 2 !== 0;
       const yTop = crownHeight / 2 + (isPeak ? 0.5 : -0.5);
 
-      // Buat ujung sedikit menjulur keluar
-      const outwardFactor = isPeak ? 0.6 : 0; // hanya puncak (bukan lembah) yang menjulur keluar
+      // Buat ujung sedikit keluar
+      const outwardFactor = isPeak ? 0.6 : 0;
       const xOut = Math.cos(theta) * (crownRadius + outwardFactor);
       const zOut = Math.sin(theta) * (crownRadius + outwardFactor);
 
-      this.vertex.push(xOut, yTop, zOut, 0.075, 0, 0.15); // hitam
+      this.vertex.push(xOut, yTop, zOut, 0.075, 0, 0.15); // ungu
 
     }
 
-    // Tambahkan face sisi samping (buat quad dari dua triangle)
+    //face samping
     for (let i = 0; i < segments; i++) {
       const p1 = baseIndex + i * 2;
       const p2 = baseIndex + i * 2 + 1;
       const p3 = baseIndex + (i + 1) * 2 + 1;
       const p4 = baseIndex + (i + 1) * 2;
 
-      this.faces.push(p1, p2, p3); // Triangle 1
-      this.faces.push(p1, p3, p4); // Triangle 2
+      this.faces.push(p1, p2, p3);
+      this.faces.push(p1, p3, p4);
     }
 
-    // (Optional) Tambahkan alas (bottom face) kalau ingin menutup bawah
+    //bawah
     const centerIndex = this.vertex.length / 6;
     this.vertex.push(0, -crownHeight / 2, 0, 0.1, 0.1, 0.1); // pusat bawah
 

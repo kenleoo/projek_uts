@@ -54,7 +54,7 @@ export class Hand {
       return path;
     }
 
-    // Tube generator
+    // generate silinder pada path
     function generateTubeAlongPath(path, circleSegments = 60, tubeRadius = 0.5) {
       const vertices = [];
       const faces = [];
@@ -72,6 +72,7 @@ export class Hand {
         side = LIBS.normalize(side);
         const localUp = LIBS.cross(side, forward);
 
+        //semakin runcing
         const taper = 1 - i / path.length;
         const currentRadius = tubeRadius * (0.3 + 0.7 * taper);
 
@@ -113,7 +114,6 @@ export class Hand {
       0.5
     );
 
-    // === Proper curved extension ("the other end") ===
     const first = basePath[0];
     const second = basePath[1];
 
@@ -130,7 +130,7 @@ export class Hand {
     for (let i = 1; i <= extCount; i++) {
       const t = i / extCount;
       // curve gently outward with rotation
-      const bendAngle = t * Math.PI * 0.6; // 108 degrees
+      const bendAngle = t * Math.PI * 0.6;
       const offset = [
         dir[0] * Math.cos(bendAngle) - side[0] * Math.sin(bendAngle),
         dir[1] * Math.cos(bendAngle) - side[1] * Math.sin(bendAngle),
@@ -139,9 +139,9 @@ export class Hand {
       const next = [
         prevPoint[0] + offset[0] * extStep,
         prevPoint[1] + offset[1] * extStep,
-        prevPoint[2] + offset[2] * extStep * 0.2, // gentle rise
+        prevPoint[2] + offset[2] * extStep * 0.2,
       ];
-      extension.unshift(next); // prepend (so it's before the spiral)
+      extension.unshift(next);
       prevPoint = next;
     }
 

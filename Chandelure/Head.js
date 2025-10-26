@@ -39,23 +39,23 @@ export class Head {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Upside-down cone (penyangga kepala) ========================= */
+    /*========================= ellipsoid kepala (main) ========================= */
     // Build vertex
    for (let i = 0; i <= vSeg; i++) {
-      let phi = Math.PI * i / vSeg; // 0 to π
+      let phi = Math.PI * i / vSeg;
       for (let j = 0; j <= uSeg; j++) {
-          let theta = 2 * Math.PI * j / uSeg; // 0 to 2π
+          let theta = 2 * Math.PI * j / uSeg;
 
           let x = a * Math.sin(phi) * Math.cos(theta);
           let y = b * Math.sin(phi) * Math.sin(theta);
           let z = c * Math.cos(phi);
 
           this.vertex.push(x, y, z);
-          this.vertex.push(0.8, 0.8, 1, 1); // Purple color
+          this.vertex.push(0.8, 0.8, 1, 1); // Purple
 
       }
    }
-    // Faces (triangles)
+    // Faces
    for (let i = 0; i < vSeg; i++) {
       for (let j = 0; j < uSeg; j++) {
           let p1 = i * (uSeg + 1) + j;

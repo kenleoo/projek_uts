@@ -23,8 +23,6 @@ export class HeadEye {
     _position,
     _color,
     _Mmatrix,
-
-    // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
     radius = 0.1,
     height = 0.025,
     segments = 360
@@ -38,7 +36,7 @@ export class HeadEye {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Upside-down cone (penyangga kepala) ========================= */
+    /*========================= silinder mata ========================= */
     // Build vertex
     this.vertex.push(0, 0, height / 2);    // top center
     this.vertex.push(1, 1, 0);             // top color
@@ -54,10 +52,10 @@ export class HeadEye {
         let zBottom = -height / 2;
 
         this.vertex.push(x, y, zTop);
-        this.vertex.push(1, 1, 0); // Yellow color
+        this.vertex.push(1, 1, 0); // Yellow
         // Bottom circle
         this.vertex.push(x, y, zBottom);
-        this.vertex.push(1, 1, 0); // Yellow color
+        this.vertex.push(1, 1, 0); // Yellow
         
     }
     // Faces
@@ -66,12 +64,12 @@ export class HeadEye {
         let bottom1 = top1 + 1;
         let top2 = ((i + 1) % segments) * 2;
         let bottom2 = top2 + 1;
-        // Side faces
+        // Side
         this.faces.push(top1, bottom1, bottom2);
         this.faces.push(top1, bottom2, top2);
-        // Top face
+        // Top
         this.faces.push(top1, top2, (segments * 2));
-        // Bottom face
+        // Bottom
         this.faces.push(bottom1, (segments * 2) + 1, bottom2);
     }
   }

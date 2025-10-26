@@ -23,8 +23,6 @@ export class BodyParaboloid {
     _position,
     _color,
     _Mmatrix,
-
-    // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
     paraboloidRadius = 1.5,
     paraboloidHeight = 3,
     segments = 36
@@ -38,25 +36,23 @@ export class BodyParaboloid {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Paraboloid Eliptik Terbalik Runcing ========================= */
-    const rings = 30; // semakin besar, semakin halus
+    /*========================= Paraboloid Eliptik Terbalik ========================= */
+    const rings = 30; // semakin besar semakin smooth
     const a = paraboloidHeight / (paraboloidRadius * paraboloidRadius); // konstanta parabola
-
-    // Simpan index awal vertex
     const baseIndex = this.vertex.length / 6;
 
-    // Build vertex paraboloid terbalik (runcing ke bawah)
+    // Build vertex paraboloid terbalik
     for (let i = 0; i <= rings; i++) {
       const t = i / rings;
       const r = paraboloidRadius * (1 - t);             // radius mengecil ke bawah
-      const y = -paraboloidHeight / 2 + a * (r * r);    // buka ke bawah, runcing di bawah
+      const y = -paraboloidHeight / 2 + a * (r * r);
 
       for (let j = 0; j <= segments; j++) {
         const theta = (j / segments) * Math.PI * 2;
         const x = Math.cos(theta) * r;
         const z = Math.sin(theta) * r;
 
-        // warna hitam 
+        // warna ungu gelap 
         this.vertex.push(x, y, z, 0.075, 0, 0.15);
       }
     }

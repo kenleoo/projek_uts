@@ -39,12 +39,11 @@ export class BodyCone {
     this.faces = [];
 
     /*========================= Upside-down cone (penyangga kepala) ========================= */
-    // Build vertex
     const halfH = height / 2;
     const bottomY = -halfH; // posisi titik puncak kerucut (bagian bawah)
     const topY = halfH; // posisi titik lingkaran atas
 
-    // Titik pusat lingkaran atas (digunakan untuk membentuk permukaan datar bagian atas)
+    //center lingkaran
     this.vertex.push(0, topY, 0, 0, 0, 0); // Warna: hitam
 
     // Titik di keliling lingkaran atas
@@ -53,23 +52,14 @@ export class BodyCone {
       const x = Math.cos(theta) * radius; // posisi X pada lingkaran
       const z = Math.sin(theta) * radius; // posisi Z pada lingkaran
 
-      this.vertex.push(x, topY, z, 0.075, 0, 0.15); // Warna: hitam
+      this.vertex.push(x, topY, z, 0.075, 0, 0.15); // Warna: ungu gelap
     }
 
     // Titik pusat di bagian bawah kerucut
     const apexIndex = this.vertex.length / 6;
-    this.vertex.push(0, bottomY, 0, 0.075, 0, 0.15); // Warna: hitam
+    this.vertex.push(0, bottomY, 0, 0.075, 0, 0.15); // Warna: ungu gelap
 
-    // Build faces 
-    // lingkaran atas
-    // for (let i = 1; i <= radialSegments; i++) {
-    //   const a = 0;
-    //   const b = i;
-    //   const c = (i % radialSegments) + 1;
-    //   this.faces.push(a, b, c);
-    // }
-
-    // sisi cone
+    // face sisi cone
     for (let i = 1; i <= radialSegments; i++) {
       const b = i;
       const c = (i % radialSegments) + 1;

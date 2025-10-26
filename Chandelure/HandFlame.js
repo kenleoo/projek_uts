@@ -44,7 +44,9 @@ export class HandFlame {
       const t = i / vSeg;
       const z = height * t;
 
-      // Flame profile: tapering + bulges
+      //tapering + bulges
+      //taperiing  : semakin runcing
+      //bulge : mengembang ditengah
       const taper = 1 - t;
       const bulge = 1;
       const radius = base_radius * taper * bulge;
@@ -68,7 +70,7 @@ export class HandFlame {
       }
     }
 
-    // Create triangle faces (quads split into 2 triangles)
+    //faces
     for (let i = 0; i < vSeg; i++) {
       for (let j = 0; j < uSeg; j++) {
         let p1 = i * (uSeg + 1) + j;

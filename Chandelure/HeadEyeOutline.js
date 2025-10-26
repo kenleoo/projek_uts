@@ -38,7 +38,7 @@ export class HeadEyeOutline {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Upside-down cone (penyangga kepala) ========================= */
+    /*========================= outline mata ========================= */
     // Build vertex
     this.vertex.push(0, 0, height / 2);    // top center
     this.vertex.push(1, 1, 0);             // top color
@@ -54,10 +54,10 @@ export class HeadEyeOutline {
         let zBottom = -height / 2;
 
         this.vertex.push(x, y, zTop);
-        this.vertex.push(0.075, 0, 0.15); // Yellow color
+        this.vertex.push(0.075, 0, 0.15); // Yellow 
         // Bottom circle
         this.vertex.push(x, y, zBottom);
-        this.vertex.push(0.075, 0, 0.15); // Yellow color
+        this.vertex.push(0.075, 0, 0.15); // Yellow 
         
     }
     // Faces
@@ -66,12 +66,12 @@ export class HeadEyeOutline {
         let bottom1 = top1 + 1;
         let top2 = ((i + 1) % segments) * 2;
         let bottom2 = top2 + 1;
-        // Side faces
+        // Side 
         this.faces.push(top1, bottom1, bottom2);
         this.faces.push(top1, bottom2, top2);
-        // Top face
+        // Top 
         this.faces.push(top1, top2, (segments * 2));
-        // Bottom face
+        // Bottom
         this.faces.push(bottom1, (segments * 2) + 1, bottom2);
     }
   }

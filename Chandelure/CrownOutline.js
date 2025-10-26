@@ -39,19 +39,19 @@ export class CrownOutline {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Upside-down cone (penyangga kepala) ========================= */
+    /*========================= tempat pada kepala disekiatr crown ========================= */
     // Build vertex
    for (let i = 0; i <= vSeg; i++) {
-      let phi = Math.PI * i / vSeg; // 0 to π
+      let phi = Math.PI * i / vSeg;
       for (let j = 0; j <= uSeg; j++) {
-          let theta = 2 * Math.PI * j / uSeg; // 0 to 2π
+          let theta = 2 * Math.PI * j / uSeg;
 
           let x = a * Math.sin(phi) * Math.cos(theta);
           let y = b * Math.sin(phi) * Math.sin(theta);
           let z = c * Math.cos(phi);
 
             this.vertex.push(x, y, z);
-            this.vertex.push(0.075, 0, 0.15); // Purple color
+            this.vertex.push(0.075, 0, 0.15); // unugu gelap
 
       }
    }

@@ -23,8 +23,6 @@ export class HeadStrip2 {
     _position,
     _color,
     _Mmatrix,
-
-    // param: radius (di bagian atas), height (tinggi), radialSegments (jumlah segmen melingkar)
     a = 0.5251,
     b = 0.5251,
     c = 0.451,
@@ -40,12 +38,12 @@ export class HeadStrip2 {
     this.vertex = [];
     this.faces = [];
 
-    /*========================= Upside-down cone (penyangga kepala) ========================= */
+    /*========================= head strip vertical kecil kepala ========================= */
     // Build vertex
    for (let i = 0; i <= vSeg; i++) {
-            let phi = Math.PI * i / vSeg; // 0 to π
+            let phi = Math.PI * i / vSeg;
             for (let j = 0; j <= uSeg; j++) {
-                let theta = 2 * Math.PI * j / uSeg; // 0 to 2π
+                let theta = 2 * Math.PI * j / uSeg;
 
                 let x = a * Math.sin(phi) * Math.cos(theta);
                 let y = b * Math.sin(phi) * Math.sin(theta);
@@ -57,7 +55,7 @@ export class HeadStrip2 {
             }
         }
 
-        // Faces (triangles)
+        // Face
         for (let i = 0; i < vSeg; i++) {
             for (let j = 0; j < uSeg; j++) {
                 let p1 = i * (uSeg + 1) + j;
@@ -65,7 +63,7 @@ export class HeadStrip2 {
                 let p3 = p1 + (uSeg + 1);
                 let p4 = p3 + 1;
 
-                //create 8 vertical strips with black color
+                //create 2 strip kecil di depan kepala
                 if(i>=27 && i<=33){
                 if(j == 165 || j == 195 || (j-1) == 195 || (j-2) == 195 || (j+1) == 195 || (j+2) == 195 || (j+1) == 165 || (j+2) == 165 || (j-1) == 165 || (j-2) == 165){
                     this.faces.push(p1, p3, p4);

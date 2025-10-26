@@ -45,11 +45,13 @@ export class HeadFlame {
       const z = height * t;
 
       // Flame profile: tapering + bulges
+      // tapering : semakin runcing 
+      //bulge : mengembang ditengah
       const taper = 1 - t;
       const bulge = 1;
       const radius = base_radius * taper * bulge;
 
-      // Flame curve offset — curve sideways (like S-shape)
+      // Flame curve menggunakan offset
       const offsetX = 0.2 * Math.sin(2 * Math.PI * t) + 0.15 * t;
       const offsetY = 0.2 * Math.cos(2 * Math.PI * t) + 0.15 * t;
 
@@ -69,7 +71,7 @@ export class HeadFlame {
       }
     }
 
-    // Create triangle faces (quads split into 2 triangles)
+    //face
     for (let i = 0; i < vSeg; i++) {
       for (let j = 0; j < uSeg; j++) {
         let p1 = i * (uSeg + 1) + j;

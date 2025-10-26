@@ -24,12 +24,11 @@ export class SubHand {
   _color,
   _Mmatrix,
 
-  // Torus parameters
-  R = 2,       // Major radius (ring)
-  r = 0.075,       // Minor radius (tube)
-  uSeg = 300,    // Segments along the main ring
-  vSeg = 60,     // Segments along the tube
-  arc = Math.PI * 0.5  // Partial arc in radians (1.5π = 270 degrees)
+  R = 2,       // radius torus
+  r = 0.075,       // radius tube torus
+  uSeg = 300,   
+  vSeg = 60,     
+  arc = Math.PI * 0.5  //1/2 bagian torus
 ) {
   this.GL = GL;
   this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -40,9 +39,9 @@ export class SubHand {
   this.vertex = [];
   this.faces = [];
 
-  // Generate vertices
+  //vertex
   for (let i = 0; i <= uSeg; i++) {
-    let u = (i / uSeg) * arc; // arc instead of 2π
+    let u = (i / uSeg) * arc;
     for (let j = 0; j <= vSeg; j++) {
       let v = (j / vSeg) * 2 * Math.PI;
 
@@ -55,7 +54,7 @@ export class SubHand {
     }
   }
 
-  // Generate faces
+  // face
   for (let i = 0; i < uSeg; i++) {
     for (let j = 0; j < vSeg; j++) {
       let p1 = i * (vSeg + 1) + j;
