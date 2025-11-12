@@ -47,8 +47,9 @@ export class LampentHand {
       for (let i = 0; i <= points; i++) {
         const t = i / points;
 
-        // agar kurva makin tajam mendekati akhir
-        const curveIntensity = startAngle + Math.pow(t, 2) * (endAngle - startAngle);
+        // agar kurva berbelok
+        const curveIntensity = startAngle;
+        // const curveIntensity = startAngle + Math.pow(t, 2) * (endAngle - startAngle);
 
         // Hitung sudut dan jarak berdasarkan parameter kurva
         const angle = t * curveIntensity * Math.PI * 0.5;
