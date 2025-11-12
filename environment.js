@@ -45,6 +45,8 @@ import { Fence } from "./Environment/Fence.js";
 import { OutwardDirt } from "./Environment/OutDirt.js";
 import { CandleBody } from "./Environment/CandleBody.js";
 import { CandleFlame } from "./Environment/CandleFlame.js";
+import { StoneBorder } from "./Environment/StoneBorder.js";
+import { Mountain } from "./Environment/Mountain.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -728,11 +730,29 @@ function main() {
   LIBS.translateZ(HandFlame4.MOVE_MATRIX, 0.1);
 
   // TODO: Enviroment Model
+  //WARNING - TEMP
+  var Stone1 = new StoneBorder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Stone2 = new StoneBorder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Mountain1 = new Mountain(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+
+  Land.childs.push(Stone1);
+  Land.childs.push(Stone2);
+  Land.childs.push(Mountain1);
   //land
   LIBS.translateY(Land.POSITION_MATRIX, -5);
   LIBS.scaleX(Land.POSITION_MATRIX, 0.5);
   LIBS.scaleY(Land.POSITION_MATRIX, 0.5);
   LIBS.scaleZ(Land.POSITION_MATRIX, 0.5);
+
+  //WARNING - TEMP
+  LIBS.translateX(Stone1.POSITION_MATRIX, 30);
+  LIBS.translateY(Stone1.POSITION_MATRIX, 5);
+
+  LIBS.translateZ(Stone2.POSITION_MATRIX, -30);
+  LIBS.translateY(Stone2.POSITION_MATRIX, 6);
+  LIBS.rotateY(Stone2.POSITION_MATRIX,90 * Math.PI/180);
+
+  LIBS.translateY(Mountain1.POSITION_MATRIX, 5);
 
   // graveyard arch
   LIBS.translateZ(GraveArch1.POSITION_MATRIX, 30);

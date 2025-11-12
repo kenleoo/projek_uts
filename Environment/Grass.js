@@ -23,9 +23,9 @@ export class DirtGrassLand {
     _position,
     _color,
     _Mmatrix,
-    width = 60,
+    width = 80,
     height = 2,
-    depth = 60,
+    depth = 80,
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -36,33 +36,54 @@ export class DirtGrassLand {
     this.vertex = [];
     this.faces = [];
 
-   // Create vertices for a flat rectangular land (grass on top, dirt on sides and bottom)
     const halfW = width / 2;
     const halfH = height / 2;
     const halfD = depth / 2;
-    const uSeg = 360; // segments along width
-    const vSeg = 1;   // segments along depth
-    // Top face (grass)
+    const uSeg = 180;
+    const vSeg = 180;
+
+    // Terrain shaping constants
+    const slopeHeight = height * 2.0; // how tall the front is compared to back
+    const baseDrop = 0;
+
+    // --- Top face (grass forming downhill slope)
     for (let i = 0; i <= vSeg; i++) {
-      let z = -halfD + (i / vSeg) * depth;
-        for (let j = 0; j <= uSeg; j++) {
-            let x = -halfW + (j / uSeg) * width;
-            this.vertex.push(x, halfH, z); // position
-            this.vertex.push(0.01, 0.1, 0.2); // grass green color
-        }
-    }
-    // bottom face (dirt)
-    for (let i = 0; i <= vSeg; i++) {
-      let z = -halfD + (i / vSeg) * depth;
-        for (let j = 0; j <= uSeg; j++) {
-            let x = -halfW + (j / uSeg) * width;
-            this.vertex.push(x, -halfH, z); // position
-            this.vertex.push(0.35, 0.16, 0.05); // dirt brown color
-        }
+      let z = -halfD + (i / vSeg) * depth; // from front (-halfD) → back (+halfD)
+      let zRatio = (z + halfD) / depth;    // normalized [0–1], 0 = front, 1 = back
+
+      for (let j = 0; j <= uSeg; j++) {
+        let x = -halfW + (j / uSeg) * width;
+
+        // Main slope: front higher, back lower
+        let slope = (1 - zRatio) * slopeHeight - baseDrop;
+
+        let elevation = slope;
+
+        // Push vertex position
+        this.vertex.push(x, halfH + elevation, z);
+
+        // Add slight color variation for natural look
+        let colorVar = (Math.random() - 0.5) * 0.05;
+        this.vertex.push(
+          0,
+          0.1,
+          0.2
+        );
+      }
     }
 
-    // Generate faces (triangles)
-    // Top face
+    // --- Bottom face (flat dirt base)
+    for (let i = 0; i <= vSeg; i++) {
+      let z = -halfD + (i / vSeg) * depth;
+      for (let j = 0; j <= uSeg; j++) {
+        let x = -halfW + (j / uSeg) * width;
+        this.vertex.push(x, -halfH, z);
+        this.vertex.push(0.35, 0.16, 0.05);
+      }
+    }
+
+    // --- Faces (triangles)
+    // Top
     for (let i = 0; i < vSeg; i++) {
       for (let j = 0; j < uSeg; j++) {
         let p1 = i * (uSeg + 1) + j;
@@ -71,10 +92,10 @@ export class DirtGrassLand {
         let p4 = p1 + 1;
         this.faces.push(p1, p2, p4);
         this.faces.push(p2, p3, p4);
-        }
+      }
     }
 
-    // bottom face
+    // Bottom
     for (let i = 0; i < vSeg; i++) {
       for (let j = 0; j < uSeg; j++) {
         let p1 = (vSeg + 1) * (uSeg + 1) + i * (uSeg + 1) + j;
@@ -83,18 +104,52 @@ export class DirtGrassLand {
         let p4 = p1 + 1;
         this.faces.push(p1, p4, p2);
         this.faces.push(p2, p4, p3);
-        }
+      }
     }
 
-    // grass and dirt sides faces met
-    for (let j = 0; j < uSeg; j++) {
-      let topP1 = j;
-      let topP2 = (uSeg + 1) + j;
-      let bottomP1 = (vSeg + 1) * (uSeg + 1) + j;
-      let bottomP2 = (vSeg + 1) * (uSeg + 1) + (uSeg + 1) + j;
-      this.faces.push(topP1, bottomP1, topP2);
-      this.faces.push(topP2, bottomP1, bottomP2);
-    }
+ // --- Sides between grass and dirt (4 walls) ---
+const topOffset = 0;
+const bottomOffset = (vSeg + 1) * (uSeg + 1);
+
+// FRONT side (z = -halfD)
+for (let j = 0; j < uSeg; j++) {
+  let topP1 = topOffset + j;
+  let topP2 = topOffset + j + 1;
+  let bottomP1 = bottomOffset + j;
+  let bottomP2 = bottomOffset + j + 1;
+  this.faces.push(topP1, bottomP1, topP2);
+  this.faces.push(topP2, bottomP1, bottomP2);
+}
+
+// BACK side (z = +halfD)
+for (let j = 0; j < uSeg; j++) {
+  let topP1 = vSeg * (uSeg + 1) + j;
+  let topP2 = topP1 + 1;
+  let bottomP1 = bottomOffset + vSeg * (uSeg + 1) + j;
+  let bottomP2 = bottomP1 + 1;
+  this.faces.push(topP1, topP2, bottomP1);
+  this.faces.push(topP2, bottomP2, bottomP1);
+}
+
+// LEFT side (x = -halfW)
+for (let i = 0; i < vSeg; i++) {
+  let topP1 = i * (uSeg + 1);
+  let topP2 = topP1 + (uSeg + 1);
+  let bottomP1 = bottomOffset + i * (uSeg + 1);
+  let bottomP2 = bottomP1 + (uSeg + 1);
+  this.faces.push(topP1, bottomP1, topP2);
+  this.faces.push(topP2, bottomP1, bottomP2);
+}
+
+// RIGHT side (x = +halfW)
+for (let i = 0; i < vSeg; i++) {
+  let topP1 = i * (uSeg + 1) + uSeg;
+  let topP2 = topP1 + (uSeg + 1);
+  let bottomP1 = bottomOffset + i * (uSeg + 1) + uSeg;
+  let bottomP2 = bottomP1 + (uSeg + 1);
+  this.faces.push(topP1, topP2, bottomP1);
+  this.faces.push(topP2, bottomP2, bottomP1);
+}
   }
 
   setup() {
