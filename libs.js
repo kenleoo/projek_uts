@@ -127,3 +127,12 @@ var LIBS = {
   },
   add: (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]],
 };
+
+// Provide lightweight global aliases for a few common helpers so older
+// modules or accidental unprefixed calls (e.g. `normalize(...)`) won't
+// throw ReferenceError in the browser if they expect globals.
+if (typeof window !== "undefined") {
+  if (typeof window.normalize === "undefined") window.normalize = LIBS.normalize;
+  if (typeof window.subtract === "undefined") window.subtract = LIBS.subtract;
+  if (typeof window.cross === "undefined") window.cross = LIBS.cross;
+}

@@ -551,7 +551,6 @@ function main() {
   LIBS.scaleY(Object1.POSITION_MATRIX, 2.3);
   LIBS.scaleZ(Object1.POSITION_MATRIX, 2.3);
 
-
   //eye kanan
   LIBS.rotateY(HeadEye1.MOVE_MATRIX, (90 * Math.PI) / 180);
   LIBS.rotateZ(HeadEye1.MOVE_MATRIX, (-45 * Math.PI) / 180);
@@ -750,7 +749,7 @@ function main() {
 
   LIBS.translateZ(Stone2.POSITION_MATRIX, -30);
   LIBS.translateY(Stone2.POSITION_MATRIX, 6);
-  LIBS.rotateY(Stone2.POSITION_MATRIX,90 * Math.PI/180);
+  LIBS.rotateY(Stone2.POSITION_MATRIX, (90 * Math.PI) / 180);
 
   LIBS.translateY(Mountain1.POSITION_MATRIX, 5);
 
@@ -975,7 +974,7 @@ function main() {
   var pitch = 0;
 
   var camSpeed = 0.005;
-  var rotSpeed = 0.0005;
+  var rotSpeed = 0.00077;
   var keys = {};
 
   window.addEventListener("keydown", (e) => (keys[e.key.toLowerCase()] = true));
@@ -1004,10 +1003,11 @@ function main() {
     // Movement input
     let move = [0, 0, 0];
 
-    if (keys["w"]) move = LIBS.subtract(move, forward);
-    if (keys["s"]) move = LIBS.add(move, forward);
-    if (keys["a"]) move = LIBS.subtract(move, right);
-    if (keys["d"]) move = LIBS.add(move, right);
+    // forward/back: W moves forward, S moves backward
+    if (keys["w"]) move = LIBS.add(move, forward);
+    if (keys["s"]) move = LIBS.subtract(move, forward);
+    if (keys["d"]) move = LIBS.subtract(move, right);
+    if (keys["a"]) move = LIBS.add(move, right);
     if (keys[" "]) move = LIBS.add(move, up);
     if (keys["shift"]) move = LIBS.subtract(move, up);
 
@@ -1021,16 +1021,40 @@ function main() {
     }
 
     // Build view matrix: camera position is always the center (0,0,0)
+    const eye = camPos;
+    const center = [camPos[0] + forward[0], camPos[1] + forward[1], camPos[2] + forward[2]];
+
+    // f = normalize(center - eye)
+    const f = LIBS.normalize(LIBS.subtract(center, eye));
+    // s = normalize(cross(f, up))
+    const s = LIBS.normalize(LIBS.cross(f, up));
+    // u = cross(s, f)
+    const u = LIBS.cross(s, f);
+
     const view = LIBS.get_I4();
 
-    // First: translate to camera position (making camPos the new origin)
-    LIBS.translateX(view, -camPos[0]);
-    LIBS.translateY(view, -camPos[1]);
-    LIBS.translateZ(view, -camPos[2]);
+    // Set rotation part
+    view[0] = s[0];
+    view[1] = u[0];
+    view[2] = -f[0];
+    view[3] = 0;
 
-    // Then: rotate around that origin
-    LIBS.rotateY(view, -yaw);
-    LIBS.rotateX(view, -pitch);
+    view[4] = s[1];
+    view[5] = u[1];
+    view[6] = -f[1];
+    view[7] = 0;
+
+    view[8] = s[2];
+    view[9] = u[2];
+    view[10] = -f[2];
+    view[11] = 0;
+
+    // Set translation part: -dot(s,eye), -dot(u,eye), dot(f,eye)
+    const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+    view[12] = -dot(s, eye);
+    view[13] = -dot(u, eye);
+    view[14] = dot(f, eye);
+    view[15] = 1;
 
     return view;
   }
@@ -1148,8 +1172,8 @@ function main() {
 
     // Apply translation to move Chandelure along infinity path
     LIBS.translateX(Object1.MOVE_MATRIX, posX + 8);
-    LIBS.translateZ(Object1.MOVE_MATRIX, posZ -4);
-    LIBS.translateY(Object1.MOVE_MATRIX, posY -1);
+    LIBS.translateZ(Object1.MOVE_MATRIX, posZ - 4);
+    LIBS.translateY(Object1.MOVE_MATRIX, posY - 1);
 
     // ANIMASI GERAK TANGAN (arms)
     var armAmplitude = (8 * Math.PI) / 180;
