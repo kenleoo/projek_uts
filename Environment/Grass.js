@@ -43,34 +43,72 @@ export class DirtGrassLand {
     const vSeg = 180;
 
     // Terrain shaping constants
-    const slopeHeight = height * 2.0; // how tall the front is compared to back
-    const baseDrop = 0;
+    const slopeHeight = height * 2.0 + 2; // how tall the front is compared to back
+    var temp = 0;
 
-    // --- Top face (grass forming downhill slope)
-    for (let i = 0; i <= vSeg; i++) {
-      let z = -halfD + (i / vSeg) * depth; // from front (-halfD) → back (+halfD)
-      let zRatio = (z + halfD) / depth;    // normalized [0–1], 0 = front, 1 = back
+// --- Top face (grass forming stepped downhill slope with smooth dirt transition)
+for (let i = 0; i <= vSeg; i++) {
+  let z = -halfD + (i / vSeg) * depth;
+  let zRatio = (z + halfD) / depth;
+  for (let j = 0; j <= uSeg; j++) {
+    let x = -halfW + (j / uSeg) * width;
+    let slope = (1 - zRatio) * slopeHeight;
 
-      for (let j = 0; j <= uSeg; j++) {
-        let x = -halfW + (j / uSeg) * width;
+    // Section settings
+    const sectionSize = 50;  // width of each flat section
+    const smoothZone = 10;    // blending zone rows
 
-        // Main slope: front higher, back lower
-        let slope = (1 - zRatio) * slopeHeight - baseDrop;
+    // Figure out section and blend range
+    const sectionStart = Math.floor(i / sectionSize) * sectionSize;
+    const sectionEnd = sectionStart + sectionSize;
+    const blendStart = sectionStart + (sectionSize - smoothZone);
 
-        let elevation = slope;
+    // Base height
+    const baseHeight = halfH + slope;
 
-        // Push vertex position
-        this.vertex.push(x, halfH + elevation, z);
+    // Track slope zone for blending
+    if (i % sectionSize === 0) temp = baseHeight;
+    let smoothHeight = baseHeight;
+    let isSlopeZone = false;
+    let t = 0;
 
-        // Add slight color variation for natural look
-        let colorVar = (Math.random() - 0.5) * 0.05;
-        this.vertex.push(
-          0,
-          0.1,
-          0.2
-        );
-      }
+    if (i >= blendStart && i < sectionEnd && i > 0) {
+      t = (i - blendStart) / smoothZone; // 0→1
+      const eased = t * t * (3 - 2 * t);
+      smoothHeight = temp * (1 - eased) + baseHeight * eased;
+      isSlopeZone = true;
+    } else if (i < blendStart) {
+      smoothHeight = temp;
     }
+
+    // --- Color logic ---
+    let colorGrassFront = [0.0, 0.1, 0.2];
+    let colorGrassBack  = [0.0, 0.1, 0.2];
+    let colorDirt       = [0.25, 0.15, 0.05]; // brown dirt tone
+
+    // Base grass gradient (front → back)
+    let tColor = i / vSeg;
+    let r = colorGrassFront[0] * (1 - tColor) + colorGrassBack[0] * tColor;
+    let g = colorGrassFront[1] * (1 - tColor) + colorGrassBack[1] * tColor;
+    let b = colorGrassFront[2] * (1 - tColor) + colorGrassBack[2] * tColor;
+
+    // Gradual brown tint through slope zone
+    if (isSlopeZone) {
+      const dirtBlend = 0.1 + 0.9 * t; // starts slightly brown → full brown near middle
+      r = r * (1 - dirtBlend) + colorDirt[0] * dirtBlend;
+      g = g * (1 - dirtBlend) + colorDirt[1] * dirtBlend;
+      b = b * (1 - dirtBlend) + colorDirt[2] * dirtBlend;
+    }
+
+    this.vertex.push(x, smoothHeight, z);
+    this.vertex.push(r, g, b);
+  }
+}
+
+
+
+
+
 
     // --- Bottom face (flat dirt base)
     for (let i = 0; i <= vSeg; i++) {
