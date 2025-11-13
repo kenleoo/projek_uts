@@ -97,6 +97,7 @@ export class LampentHead {
     this.GL.bindBuffer(this.GL.ARRAY_BUFFER, this.OBJECT_VERTEX);
     this.GL.vertexAttribPointer(this._position, 3, this.GL.FLOAT, false, 28, 0);
     this.GL.vertexAttribPointer(this._color, 4, this.GL.FLOAT, false, 28, 12);
+    // this.GL.vertexAttribPointer(this._color, 3, this.GL.FLOAT, false, 28, 12);
 
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
     this.GL.drawElements(this.GL.TRIANGLES, this.faces.length, this.GL.UNSIGNED_SHORT, 0);
