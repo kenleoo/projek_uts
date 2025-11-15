@@ -24,11 +24,11 @@ export class StoneBorder {
     _color,
     _Mmatrix,
 
-    a = 2, // base radius x
-    b = 4, // base radius y
+    a = 3, // base radius x
+    b = 1, // base radius y
     c = 3, // height per stone (z)
     uSeg = 6,
-    vSeg = 4
+    vSeg = 5
   ) {
     this.GL = GL;
     this.SHADER_PROGRAM = SHADER_PROGRAM;
@@ -40,7 +40,7 @@ export class StoneBorder {
     this.faces = [];
 
     // === Build 3 vertically stacked ellipsoids (stones) ===
-    const stoneCount = 3;
+    const stoneCount = 1;
     const totalHeight = c * stoneCount * 1.1;
 
     for (let s = 0; s < stoneCount; s++) {
@@ -52,11 +52,16 @@ export class StoneBorder {
       const scaleY = b * (0.9 + Math.random() * 0.2);
       const scaleZ = c * (0.9 + Math.random() * 0.2);
 
-      const offsetX = (Math.random() - 0.5) * 0.3;
+      let offsetX;
+      if (s % 2 === 0) {
+        offsetX = -6;
+      } else {
+        offsetX = (Math.random() - 0.5) * 0.3;
+      }
       const offsetY = (Math.random() - 0.5) * 0.3;
 
       for (let i = 0; i <= vSeg; i++) {
-        let phi = Math.PI * i / vSeg;
+        let phi = (Math.PI * i) / vSeg;
         for (let j = 0; j <= uSeg; j++) {
           let theta = (2 * Math.PI * j) / uSeg;
 
@@ -109,7 +114,7 @@ export class StoneBorder {
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
     this.GL.bufferData(this.GL.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), this.GL.STATIC_DRAW);
 
-    this.childs.forEach(child => child.setup());
+    this.childs.forEach((child) => child.setup());
   }
 
   render(PARENT_MATRIX) {
@@ -126,6 +131,6 @@ export class StoneBorder {
     this.GL.bindBuffer(this.GL.ELEMENT_ARRAY_BUFFER, this.OBJECT_FACES);
     this.GL.drawElements(this.GL.TRIANGLES, this.faces.length, this.GL.UNSIGNED_SHORT, 0);
 
-    this.childs.forEach(child => child.render(this.MODEL_MATRIX));
+    this.childs.forEach((child) => child.render(this.MODEL_MATRIX));
   }
 }

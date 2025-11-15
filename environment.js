@@ -47,7 +47,6 @@ import { CandleBody } from "./Environment/CandleBody.js";
 import { CandleFlame } from "./Environment/CandleFlame.js";
 import { StoneBorder } from "./Environment/StoneBorder.js";
 import { Mountain } from "./Environment/Mountain.js";
-import { Pumpkin } from "./Environment/Pumpkin.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -731,15 +730,9 @@ function main() {
 
   // TODO: Enviroment Model
   //WARNING - TEMP
-  var Stone1 = new StoneBorder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var Stone2 = new StoneBorder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var Mountain1 = new Mountain(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var Pumpkin1 = new Pumpkin (GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
-  Land.childs.push(Stone1);
-  Land.childs.push(Stone2);
   Land.childs.push(Mountain1);
-  Land.childs.push(Pumpkin1);
   //land
   LIBS.translateY(Land.POSITION_MATRIX, -5);
   LIBS.scaleX(Land.POSITION_MATRIX, 0.5);
@@ -747,16 +740,36 @@ function main() {
   LIBS.scaleZ(Land.POSITION_MATRIX, 0.5);
 
   //WARNING - TEMP
-  LIBS.translateX(Stone1.POSITION_MATRIX, 40);
-  LIBS.translateY(Stone1.POSITION_MATRIX, 5);
+  let path = [];
 
-  // LIBS.translateZ(Stone2.POSITION_MATRIX, -30);
-  // LIBS.translateY(Stone2.POSITION_MATRIX, 6);
-  // LIBS.rotateY(Stone2.POSITION_MATRIX, (90 * Math.PI) / 180);
+  for (let i = 0; i < 10; i++) {
+    // vertical fences
+    var stonePath = new StoneBorder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+    LIBS.scaleX(stonePath.POSITION_MATRIX, 0.5);
+    LIBS.scaleY(stonePath.POSITION_MATRIX, 0.5);
+    LIBS.scaleZ(stonePath.POSITION_MATRIX, 0.5);
+    LIBS.translateZ(stonePath.POSITION_MATRIX, -4);
+    LIBS.translateX(stonePath.POSITION_MATRIX, 3);
+    
 
-  LIBS.translateY(Mountain1.POSITION_MATRIX, 5);
+    LIBS.translateZ(stonePath.POSITION_MATRIX, i * -2);
+    if (i % 2 == 0) {
+      LIBS.translateX(stonePath.POSITION_MATRIX, -3);
+    }
+    LIBS.translateY(stonePath.POSITION_MATRIX, 0);
 
-  LIBS.rotateX(Pumpkin1.POSITION_MATRIX, -90 * Math.PI/180);
+    if (i < 5) {
+    }
+
+    path.push(stonePath);
+  }
+  // attach all to arch (parent)
+  for (let i = 0; i < path.length; i++) {
+    GraveArch1.childs.push(path[i]);
+  }
+
+  LIBS.translateZ(Mountain1.POSITION_MATRIX, -31);
+  LIBS.translateY(Mountain1.POSITION_MATRIX, 7);
 
   // graveyard arch
   LIBS.translateY(GraveArch1.POSITION_MATRIX, 2.1);
@@ -867,7 +880,7 @@ function main() {
     const baseZ = rowZOffsets[row] !== undefined ? rowZOffsets[row] : 0;
 
     // TODO: customize which graves to skip or not have candles
-    const skipGrave = [];
+    const skipGrave = [6, 7, 17, 18, 25, 26, 27, 34, 35, 42, 43, 44, 52, 53, 54, 55, 63, 64, 65];
     const noCandle = [];
 
     // skip full grave
