@@ -552,7 +552,6 @@ function main() {
   LIBS.scaleY(Object1.POSITION_MATRIX, 2.3);
   LIBS.scaleZ(Object1.POSITION_MATRIX, 2.3);
 
-
   //eye kanan
   LIBS.rotateY(HeadEye1.MOVE_MATRIX, (90 * Math.PI) / 180);
   LIBS.rotateZ(HeadEye1.MOVE_MATRIX, (-45 * Math.PI) / 180);
@@ -748,25 +747,26 @@ function main() {
   LIBS.scaleZ(Land.POSITION_MATRIX, 0.5);
 
   //WARNING - TEMP
-  LIBS.translateX(Stone1.POSITION_MATRIX, 30);
-  LIBS.translateY(Stone1.POSITION_MATRIX, 10);
+  LIBS.translateX(Stone1.POSITION_MATRIX, 40);
+  LIBS.translateY(Stone1.POSITION_MATRIX, 5);
 
-  LIBS.translateZ(Stone2.POSITION_MATRIX, -30);
-  LIBS.translateY(Stone2.POSITION_MATRIX, 6);
-  LIBS.rotateY(Stone2.POSITION_MATRIX,90 * Math.PI/180);
+  // LIBS.translateZ(Stone2.POSITION_MATRIX, -30);
+  // LIBS.translateY(Stone2.POSITION_MATRIX, 6);
+  // LIBS.rotateY(Stone2.POSITION_MATRIX, (90 * Math.PI) / 180);
 
   LIBS.translateY(Mountain1.POSITION_MATRIX, 5);
 
   LIBS.rotateX(Pumpkin1.POSITION_MATRIX, -90 * Math.PI/180);
 
   // graveyard arch
-  LIBS.translateZ(GraveArch1.POSITION_MATRIX, 30);
+  LIBS.translateY(GraveArch1.POSITION_MATRIX, 2.1);
+  LIBS.translateZ(GraveArch1.POSITION_MATRIX, 40);
 
   // loop for fences
   let fences = [];
   let verFences = [];
 
-  for (let i = 0; i < 11; i++) {
+  for (let i = 0; i < 16; i++) {
     // vertical fences
     const fence = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
     const vfence = new Fence(GL, SHADER_PROGRAM, _position, _color, _Mmatrix, 0.05, 4.0, 1, 2);
@@ -780,59 +780,62 @@ function main() {
     LIBS.scaleY(vfence.POSITION_MATRIX, 5);
     LIBS.scaleZ(vfence.POSITION_MATRIX, 5);
 
-    if (i == 0) {
+    if (i <= 1) {
       // pagar sebelah kanan arch
       LIBS.rotateZ(vfence.MOVE_MATRIX, (90 * Math.PI) / 180);
       LIBS.translateY(vfence.MOVE_MATRIX, 0.5);
-      LIBS.translateX(vfence.MOVE_MATRIX, 6);
-    } else if (i > 0 && i < 4) {
+      LIBS.translateX(vfence.MOVE_MATRIX, 6 + i * 2);
+    } else if (i >= 2 && i <= 5) {
       // pagar sebelah kanan graveyard
       LIBS.rotateZ(vfence.MOVE_MATRIX, (90 * Math.PI) / 180);
       LIBS.rotateY(vfence.MOVE_MATRIX, (90 * Math.PI) / 180);
-      LIBS.translateY(vfence.MOVE_MATRIX, 0.5);
-      LIBS.translateX(vfence.MOVE_MATRIX, 6);
-      LIBS.translateZ(vfence.MOVE_MATRIX, -4 * i);
-    } else if (i > 3 && i < 7) {
+      LIBS.translateY(vfence.MOVE_MATRIX, 0.5 + (i - 2) * 0.3);
+      LIBS.translateX(vfence.MOVE_MATRIX, 8);
+      LIBS.translateZ(vfence.MOVE_MATRIX, -4 + (i - 2) * -4);
+    } else if (i >= 6 && i <= 9) {
       // pagar belakang graveyard
       LIBS.rotateZ(vfence.MOVE_MATRIX, (90 * Math.PI) / 180);
-      LIBS.translateY(vfence.MOVE_MATRIX, 0.5);
-      LIBS.translateX(vfence.MOVE_MATRIX, 6 + (i - 4) * -4);
-      LIBS.translateZ(vfence.MOVE_MATRIX, -12);
-    } else if (i > 6 && i < 10) {
+      LIBS.translateY(vfence.MOVE_MATRIX, 1.4);
+      LIBS.translateX(vfence.MOVE_MATRIX, 8 + (i - 6) * -4);
+      LIBS.translateZ(vfence.MOVE_MATRIX, -16);
+    } else if (i >= 10 && i <= 13) {
       // pagar sebelah kiri graveyard
       LIBS.rotateZ(vfence.MOVE_MATRIX, (90 * Math.PI) / 180);
       LIBS.rotateY(vfence.MOVE_MATRIX, (90 * Math.PI) / 180);
-      LIBS.translateY(vfence.MOVE_MATRIX, 0.5);
-      LIBS.translateX(vfence.MOVE_MATRIX, -6);
-      LIBS.translateZ(vfence.MOVE_MATRIX, -4 + (i - 7) * -4);
-    } else if (i == 10) {
+      LIBS.translateY(vfence.MOVE_MATRIX, 0.5 + (i - 10) * 0.3);
+      LIBS.translateX(vfence.MOVE_MATRIX, -8);
+      LIBS.translateZ(vfence.MOVE_MATRIX, -4 + (i - 10) * -4);
+    } else if (i > 13) {
       // pagar sebelah kiri arch
       LIBS.rotateZ(vfence.MOVE_MATRIX, (90 * Math.PI) / 180);
       LIBS.translateY(vfence.MOVE_MATRIX, 0.5);
-      LIBS.translateX(vfence.MOVE_MATRIX, -2);
+      LIBS.translateX(vfence.MOVE_MATRIX, -4 + (i - 14) * 2);
     }
     verFences.push(vfence);
 
-    if (i == 0) {
+    if (i <= 1) {
       // pagar sebelah kanan arch
-      LIBS.translateX(fence.POSITION_MATRIX, 10);
-    } else if (i > 0 && i < 4) {
+      LIBS.translateX(fence.POSITION_MATRIX, 10 + i * 10);
+    } else if (i >= 2 && i <= 5) {
       // pagar sebelah kanan graveyard
       LIBS.rotateY(fence.MOVE_MATRIX, (90 * Math.PI) / 180);
-      LIBS.translateX(fence.POSITION_MATRIX, 30);
-      LIBS.translateZ(fence.POSITION_MATRIX, -20 * (i - 1));
-    } else if (i > 3 && i < 7) {
+      LIBS.translateX(fence.POSITION_MATRIX, 40);
+      LIBS.translateY(fence.POSITION_MATRIX, (i - 2) * 1.5);
+      LIBS.translateZ(fence.POSITION_MATRIX, -20 * (i - 2));
+    } else if (i >= 6 && i <= 9) {
       // pagar belakang graveyard
-      LIBS.translateX(fence.POSITION_MATRIX, 10 - (i - 4) * 20);
-      LIBS.translateZ(fence.POSITION_MATRIX, -60);
-    } else if (i > 6 && i < 10) {
+      LIBS.translateX(fence.POSITION_MATRIX, 20.3 - (i - 6) * 20);
+      LIBS.translateY(fence.POSITION_MATRIX, 4.5);
+      LIBS.translateZ(fence.POSITION_MATRIX, -80);
+    } else if (i >= 10 && i <= 13) {
       // pagar sebelah kiri graveyard
       LIBS.rotateY(fence.MOVE_MATRIX, (90 * Math.PI) / 180);
-      LIBS.translateX(fence.POSITION_MATRIX, -30);
-      LIBS.translateZ(fence.POSITION_MATRIX, -20 * (i - 7));
-    } else if (i == 10) {
+      LIBS.translateX(fence.POSITION_MATRIX, -40);
+      LIBS.translateY(fence.POSITION_MATRIX, (i - 10) * 1.5);
+      LIBS.translateZ(fence.POSITION_MATRIX, -20 * (i - 10));
+    } else if (i > 13) {
       // pagar sebelah kiri arch
-      LIBS.translateX(fence.POSITION_MATRIX, -30);
+      LIBS.translateX(fence.POSITION_MATRIX, -40 + (i - 14) * 10);
     }
     fences.push(fence);
   }
@@ -845,24 +848,27 @@ function main() {
 
   // === GRAVESTONES + DIRT + CANDLE ===
   const graves = [];
-  const graveCount = 35;
+  const graveCount = 70;
 
   // easy to tweak
-  const colsPerRow = 7; // number of graves per row
+  const colsPerRow = 10; // number of graves per row
   const rowSpacing = 8; // horizontal spacing (X)
-  const colSpacing = 10; // vertical spacing (Z)
-  const startX = -25; // starting X offset
-  const startZ = 13; // starting Z offset
+  const startX = -36; // starting X offset
+
+  const rowYLevels = [-1.8, 0, 0, 1.8, 1.8, 3.6, 3.6]; // Y offset for each row (adjust as needed)
+  const rowZOffsets = [28, 16, 6, -7, -16, -29, -38]; // Z starting position for each row
 
   for (let i = 0; i < graveCount; i++) {
     // === Grid layout ===
     const row = Math.floor(i / colsPerRow);
     const col = i % colsPerRow;
     const baseX = startX + col * rowSpacing;
-    const baseZ = startZ - row * colSpacing;
+    // Use row-specific Z offset; fallback to 0 if row not in array
+    const baseZ = rowZOffsets[row] !== undefined ? rowZOffsets[row] : 0;
 
-    const skipGrave = [2, 5, 9, 13, 18, 25, 31];
-    const noCandle = [1, 6, 11, 17, 22, 27, 33];
+    // TODO: customize which graves to skip or not have candles
+    const skipGrave = [];
+    const noCandle = [];
 
     // skip full grave
     if (skipGrave.includes(i)) continue;
@@ -871,7 +877,8 @@ function main() {
     const stone = new GravestoneA(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
     LIBS.translateX(stone.POSITION_MATRIX, baseX);
     LIBS.translateZ(stone.POSITION_MATRIX, baseZ);
-    LIBS.translateY(stone.POSITION_MATRIX, 0.2);
+    // Apply row-specific Y level
+    LIBS.translateY(stone.POSITION_MATRIX, (rowYLevels[row] !== undefined ? rowYLevels[row] : 0) + 3);
 
     // === Dirt mound ===
     const dirt = new OutwardDirt(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
@@ -907,7 +914,6 @@ function main() {
     graves.push({ stone, dirt, candle, candleFlame });
   }
 
-  // === Attach all to the parent object ===
   // === Attach all to the parent object ===
   for (let i = 0; i < graves.length; i++) {
     // always attach the gravestone and dirt
@@ -975,12 +981,12 @@ function main() {
   LitwickBodyClylinder1.setup();
 
   /*========================= Free Camera with Orbital Rotation =========================*/
-  const camPos = [0, 0, 0]; // Start position
-  var yaw = 0;
-  var pitch = 0;
+  const camPos = [0, 20, 35]; // default 0,0,0
+  var yaw = 3.141; // default 0
+  var pitch = -0.7; // default 0
 
   var camSpeed = 0.005;
-  var rotSpeed = 0.0005;
+  var rotSpeed = 0.00077;
   var keys = {};
 
   window.addEventListener("keydown", (e) => (keys[e.key.toLowerCase()] = true));
@@ -1009,10 +1015,11 @@ function main() {
     // Movement input
     let move = [0, 0, 0];
 
-    if (keys["w"]) move = LIBS.subtract(move, forward);
-    if (keys["s"]) move = LIBS.add(move, forward);
-    if (keys["a"]) move = LIBS.subtract(move, right);
-    if (keys["d"]) move = LIBS.add(move, right);
+    // forward/back: W moves forward, S moves backward
+    if (keys["w"]) move = LIBS.add(move, forward);
+    if (keys["s"]) move = LIBS.subtract(move, forward);
+    if (keys["d"]) move = LIBS.subtract(move, right);
+    if (keys["a"]) move = LIBS.add(move, right);
     if (keys[" "]) move = LIBS.add(move, up);
     if (keys["shift"]) move = LIBS.subtract(move, up);
 
@@ -1026,16 +1033,40 @@ function main() {
     }
 
     // Build view matrix: camera position is always the center (0,0,0)
+    const eye = camPos;
+    const center = [camPos[0] + forward[0], camPos[1] + forward[1], camPos[2] + forward[2]];
+
+    // f = normalize(center - eye)
+    const f = LIBS.normalize(LIBS.subtract(center, eye));
+    // s = normalize(cross(f, up))
+    const s = LIBS.normalize(LIBS.cross(f, up));
+    // u = cross(s, f)
+    const u = LIBS.cross(s, f);
+
     const view = LIBS.get_I4();
 
-    // First: translate to camera position (making camPos the new origin)
-    LIBS.translateX(view, -camPos[0]);
-    LIBS.translateY(view, -camPos[1]);
-    LIBS.translateZ(view, -camPos[2]);
+    // Set rotation part
+    view[0] = s[0];
+    view[1] = u[0];
+    view[2] = -f[0];
+    view[3] = 0;
 
-    // Then: rotate around that origin
-    LIBS.rotateY(view, -yaw);
-    LIBS.rotateX(view, -pitch);
+    view[4] = s[1];
+    view[5] = u[1];
+    view[6] = -f[1];
+    view[7] = 0;
+
+    view[8] = s[2];
+    view[9] = u[2];
+    view[10] = -f[2];
+    view[11] = 0;
+
+    // Set translation part: -dot(s,eye), -dot(u,eye), dot(f,eye)
+    const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+    view[12] = -dot(s, eye);
+    view[13] = -dot(u, eye);
+    view[14] = dot(f, eye);
+    view[15] = 1;
 
     return view;
   }
@@ -1153,8 +1184,8 @@ function main() {
 
     // Apply translation to move Chandelure along infinity path
     LIBS.translateX(Object1.MOVE_MATRIX, posX + 8);
-    LIBS.translateZ(Object1.MOVE_MATRIX, posZ -4);
-    LIBS.translateY(Object1.MOVE_MATRIX, posY -1);
+    LIBS.translateZ(Object1.MOVE_MATRIX, posZ - 4);
+    LIBS.translateY(Object1.MOVE_MATRIX, posY - 1);
 
     // ANIMASI GERAK TANGAN (arms)
     var armAmplitude = (8 * Math.PI) / 180;
