@@ -47,6 +47,8 @@ import { CandleBody } from "./Environment/CandleBody.js";
 import { CandleFlame } from "./Environment/CandleFlame.js";
 import { StoneBorder } from "./Environment/StoneBorder.js";
 import { Mountain } from "./Environment/Mountain.js";
+import { CrossGravestone } from "./Environment/Grave2.js";
+import { NonSymmetricalBoxGrave } from "./Environment/Grave3.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -731,8 +733,12 @@ function main() {
   // TODO: Enviroment Model
   //WARNING - TEMP
   var Mountain1 = new Mountain(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Grave2 = new CrossGravestone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Grave3 = new NonSymmetricalBoxGrave(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   Land.childs.push(Mountain1);
+  Land.childs.push(Grave2);
+  Land.childs.push(Grave3);
   //land
   LIBS.translateY(Land.POSITION_MATRIX, -5);
   LIBS.scaleX(Land.POSITION_MATRIX, 0.5);
