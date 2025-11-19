@@ -745,35 +745,190 @@ function main() {
   LIBS.scaleY(Land.POSITION_MATRIX, 0.5);
   LIBS.scaleZ(Land.POSITION_MATRIX, 0.5);
 
-  //WARNING - TEMP
-  let path = [];
+  //----------------------------------------------------------------------------------------------------------
+  // Stone Path
+  const controlPoints = [
+    { x: -50, y: 0, z: 0 },
+    { x: 0, y: 0, z: -15 },
+    { x: 15, y: 0, z: -35 },
+    { x: -10, y: 0, z: -55 },
+    { x: -20, y: 0, z: -75 },
+    { x: 110, y: 0, z: -100 },
+  ];
 
-  for (let i = 0; i < 10; i++) {
-    // vertical fences
-    var stonePath = new StoneBorder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-    LIBS.scaleX(stonePath.POSITION_MATRIX, 0.5);
-    LIBS.scaleY(stonePath.POSITION_MATRIX, 0.5);
-    LIBS.scaleZ(stonePath.POSITION_MATRIX, 0.5);
-    LIBS.translateZ(stonePath.POSITION_MATRIX, -4);
-    LIBS.translateX(stonePath.POSITION_MATRIX, 3);
-    
+  function catmullRom(p0, p1, p2, p3, t) {
+    const t2 = t * t;
+    const t3 = t2 * t;
 
-    LIBS.translateZ(stonePath.POSITION_MATRIX, i * -2);
-    if (i % 2 == 0) {
-      LIBS.translateX(stonePath.POSITION_MATRIX, -3);
-    }
-    LIBS.translateY(stonePath.POSITION_MATRIX, 0);
-
-    if (i < 5) {
-    }
-
-    path.push(stonePath);
+    return {
+      x: 0.5 * (2 * p1.x + (-p0.x + p2.x) * t + (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 + (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3),
+      y: 0.5 * (2 * p1.y + (-p0.y + p2.y) * t + (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 + (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3),
+      z: 0.5 * (2 * p1.z + (-p0.z + p2.z) * t + (2 * p0.z - 5 * p1.z + 4 * p2.z - p3.z) * t2 + (-p0.z + 3 * p1.z - 3 * p2.z + p3.z) * t3),
+    };
   }
-  // attach all to arch (parent)
+  function generateSplinePoints(points, samplesPerSegment = 20) {
+    const result = [];
+    for (let i = 0; i < points.length - 3; i++) {
+      for (let t = 0; t <= 1; t += 1 / samplesPerSegment) {
+        result.push(catmullRom(points[i], points[i + 1], points[i + 2], points[i + 3], t));
+      }
+    }
+    return result;
+  }
+  const splinePoints = generateSplinePoints(controlPoints);
+  function getDirection(i) {
+    if (i <= 0) return { x: 1, z: 0 };
+
+    const p1 = splinePoints[i - 1];
+    const p2 = splinePoints[i];
+
+    const dx = p2.x - p1.x;
+    const dz = p2.z - p1.z;
+
+    const len = Math.sqrt(dx * dx + dz * dz) || 1;
+
+    return { x: dx / len, z: dz / len };
+  }
+  function getNormalVector(dir) {
+    return { x: -dir.z, z: dir.x };
+  }
+
+  // ZIG-ZAG PATH PLACEMENT
+  let path = [];
+  let lastPlaced = null;
+  let zigzagLeft = true;
+
+  const spacing = 1.5;
+  const offsetDist = 1.5; // jarak zigzag kiri-kanan
+  let baseY = 0; // posisi vertikal batu
+
+  function placeZigZagStone(P, i) {
+    const dir = getDirection(i);
+    const normal = getNormalVector(dir);
+
+    const offset = zigzagLeft ? offsetDist : -offsetDist;
+
+    var tempZ = P.z + normal.z * offset;
+
+    if ((tempZ >= -28 && tempZ <= -20) || (tempZ >= -46 && tempZ <= -42) || (tempZ >= -74 && tempZ <= -68)) {
+      baseY += 0.4;
+    }
+    const finalPos = {
+      x: P.x + normal.x * offset,
+      y: baseY + P.y,
+      z: P.z + normal.z * offset,
+    };
+
+    const stone = new StoneBorder(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+
+    LIBS.scaleX(stone.POSITION_MATRIX, 0.5);
+    LIBS.scaleY(stone.POSITION_MATRIX, 0.5);
+    LIBS.scaleZ(stone.POSITION_MATRIX, 0.5);
+
+    // custom offsetY
+    const customY = {
+      5: -0.3,
+      6: -0.4,
+      8: -0.5,
+      10: -0.9,
+      12: -0.1,
+      26: -0.3,
+      27: -0.5,
+      28: -0.7,
+      29: -1.3,
+      30: -0.8,
+      31: -1.5,
+      32: -0.5,
+      33: -1,
+      35: -0.3,
+      53: -0.3,
+      55: -0.8,
+      57: 0.2,
+    };
+    let offsetY = customY[i] ?? 0; // kalau tidak ada, pakai 0
+    LIBS.translateY(stone.POSITION_MATRIX, finalPos.y + offsetY);
+
+    const customX = {
+      22: -1,
+      38: -1,
+      53: 0.5,
+      55: 0.5,
+      57: -1,
+      58: -3,
+      59: -5.5,
+    };
+    let offsetX = customX[i] ?? 0; // kalau tidak ada, pakai 0
+    LIBS.translateX(stone.POSITION_MATRIX, finalPos.x + 10 + offsetX);
+
+    const customZ = {
+      5: -1,
+      6: -1,
+      22: -1,
+      38: -1,
+      39: -1,
+      55: 1.5,
+      57: -0.7,
+      58: 3,
+      59: -2,
+    };
+    let offsetZ = customZ[i] ?? 0; // kalau tidak ada, pakai 0
+    LIBS.translateZ(stone.POSITION_MATRIX, finalPos.z + 10 + offsetZ);
+
+    // custom rotateY
+    const customRy = {
+      8: -25,
+      10: -25,
+    };
+    let offsetRy = customRy[i] ?? 0; // kalau tidak ada, pakai 0
+    LIBS.rotateY(stone.MOVE_MATRIX, (offsetRy * Math.PI) / 180);
+
+    // custom rotateX
+    const customRx = {
+      8: 20,
+      10: 20,
+      30: 13,
+      31: 15,
+      32: 15,
+      33: 23,
+      35: 10,
+      53: 20,
+      55: 20,
+      58: 10,
+    };
+    let offsetRx = customRx[i] ?? 0; // kalau tidak ada, pakai 0
+    LIBS.rotateX(stone.MOVE_MATRIX, (offsetRx * Math.PI) / 180);
+
+    path.push(stone);
+
+    zigzagLeft = !zigzagLeft;
+  }
+
+  // LOOP UTAMA PASANG BATU ZIGZAG
+  for (let i = 0; i < splinePoints.length; i++) {
+    const P = splinePoints[i];
+
+    if (!lastPlaced) {
+      placeZigZagStone(P, i);
+      lastPlaced = P;
+      continue;
+    }
+
+    const dx = P.x - lastPlaced.x;
+    const dz = P.z - lastPlaced.z;
+    const dist = Math.sqrt(dx * dx + dz * dz);
+
+    if (dist >= spacing) {
+      placeZigZagStone(P, i);
+      lastPlaced = P;
+    }
+  }
+
   for (let i = 0; i < path.length; i++) {
     GraveArch1.childs.push(path[i]);
   }
+  //----------------------------------------------------------------------------------------------------------
 
+  // Moutain
   LIBS.translateZ(Mountain1.POSITION_MATRIX, -31);
   LIBS.translateY(Mountain1.POSITION_MATRIX, 7);
 
