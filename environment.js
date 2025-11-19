@@ -739,11 +739,16 @@ function main() {
   Land.childs.push(Mountain1);
   Land.childs.push(Grave2);
   Land.childs.push(Grave3);
+
   //land
   LIBS.translateY(Land.POSITION_MATRIX, -5);
   LIBS.scaleX(Land.POSITION_MATRIX, 0.5);
   LIBS.scaleY(Land.POSITION_MATRIX, 0.5);
   LIBS.scaleZ(Land.POSITION_MATRIX, 0.5);
+
+  // Mountain
+  LIBS.translateZ(Mountain1.POSITION_MATRIX, -31);
+  LIBS.translateY(Mountain1.POSITION_MATRIX, 7);
 
   //----------------------------------------------------------------------------------------------------------
   // Stone Path
@@ -928,10 +933,6 @@ function main() {
   }
   //----------------------------------------------------------------------------------------------------------
 
-  // Moutain
-  LIBS.translateZ(Mountain1.POSITION_MATRIX, -31);
-  LIBS.translateY(Mountain1.POSITION_MATRIX, 7);
-
   // graveyard arch
   LIBS.translateY(GraveArch1.POSITION_MATRIX, 2.1);
   LIBS.translateZ(GraveArch1.POSITION_MATRIX, 40);
@@ -1041,7 +1042,7 @@ function main() {
     const baseZ = rowZOffsets[row] !== undefined ? rowZOffsets[row] : 0;
 
     // TODO: customize which graves to skip or not have candles
-    const skipGrave = [6, 7, 17, 18, 25, 26, 27, 34, 35, 42, 43, 44, 52, 53, 54, 55, 63, 64, 65];
+    const skipGrave = [6, 17, 26, 27, 34, 35, 42, 43, 44, 52, 53, 54, 55, 62, 63, 64, 65];
     const noCandle = [];
 
     // skip full grave
