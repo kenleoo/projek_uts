@@ -1081,7 +1081,7 @@ function main() {
     // Use row-specific Z offset; fallback to 0 if row not in array
     const baseZ = rowZOffsets[row] !== undefined ? rowZOffsets[row] : 0;
 
-    // TODO: customize which graves to skip or not have candles
+    // parameter for grave stone
     const skipGrave = [6, 17, 21, 26, 27, 34, 35, 38, 42, 43, 44, 52, 53, 54, 55, 62, 63, 64, 65];
     const noCandle = [];
 
@@ -1090,6 +1090,8 @@ function main() {
 
     // === Gravestone ===
     type = randomInt(0, 2);
+    if (i == 57 || i == 58) type = 0;
+
     if (type == 0) var stone = new GravestoneA(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
     if (type == 1) {
       var stone = new NonSymmetricalBoxGrave(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
@@ -1293,6 +1295,17 @@ function main() {
       camPos[0] += move[0];
       camPos[1] += move[1];
       camPos[2] += move[2];
+    }
+
+    // Reset camera position
+    // Reset camera position
+    if (keys["r"]) {
+      camPos[0] = 0;
+      camPos[1] = 0;
+      camPos[2] = 45;
+
+      yaw = 3.141;
+      pitch = 0;
     }
 
     // Build view matrix: camera position is always the center (0,0,0)
