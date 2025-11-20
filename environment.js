@@ -49,6 +49,7 @@ import { StoneBorder } from "./Environment/StoneBorder.js";
 import { Mountain } from "./Environment/Mountain.js";
 import { CrossGravestone } from "./Environment/Grave2.js";
 import { NonSymmetricalBoxGrave } from "./Environment/Grave3.js";
+import { DeadTree } from "./Environment/Tree.js";
 
 function main() {
   /** @type {HTMLCanvasElement} */
@@ -735,10 +736,12 @@ function main() {
   var Mountain1 = new Mountain(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var Grave2 = new CrossGravestone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var Grave3 = new NonSymmetricalBoxGrave(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var DeadTree1 = new DeadTree(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   Land.childs.push(Mountain1);
   Land.childs.push(Grave2);
   Land.childs.push(Grave3);
+  Land.childs.push(DeadTree1);
 
   //land
   LIBS.translateY(Land.POSITION_MATRIX, -5);
