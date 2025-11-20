@@ -1089,7 +1089,7 @@ function main() {
     if (skipGrave.includes(i)) continue;
 
     // === Gravestone ===
-    type = randomInt(0, 2)
+    type = randomInt(0, 2);
     if (type == 0) var stone = new GravestoneA(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
     if (type == 1) {
       var stone = new NonSymmetricalBoxGrave(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
@@ -1220,12 +1220,40 @@ function main() {
   var yaw = 3.141; // default 0
   var pitch = 0; // default 0
 
+  let mouseLocked = false;
+
+  const mouseSensitivity = 0.001;
+
   var camSpeed = 0.005;
   var rotSpeed = 0.00077;
   var keys = {};
 
   window.addEventListener("keydown", (e) => (keys[e.key.toLowerCase()] = true));
   window.addEventListener("keyup", (e) => (keys[e.key.toLowerCase()] = false));
+
+  CANVAS.addEventListener("click", () => {
+    CANVAS.requestPointerLock();
+  });
+
+  document.addEventListener("pointerlockchange", () => {
+    mouseLocked = document.pointerLockElement === CANVAS;
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!mouseLocked) return;
+
+    // movementX and movementY give delta movement
+    const dx = e.movementX;
+    const dy = e.movementY;
+
+    yaw -= dx * mouseSensitivity;
+    pitch -= dy * mouseSensitivity;
+
+    // clamp pitch
+    const limit = Math.PI / 2 - 0.01;
+    if (pitch > limit) pitch = limit;
+    if (pitch < -limit) pitch = -limit;
+  });
 
   function updateCamera(dt) {
     const moveSpeed = camSpeed * dt;
