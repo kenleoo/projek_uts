@@ -746,18 +746,38 @@ function main() {
 
   // Enviroment Model
   var Mountain1 = new Mountain(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var Grave2 = new CrossGravestone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
-  var Grave3 = new NonSymmetricalBoxGrave(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var DeadTree1 = new DeadTree(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   Land.childs.push(Mountain1);
-  Land.childs.push(Grave2);
-  Land.childs.push(Grave3);
   Land.childs.push(DeadTree1);
 
   // Tree
   LIBS.translateZ(DeadTree1.POSITION_MATRIX, -31);
-  LIBS.translateY(DeadTree1.POSITION_MATRIX, 0);
+  LIBS.translateY(DeadTree1.POSITION_MATRIX, 6);
+
+  var trees = [];
+  for (let i = 0; i <= 6; i++) {
+    const tree = new DeadTree(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+
+    // custom coordinat tree
+    const customTY = { 0: 3, 1: 3, 2: 5, 3: 0, 4: -2, 5: -4, 6: -5 };
+    let offsetTY = customTY[i] ?? 0;
+    LIBS.translateY(tree.POSITION_MATRIX, offsetTY);
+
+    const customTX = { 0: -45, 1: -60, 2: 65, 3: 28, 4: -28, 5: 50, 6: -20 };
+    let offsetTX = customTX[i] ?? 0;
+    LIBS.translateX(tree.POSITION_MATRIX, offsetTX);
+
+    const customTZ = { 0: -50, 1: -3, 2: -25, 3: -4, 4: 8, 5: 38, 6: 50 };
+    let offsetTZ = customTZ[i] ?? 0;
+    LIBS.translateZ(tree.POSITION_MATRIX, offsetTZ);
+
+    trees.push(tree);
+  }
+
+  for (let i = 0; i <= 6; i++) {
+    Land.childs.push(trees[i]);
+  }
 
   //land
   LIBS.translateY(Land.POSITION_MATRIX, -5);
@@ -1043,6 +1063,7 @@ function main() {
   // === GRAVESTONES + DIRT + CANDLE ===
   const graves = [];
   const graveCount = 70;
+  var type = 2;
 
   // easy to tweak
   const colsPerRow = 10; // number of graves per row
@@ -1061,14 +1082,24 @@ function main() {
     const baseZ = rowZOffsets[row] !== undefined ? rowZOffsets[row] : 0;
 
     // TODO: customize which graves to skip or not have candles
-    const skipGrave = [6, 17, 26, 27, 34, 35, 42, 43, 44, 52, 53, 54, 55, 62, 63, 64, 65];
+    const skipGrave = [6, 17, 21, 26, 27, 34, 35, 38, 42, 43, 44, 52, 53, 54, 55, 62, 63, 64, 65];
     const noCandle = [];
 
     // skip full grave
     if (skipGrave.includes(i)) continue;
 
     // === Gravestone ===
-    const stone = new GravestoneA(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+    type = randomInt(0, 2)
+    if (type == 0) var stone = new GravestoneA(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+    if (type == 1) {
+      var stone = new NonSymmetricalBoxGrave(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+      LIBS.translateY(stone.POSITION_MATRIX, 0.5);
+    }
+    if (type == 2) {
+      var stone = new CrossGravestone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+      LIBS.translateY(stone.POSITION_MATRIX, 0.4);
+    }
+
     LIBS.translateX(stone.POSITION_MATRIX, baseX);
     LIBS.translateZ(stone.POSITION_MATRIX, baseZ);
     // Apply row-specific Y level
@@ -1081,6 +1112,10 @@ function main() {
     LIBS.scaleZ(dirt.POSITION_MATRIX, 2.5);
     LIBS.translateZ(dirt.POSITION_MATRIX, 0.2);
     LIBS.translateY(dirt.POSITION_MATRIX, 0.7);
+
+    if (type == 1 || type == 2) {
+      LIBS.translateY(dirt.POSITION_MATRIX, -10);
+    }
 
     let candle = null;
     let candleFlame = null;
@@ -1102,6 +1137,12 @@ function main() {
       LIBS.scaleY(candleFlame.POSITION_MATRIX, 0.35);
       LIBS.scaleZ(candleFlame.POSITION_MATRIX, 0.5);
       LIBS.translateZ(candleFlame.MOVE_MATRIX, 1);
+
+      if (type == 1) {
+        LIBS.translateY(candle.POSITION_MATRIX, -0.8);
+      } else if (type == 2) {
+        LIBS.translateY(candle.POSITION_MATRIX, -0.8);
+      }
     }
 
     // Save for later reference
@@ -1175,9 +1216,9 @@ function main() {
   LitwickBodyClylinder1.setup();
 
   /*========================= Free Camera with Orbital Rotation =========================*/
-  const camPos = [0, 20, 35]; // default 0,0,0
+  const camPos = [0, 30, 35]; // default 0,0,0
   var yaw = 3.141; // default 0
-  var pitch = -0.7; // default 0
+  var pitch = -0.8; // default 0
 
   var camSpeed = 0.005;
   var rotSpeed = 0.00077;
