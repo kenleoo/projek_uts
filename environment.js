@@ -1216,9 +1216,9 @@ function main() {
   LitwickBodyClylinder1.setup();
 
   /*========================= Free Camera with Orbital Rotation =========================*/
-  const camPos = [0, 30, 35]; // default 0,0,0
+  const camPos = [0, 0, 45]; // default 0,0,0
   var yaw = 3.141; // default 0
-  var pitch = -0.8; // default 0
+  var pitch = 0; // default 0
 
   var camSpeed = 0.005;
   var rotSpeed = 0.00077;
