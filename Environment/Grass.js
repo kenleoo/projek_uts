@@ -23,7 +23,7 @@ export class DirtGrassLand {
     _position,
     _color,
     _Mmatrix,
-    width = 80,
+    width = 140,
     height = 2,
     depth = 80,
   ) {

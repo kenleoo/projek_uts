@@ -330,10 +330,10 @@ function main() {
   LIBS.rotateZ(Right_hand.POSITION_MATRIX, 5.5);
 
   // body cylinder
-  LIBS.translateY(LitwickBodyClylinder1.POSITION_MATRIX, -4.2);
-  LIBS.translateX(LitwickBodyClylinder1.POSITION_MATRIX, -7);
-  LIBS.translateZ(LitwickBodyClylinder1.POSITION_MATRIX, 1.3);
-  LIBS.rotateY(LitwickBodyClylinder1.MOVE_MATRIX, 100 * (Math.PI / 180));
+  LIBS.translateY(LitwickBodyClylinder1.POSITION_MATRIX, -3.8);
+  LIBS.translateX(LitwickBodyClylinder1.POSITION_MATRIX, -4);
+  LIBS.translateZ(LitwickBodyClylinder1.POSITION_MATRIX, 15);
+  LIBS.rotateY(LitwickBodyClylinder1.MOVE_MATRIX, 40 * (Math.PI / 180));
   LIBS.scaleX(LitwickBodyClylinder1.POSITION_MATRIX, 1);
   LIBS.scaleY(LitwickBodyClylinder1.POSITION_MATRIX, 1);
   LIBS.scaleZ(LitwickBodyClylinder1.POSITION_MATRIX, 1);
@@ -380,10 +380,10 @@ function main() {
   LIBS.scaleX(OutHead.POSITION_MATRIX, 0.5);
   LIBS.scaleY(OutHead.POSITION_MATRIX, 0.5);
   LIBS.scaleZ(OutHead.POSITION_MATRIX, 0.5);
-  LIBS.rotateY(OutHead.POSITION_MATRIX, 25 * (Math.PI / 180));
-  LIBS.translateY(OutHead.POSITION_MATRIX, -4);
-  LIBS.translateZ(OutHead.POSITION_MATRIX, -8.5);
-  LIBS.translateX(OutHead.POSITION_MATRIX, -5);
+  LIBS.rotateY(OutHead.POSITION_MATRIX, 100 * (Math.PI / 180));
+  LIBS.translateY(OutHead.POSITION_MATRIX, -2);
+  LIBS.translateZ(OutHead.POSITION_MATRIX, 0);
+  LIBS.translateX(OutHead.POSITION_MATRIX, -10);
 
   // Inner Glass (head inner)
   LIBS.scaleX(InHead.POSITION_MATRIX, 0.95);
@@ -511,6 +511,8 @@ function main() {
   var HandFlame4 = new HandFlame(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   var Land = new DirtGrassLand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Land2 = new DirtGrassLand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
+  var Land3 = new DirtGrassLand(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var GraveArch1 = new GraveArch(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
 
   // Child object relationship
@@ -545,14 +547,25 @@ function main() {
   HandParaboloid4.childs.push(HandCrown4);
   HandCrown4.childs.push(HandFlame4);
 
+  Land.childs.push(Land2);
+  Land.childs.push(Land3);
   Land.childs.push(GraveArch1);
   Land.childs.push(Object1);
+
+  LIBS.translateZ(Land2.MOVE_MATRIX, 20);
+  LIBS.translateY(Land2.MOVE_MATRIX, -1.7);
+
+  LIBS.translateZ(Land3.MOVE_MATRIX, -23);
+  LIBS.translateY(Land3.MOVE_MATRIX, 1.7);
 
   // Scale + Positioning objects
   //object1 (head)
   LIBS.scaleX(Object1.POSITION_MATRIX, 2.3);
   LIBS.scaleY(Object1.POSITION_MATRIX, 2.3);
   LIBS.scaleZ(Object1.POSITION_MATRIX, 2.3);
+  LIBS.translateZ(Object1.POSITION_MATRIX, -18);
+  LIBS.translateY(Object1.POSITION_MATRIX, 6);
+  LIBS.translateX(Object1.POSITION_MATRIX, 5);
 
   //eye kanan
   LIBS.rotateY(HeadEye1.MOVE_MATRIX, (90 * Math.PI) / 180);
@@ -731,8 +744,7 @@ function main() {
   LIBS.translateX(HandFlame4.MOVE_MATRIX, 0.1);
   LIBS.translateZ(HandFlame4.MOVE_MATRIX, 0.1);
 
-  // TODO: Enviroment Model
-  //WARNING - TEMP
+  // Enviroment Model
   var Mountain1 = new Mountain(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var Grave2 = new CrossGravestone(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
   var Grave3 = new NonSymmetricalBoxGrave(GL, SHADER_PROGRAM, _position, _color, _Mmatrix);
@@ -742,6 +754,10 @@ function main() {
   Land.childs.push(Grave2);
   Land.childs.push(Grave3);
   Land.childs.push(DeadTree1);
+
+  // Tree
+  LIBS.translateZ(DeadTree1.POSITION_MATRIX, -31);
+  LIBS.translateY(DeadTree1.POSITION_MATRIX, 0);
 
   //land
   LIBS.translateY(Land.POSITION_MATRIX, -5);
